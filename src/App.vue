@@ -1,5 +1,7 @@
 <template>
-  <header>Header</header>
+  <header>
+    <h2>Header</h2>
+  </header>
 
   <main>
     <CmdBar></CmdBar>
