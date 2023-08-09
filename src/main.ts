@@ -1,4 +1,4 @@
-import './assets/anny-theme.scss'
+import './assets/anny-base.scss'
 
 import { createApp } from 'vue'
 import App from './App.vue'

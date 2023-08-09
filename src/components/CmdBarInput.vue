@@ -17,11 +17,11 @@ defineEmits<{
 
 <template>
   <input
+    data-cmd-bar-input
+    class="cmd-bar__input"
     autofocus
     :value="modelValue"
     :placeholder="placeholder"
     @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
   />
 </template>
-
-<style scoped lang="scss"></style>
