@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, defineComponent, computed } from 'vue'
 import CmdBarInput from '@/components/CmdBarInput.vue'
-import KeyboardShortcut from '@/components/KeyboardShortcut.vue'
 import CmdBarItem from '@/components/CmdBarItem.vue'
 
 defineComponent({
@@ -11,6 +10,20 @@ defineComponent({
 const dialog = ref<HTMLDialogElement | null>(null)
 const dialogContent = ref<HTMLDivElement | null>(null)
 const searchTerm = ref('')
+const selectedIndex = ref(0)
+
+function handleKeyDown(event: KeyboardEvent): void {
+  if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+    event.preventDefault()
+
+    if (event.key === 'ArrowUp') {
+      selectedIndex.value = Math.max(selectedIndex.value - 1, 0)
+    } else if (event.key === 'ArrowDown') {
+      console.log('down')
+      selectedIndex.value = Math.min(selectedIndex.value + 1, filteredItems.value.length - 1)
+    }
+  }
+}
 
 function toggleCmdBar(): void {
   // if component is mounted, open dialog
@@ -22,6 +35,10 @@ function toggleCmdBar(): void {
     }
   }
 }
+
+defineExpose({
+  toggleCmdBar
+})
 
 // dummy data of 5 items for the CmdBar (id, name, icon, actions)
 // the icon is a link to a ransom unsplash image https://source.unsplash.com/random/300×300
@@ -60,7 +77,7 @@ const items = [
 ]
 
 const filteredItems = computed(() => {
-  if (searchTerm.value && searchTerm.value.length > 2) {
+  if (searchTerm.value && searchTerm.value.length > 1) {
     console.log('filteredItems', searchTerm.value, searchTerm.value)
     const lowerCaseSearchTerm = searchTerm.value.toLowerCase()
     return items.filter((item) => item.name.toLowerCase().includes(lowerCaseSearchTerm))
@@ -87,15 +104,19 @@ function handleClickOutside(event: MouseEvent): void {
 
 <template>
   <div>
-    <dialog ref="dialog" @click="handleClickOutside">
+    <dialog ref="dialog" @click="handleClickOutside" @keydown="handleKeyDown">
       <div ref="dialogContent">
         <CmdBarInput v-model="searchTerm" />
-        <div v-for="item in filteredItems" :key="item.id">
-          <CmdBarItem :icon="item.icon" :name="item.name" />
+        <div v-for="(item, index) in filteredItems" :key="item.id">
+          <CmdBarItem
+            cmd-item
+            :icon="item.icon"
+            :name="item.name"
+            :class="{ selected: index === selectedIndex }"
+          />
         </div>
       </div>
     </dialog>
-    <keyboard-shortcut :headless="true" :ctrl="true" shortcut="k" @detected="toggleCmdBar" />
   </div>
 </template>
 
@@ -121,6 +142,14 @@ dialog {
     animation: dialog 0.2s ease forwards;
     pointer-events: inherit;
   }
+
+  [cmd-item] {
+    &.selected {
+      background-color: var(--primary-color);
+      color: white;
+    }
+  }
+
   //&:hover {
   //  color: var(--primary-color);
   //  //color: var(--primary-color-hover);
