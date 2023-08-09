@@ -1,0 +1,205 @@
+@import 'base.scss';
+
+$primary-color: #2b6af8; // on-light-color
+$on-primary: #ffffff;
+$primary-container-color: #dae1ff;
+$on-primary-container: #00164d;
+$primary-color-light: #7597ff; // on-dark
+$primary-color-dark: #0040c4; // on-light
+$secondary-color: #f8bb2b; // on-dark
+$secondary-color-light: #ffed61; // on-dark
+$secondary-color-dark: #c18b00; // on-dark
+$primary-color-dark: #131333;
+$anny-color: #333366;
+$secondary-color: #ff9814;
+
+$primary-color-overlay: rgba(lighten($primary-color, 5%), 0.12);
+$secondary-color-overlay: rgba($secondary-color, 0.8);
+
+$success-color: #1BC98E;
+$success-color-overlay: rgba($success-color, 0.25);
+
+$info-color: #00dbcb;
+$info-color-overlay: rgba($info-color, 0.12);
+$danger-color: #E64759;
+$danger-color-overlay: rgba($danger-color, 0.25);
+$warning-color: #e2a04f;
+$warning-color-overlay: rgba($warning-color, 0.25);
+
+$toned-shadows: (
+        "primary-color": rgba($primary-color, 0.5),
+        "secondary-color": rgba($secondary-color, 0.5),
+        "success-color": rgba($success-color, 0.5),
+        "danger-color": rgba($danger-color, 0.5),
+        "warning-color": rgba($warning-color, 0.5)
+);
+
+$hero-gradient-start: #e5e5f3;
+$hero-gradient-end: #f5edea;
+
+$light-color: #d8d8d8;
+$light-color-overlay: rgba($light-color, 0.25);
+
+// Text colors
+$text-primary: #414141;
+$text-secondary: #5a5a5a;
+$text-tertiary: #9d9d9d;
+
+// Background colors
+$primary-background: #f3f4f6;
+$panel-background: #ffffff; // CHANGED NAME
+$panel-background-light: lighten($panel-background, 10%);
+$panel-background-overlay: rgba($panel-background, 0.25);
+$panel-background-overlay-dense: rgba($panel-background, 0.85);
+
+// Feature sections
+$feature-background: (
+        "normal": #fefefe,
+        "colored": rgb(19, 39, 57)
+);
+
+$feature-text: (
+        "normal": $text-primary,
+        "normal-accent": $secondary-color,
+        "colored": #fefefe,
+        "colored-accent": $secondary-color,
+);
+
+$input-background: #e3e5ea;
+$hover-background: darken($input-background, 8%);
+$sidebar-background: $primary-background;
+$heatmap-background: rgba($panel-background, 0);
+$topbar-background: #f3f3f3;
+$topbar-background-rgb: red($topbar-background), green($topbar-background), blue($topbar-background);
+
+
+// Borders
+$table-border-color: #e1e7e8; // CHANGED NAME
+$light-border-color: #e2e2e2;
+$dark-border-color: #c4c4c4;
+
+// Shadows (h-offset v-offset blur-radius spread color)
+$panel-shadow: none;
+$hover-shadow: 0px 5px 25px 0px rgba(184, 184, 184, 0.7);
+$dropdown-shadow: 0px 4px 8px 0px rgba(97, 97, 97, 0.25);
+$detail-shadow: 0px 3px 6px 0px rgba(190, 190, 190, 0.4);
+$minimal-shadow: 0px 1px 2px 0px rgba(190, 190, 190, 0.5);
+
+$color-palette: (#5fbbd0,#5b8fdd,#8e5dca,#d33e8a,#e7445e,#ed8047,#f8b52c,#eded5d,#9aed63);
+
+$heatmap-gradient: ($success-color, $warning-color, $danger-color);
+
+// on colors are used for typography and iconography
+$on-dark-color: #000000;
+
+// Surface colors affect surfaces of components such as cards and sheets and menus
+// Background color appear behind scrollable content.
+// the baseline background and surface color
+$primary-background-color: #f3f4f6; // on-dark
+$primary-background-color-light: #ffffff; // on-dark
+$primary-background-color-dark: #c0c1c3; // on-dark
+
+$success-color-light: #65fdbe; // on-dark
+$success-color-dark: #009760; // on-dark
+
+$info-color-light: #66fffe;
+$info-color-dark: #00a89a;
+
+$danger-color-light: #ff7b86; // on-dark
+$danger-color-dark: #ae0030; // on-light
+
+$analogous-primary-color: #2bcff8;
+$analogous-complementary-color: #542bf8;
+
+$triadic-primary-color: #bb2bf8;
+$triadic-complementary-color: #f92b68;
+
+
+/* semantic color variables for this project */
+:root {
+  // global
+  --primary-color: #{$primary-color};
+  --primary-color-dark: #{$primary-color-dark};
+  --anny-color: #{$anny-color};
+  --primary-color-hover: #{lighten($primary-color, 5%)};
+  --primary-color-overlay: #{$primary-color-overlay};
+  --secondary-color: #{$secondary-color};
+  --secondary-color-hover: #{lighten($secondary-color, 5%)};
+  --secondary-color-dark: #{darken($secondary-color, 5%)};
+  --secondary-color-overlay: #{$secondary-color-overlay};
+  --success-color: #{$success-color};
+  --success-color-overlay: #{$success-color-overlay};
+  --success-color-light: #{lighten($success-color, 5%)};
+  --info-color: #{$info-color};
+  --info-color-overlay: #{$info-color-overlay};
+  --danger-color: #{$danger-color};
+  --danger-color-light: #{lighten($danger-color, 5%)};
+  --danger-color-overlay: #{$danger-color-overlay};
+  --warning-color: #{$warning-color};
+  --warning-color-overlay: #{$warning-color-overlay};
+  --alternate-primary-color: #8a3aff;
+
+  --light-color: #{$light-color};
+  --light-color-overlay: #{$light-color-overlay};
+  --dark-color: #{darken($light-color, 5%)};
+  // text
+  --text-primary-color: #{$text-primary};
+  --text-secondary-color: #{$text-secondary};
+  --text-tertiary-color: #{$text-tertiary};
+  // background
+  --primary-background: #{$primary-background};
+  --primary-background-dark: #{darken($primary-background, 0.2)};
+  --panel-background: #{$panel-background};
+  --panel-background-light: #{$panel-background-light};
+  --panel-background-overlay: #{$panel-background-overlay};
+  --panel-background-overlay-dense: #{$panel-background-overlay-dense};
+  --panel-background-dark: #{$input-background};
+  --input-background: #{$input-background};
+  --hover-background: #{$hover-background};
+  --sidebar-background: #{$sidebar-background};
+  --heatmap-background: #{$heatmap-background};
+  --topbar-background: #{$topbar-background};
+  --topbar-background-rgb: #{$topbar-background-rgb};
+  // feature backgrounds
+  --feature-background-normal: #{map-get($feature-background, "normal")};
+  --feature-background-colored: #{map-get($feature-background, "colored")};
+  --feature-text-normal: #{map-get($feature-text, "normal")};
+  --feature-text-normal-accent: #{map-get($feature-text, "normal-accent")};
+  --feature-text-colored: #{map-get($feature-text, "colored")};
+  --feature-text-colored-accent: #{map-get($feature-text, "colored-accent")};
+  // borders
+  --table-border-color: #{$table-border-color};
+  --light-border-color: #{$light-border-color};
+  --dark-border-color: #{$dark-border-color};
+  // shadows
+  --panel-shadow: #{$panel-shadow};
+  --hover-shadow: #{$hover-shadow};
+  --dropdown-shadow: #{$dropdown-shadow};
+  --detail-shadow: #{$detail-shadow};
+  --minimal-shadow: #{$minimal-shadow};
+  // toned shadow colors
+  --primary-color-shadow: #{map-get($toned-shadows, "primary-color")};
+  --secondary-color-shadow: #{map-get($toned-shadows, "secondary-color")};
+  --success-color-shadow: #{map-get($toned-shadows, "success-color")};
+  --danger-color-shadow: #{map-get($toned-shadows, "danger-color")};
+  --warning-color-shadow: #{map-get($toned-shadows, "warning-color")};
+  --hero-gradient-start: #{$hero-gradient-start};
+  --hero-gradient-end: #{$hero-gradient-end};
+
+  --section-gap: 160px;
+  --small-border-radius: 0.25rem;
+  --small-border-style: none;
+  --detail-border-radius: 0.5rem;
+  --detail-border-style: none;
+  --large-border-radius: 2rem;
+  --panel-border-radius: 1rem;
+  --panel-border-style: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+  }
+}
+
+
+

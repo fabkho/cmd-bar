@@ -60,12 +60,13 @@ const items = [
 ]
 
 const filteredItems = computed(() => {
-  if (!searchTerm.value) {
+  if (searchTerm.value && searchTerm.value.length > 2) {
+    console.log('filteredItems', searchTerm.value, searchTerm.value)
+    const lowerCaseSearchTerm = searchTerm.value.toLowerCase()
+    return items.filter((item) => item.name.toLowerCase().includes(lowerCaseSearchTerm))
+  } else {
     return items
   }
-  console.log('filteredItems', searchTerm.value, searchTerm.value)
-  const lowerCaseSearchTerm = searchTerm.value.toLowerCase()
-  return items.filter((item) => item.name.toLowerCase().includes(lowerCaseSearchTerm))
 })
 
 /**
@@ -99,31 +100,45 @@ function handleClickOutside(event: MouseEvent): void {
 </template>
 
 <style scoped lang="scss">
-//dialog {
-//  pointer-events: none;
-//  opacity: 0;
-//  display: flex;
-//  flex-direction: column;
-//  align-items: center;
-//  justify-content: center;
-//
-//  &[open] {
-//    animation: dialog 0.2s ease forwards;
-//    pointer-events: inherit;
-//  }
-//  //&::backdrop {
-//  //  backdrop-filter: blur(5px);
-//  //}
-//}
-//
-//@keyframes dialog {
-//  from {
-//    opacity: 0;
-//    transform: scale(0.3);
-//  }
-//  to {
-//    opacity: 1;
-//    transform: scale(1);
-//  }
-//}
+dialog {
+  pointer-events: none;
+  position: relative;
+  background-color: var(--panel-background);
+  border-radius: var(--panel-border-radius);
+  box-shadow: var(--panel-shadow);
+  max-width: 95%;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  @media screen and (max-width: 576px) {
+    width: 100%;
+  }
+
+  &[open] {
+    animation: dialog 0.2s ease forwards;
+    pointer-events: inherit;
+  }
+  //&:hover {
+  //  color: var(--primary-color);
+  //  //color: var(--primary-color-hover);
+  //  background-color: var(--panel-background-dark);
+  //}
+  //&::backdrop {
+  //  backdrop-filter: blur(5px);
+  //}
+}
+
+@keyframes dialog {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 </style>

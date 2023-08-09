@@ -1,28 +1,26 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-
-const props = defineProps({
+defineProps({
   placeholder: {
     type: String,
     default: 'search for anything'
   },
-  value: {
+  modelValue: {
     type: String,
     required: false,
     default: ''
   }
 })
-
-const inputRef = ref<HTMLInputElement | null>(null)
+defineEmits<{
+  (e: 'update:modelValue', val: any): void
+}>()
 </script>
 
 <template>
   <input
-    ref="inputRef"
     autofocus
-    :value="value"
+    :value="modelValue"
     :placeholder="placeholder"
-    @input="$emit('update:value', ($event.target as HTMLInputElement).value)"
+    @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
   />
 </template>
 
