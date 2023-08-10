@@ -3,6 +3,7 @@ import { ref } from 'vue'
 
 const dialog = ref<HTMLDialogElement | null>(null)
 const dialogContent = ref<HTMLDivElement | null>(null)
+const selectedIndex = ref(0)
 
 /**
  * toggle dialog

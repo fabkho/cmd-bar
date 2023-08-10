@@ -76,7 +76,7 @@ function handleKeyDown(event: KeyboardEvent): void {
 </script>
 
 <template>
-  <CmdBar ref="cmdBar">
+  <CmdBar ref="cmdBar" @keydown="handleKeyDown">
     <template #header>
       <CmdBarInput v-model="searchTerm" />
     </template>
@@ -86,7 +86,6 @@ function handleKeyDown(event: KeyboardEvent): void {
           :icon="item.icon"
           :name="item.name"
           :class="{ selected: index === selectedIndex }"
-          @keydown="handleKeyDown"
         />
       </div>
     </template>
@@ -96,14 +95,4 @@ function handleKeyDown(event: KeyboardEvent): void {
 
 <style lang="scss">
 @import '@/assets/anny-theme';
-
-//[cmd-item] {
-//  &.selected {
-//    background-color: var(--primary-color);
-//    color: white;
-//  }
-//}
-//[cmd-input] {
-//  margin-bottom: 0.5rem;
-//}
 </style>
