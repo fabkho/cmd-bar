@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, inject } from 'vue'
+import { ref } from 'vue'
 import { USE_CMD_STATE } from '@/useCmdState'
 import type { CmdBarStore } from '@/types'
+import { requireInjection } from '@/utils'
 
-const useCmdState = inject<CmdBarStore>(USE_CMD_STATE)
+const useCmdState = requireInjection<CmdBarStore>(USE_CMD_STATE)
 
 const items = ref(useCmdState?.state.items ?? [])
 const dialog = ref<HTMLDialogElement | null>(null)

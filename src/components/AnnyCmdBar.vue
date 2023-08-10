@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { ref, computed, inject } from 'vue'
+import { ref, computed } from 'vue'
 import KeyboardShortcut from '@/components/KeyboardShortcut.vue'
 import CmdBar from '@/components/CmdBar.vue'
 import CmdBarInput from '@/components/CmdBarInput.vue'
 import CmdBarItems from '@/components/CmdBarItems.vue'
 import { USE_CMD_STATE } from '@/useCmdState'
 import type { CmdBarStore } from '@/types'
+import { requireInjection } from '@/utils'
 
-const useCmdState = inject<CmdBarStore>(USE_CMD_STATE)
+const useCmdState = requireInjection<CmdBarStore>(USE_CMD_STATE)
 
 const cmdBar = ref<typeof CmdBar | null>(null)
 const searchTerm = ref('')

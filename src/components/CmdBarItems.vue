@@ -1,7 +1,8 @@
 <script setup lang="ts" generic="T">
-import { inject, computed } from 'vue'
+import { computed } from 'vue'
 import { USE_CMD_STATE } from '@/useCmdState'
 import type { CmdBarStore } from '@/types'
+import { requireInjection } from '@/utils'
 
 defineProps<{
   items: T[]
@@ -12,7 +13,7 @@ defineSlots<{
   default(props: { item: T }): any
 }>()
 
-const useCmdState = inject<CmdBarStore>(USE_CMD_STATE)
+const useCmdState = requireInjection<CmdBarStore>(USE_CMD_STATE)
 const selectedIndex = computed(() => useCmdState?.state.selectedItemIndex ?? 0)
 </script>
 
