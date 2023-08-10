@@ -1,19 +1,11 @@
 import { reactive } from 'vue'
-
-type State = {
-  selectedItem: string
-  searchTerm: string
-  items: string[]
-  filteredItems: string[]
-}
+import type { State } from '@/types'
 
 const state = reactive<State>({
   selectedItem: '',
-  searchTerm: '',
+  searchTerm: 'testitest',
   items: [],
   filteredItems: []
 })
 
-export default {
-  state: state
-}
+export default state
