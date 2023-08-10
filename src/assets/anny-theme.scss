@@ -3,10 +3,9 @@
 .cmd-bar{
   pointer-events: none;
   position: relative;
-
+  border-radius: var(--panel-border-radius);
   background-color: var(--panel-background);
   border: none;
-  border-radius: var(--panel-border-radius);
   box-shadow: var(--panel-shadow);
   opacity: 0;
 
@@ -45,62 +44,53 @@
     padding: 8px 8px 16px 8px;
     outline: none;
     color: var(--gray12);
-    border-bottom: 1px solid var(--gray6);
+    border-bottom: 1px solid var(--light-border-color);
     margin-bottom: 16px;
     border-radius: 0;
 
     &::placeholder {
-      color: var(--gray9);
+      color: var(--text-tertiary-color);
     }
   }
 
-  &__item {
-    cursor: pointer;
-    height: 48px;
-    border-radius: 8px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 0 16px;
-    color: var(--text-primary-color);
-    user-select: none;
-    will-change: background, color;
-    transition: all 150ms ease;
-    transition-property: none;
-
-    content-visibility: auto;
-
-    &.selected {
-      background-color: var(--hover-background);
-      color: whitesmoke;
-    }
-
-    &__icon {
-      width: 24px;
-      height: 24px;
+  &__items {
+    list-style-type: inside;
+    margin: 0;
+    padding: 0;
+    &__item {
+      cursor: pointer;
+      height: 48px;
+      padding: 0 .5rem;
+      border-radius: 8px;
+      font-size: 14px;
       display: flex;
       align-items: center;
-    }
-
-    &__icon img {
-      width: 100%;
-      height: 100%;
-      aspect-ratio: 16/9;
-    }
-
-    &__name {
-      font-weight: bold;
-    }
-
-    &__actions {
-      display: flex;
       gap: 8px;
-      justify-content: flex-end;
+      color: var(--text-primary-color);
+      user-select: none;
+      //will-change: background, color;
+      //transition: all 150ms ease;
+      //transition-property: none;
+
+      content-visibility: auto;
+
+      &.selected {
+        background-color: var(--hover-background);
+        color: whitesmoke;
+      }
+      //
+      //
+      //&__name {
+      //  font-weight: bold;
+      //}
+      //
+      //&__actions {
+      //  display: flex;
+      //  gap: 8px;
+      //  justify-content: flex-end;
+      //}
     }
   }
-
-
   //&:hover {
   //  color: var(--primary-color);
   //  //color: var(--primary-color-hover);
@@ -111,6 +101,29 @@
   //}
 }
 
+/* Item */
+.item {
+  &__leading {
+    width: 24px;
+    height: 24px;
+    img {
+      width: 100%;
+      height: 100%;
+      aspect-ratio: 16/9;
+    }
+  }
+  &__title {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  &__actions{
+    //  display: flex;
+    //  gap: 8px;
+    //  justify-content: flex-end;
+  }
+}
+
+/* ANIMATIONS */
 @keyframes dialog {
   from {
     opacity: 0;

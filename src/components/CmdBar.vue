@@ -43,7 +43,13 @@ function handleClickOutside(event: MouseEvent): void {
 </script>
 
 <template>
-  <dialog data-cmd-bar class="cmd-bar" ref="dialog" @click="handleClickOutside">
+  <dialog
+    data-cmd-bar
+    class="cmd-bar"
+    ref="dialog"
+    @click="handleClickOutside"
+    @keydown="handleKeyDown"
+  >
     <div data-cmd-bar-wrapper class="cmd-bar__wrapper" ref="dialogContent">
       <div data-cmd-bar-header class="cmd-bar__header">
         <slot name="header" />
