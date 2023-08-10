@@ -1,24 +1,19 @@
 <script setup lang="ts" generic="T">
-import { ref, inject } from 'vue'
+import { ref, inject, computed } from 'vue'
+import { USE_CMD_STATE } from '@/useCmdState'
+import type { CmdBarStore } from '@/types'
 
-const props = defineProps<{
+defineProps<{
   items: T[]
 }>()
 
-const selectedIndex = ref(0)
+//
+defineSlots<{
+  default(props: { item: T }): any
+}>()
 
-function handleKeyDown(event: KeyboardEvent): void {
-  if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-    event.preventDefault()
-
-    if (event.key === 'ArrowUp') {
-      selectedIndex.value = Math.max(selectedIndex.value - 1, 0)
-    } else if (event.key === 'ArrowDown') {
-      console.log('down')
-      selectedIndex.value = Math.min(selectedIndex.value + 1, props.items.length - 1)
-    }
-  }
-}
+const useCmdState = inject<CmdBarStore>(USE_CMD_STATE)
+const selectedIndex = computed(() => useCmdState?.state.selectedItemIndex ?? 0)
 </script>
 
 <template>

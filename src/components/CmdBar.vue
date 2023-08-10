@@ -1,6 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
+import { USE_CMD_STATE } from '@/useCmdState'
+import type { CmdBarStore, State } from '@/types'
 
+const useCmdState = inject<CmdBarStore>(USE_CMD_STATE)
+
+const items = ref(useCmdState?.state.items ?? [])
 const dialog = ref<HTMLDialogElement | null>(null)
 const dialogContent = ref<HTMLDivElement | null>(null)
 const selectedIndex = ref(0)
@@ -38,6 +43,20 @@ function handleClickOutside(event: MouseEvent): void {
     )
   ) {
     dialog.value?.close()
+  }
+}
+
+function handleKeyDown(event: KeyboardEvent): void {
+  if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+    event.preventDefault()
+
+    if (event.key === 'ArrowUp') {
+      console.log('up', Math.max(selectedIndex.value - 1, 0))
+      useCmdState?.nextItem()
+    } else if (event.key === 'ArrowDown') {
+      console.log('down', Math.min(selectedIndex.value + 1, items.value.length - 1))
+      useCmdState?.prevItem()
+    }
   }
 }
 </script>
