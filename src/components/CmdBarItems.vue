@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T">
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 
 const props = defineProps<{
   items: T[]

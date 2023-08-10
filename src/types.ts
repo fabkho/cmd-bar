@@ -1,5 +1,5 @@
 export type State = {
-  selectedItem: string
+  selectedItemIndex: number
   searchTerm: string
   items: string[]
   filteredItems: string[]

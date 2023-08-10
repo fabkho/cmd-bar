@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, inject } from 'vue'
 import type { State } from '@/types'
-import { InjectionKey } from 'vue-demi'
+import { USE_CMD_STATE } from '@/useCmdState'
 
 defineProps({
   placeholder: {
@@ -19,8 +19,7 @@ defineEmits<{
   (e: 'update:modelValue', val: any): void
 }>()
 
-const key = 'useCmdState' as InjectionKey<State>
-const useCmdState = inject<State>(key, null)
+const useCmdState = inject<State>(USE_CMD_STATE)
 
 //log it as a computed
 const computedValue = computed(() => {

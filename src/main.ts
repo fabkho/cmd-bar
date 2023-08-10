@@ -1,7 +1,7 @@
 import './assets/anny-base.scss'
 import { createApp } from 'vue'
 import App from './App.vue'
-import useCmdState from '@/useCmdState'
+import useCmdState, { USE_CMD_STATE } from '@/useCmdState'
 import type { InjectionKey } from 'vue-demi'
 import type { State } from '@/types'
 // import CmdBarVue from '@/plugins/CmdBarVue'
@@ -9,7 +9,6 @@ import type { State } from '@/types'
 const app = createApp(App)
 
 // app.use(CmdBarVue, {})
-const key = 'useCmdState' as InjectionKey<State>
-app.provide(key, useCmdState)
+app.provide(USE_CMD_STATE, useCmdState)
 
 app.mount('#app')
