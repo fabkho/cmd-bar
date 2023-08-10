@@ -1,4 +1,4 @@
-import { type InjectionKey, reactive, readonly, provide } from 'vue'
+import { type InjectionKey, reactive, readonly } from 'vue'
 import type { CmdBarStore, State } from '@/types'
 import { items } from '@/types'
 

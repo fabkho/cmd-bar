@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T">
-import { ref, inject, computed } from 'vue'
+import { inject, computed } from 'vue'
 import { USE_CMD_STATE } from '@/useCmdState'
 import type { CmdBarStore } from '@/types'
 

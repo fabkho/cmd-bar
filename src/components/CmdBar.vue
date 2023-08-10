@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue'
 import { USE_CMD_STATE } from '@/useCmdState'
-import type { CmdBarStore, State } from '@/types'
+import type { CmdBarStore } from '@/types'
 
 const useCmdState = inject<CmdBarStore>(USE_CMD_STATE)
 

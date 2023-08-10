@@ -35,7 +35,7 @@ const filteredItems = computed(() => {
       <CmdBarInput v-model="searchTerm" />
     </template>
     <template #content>
-      <CmdBarItems v-slot="{ item }: Record<string, any>" :items="filteredItems">
+      <CmdBarItems v-slot="{ item }" :items="filteredItems">
         <div class="item__leading">
           <img :src="item.leading" alt="" />
         </div>
