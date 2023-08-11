@@ -38,7 +38,7 @@ const filteredItems = computed(() => {
     <template #content>
       <CmdBarItems v-slot="{ item }" :items="filteredItems">
         <div class="item__leading">
-          <img :src="item.leading" alt="" />
+          <img :src="item.leading" alt="icon" />
         </div>
         <div class="cmd-bar__item__title">{{ item.title }}</div>
         <div class="cmd-bar__item__actions"></div>

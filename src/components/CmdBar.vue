@@ -37,25 +37,35 @@ defineExpose({
  * @param event
  */
 function handleClickOutside(event: MouseEvent): void {
-  if (
-    !(
-      dialogContent.value === (event.target as HTMLDivElement) ||
-      dialogContent.value?.contains(event.target as Node)
-    )
-  ) {
-    dialog.value?.close()
+  dialog.value?.close()
+}
+
+const vClickOutside = {
+  mounted(el: HTMLElement, binding: any) {
+    el.__ClickOutsideHandler__ = (event: MouseEvent) => {
+      if (!(el === event.target || el.contains(event.target as Node))) {
+        binding.value(event, el)
+      }
+    }
+    document.body.addEventListener('click', el.__ClickOutsideHandler__)
+  },
+  unmount(el: HTMLElement) {
+    document.body.removeEventListener('click', el.__ClickOutsideHandler__)
   }
 }
 
+/**
+ * Handle keyboard events
+ * @param event
+ */
 function handleKeyDown(event: KeyboardEvent): void {
+  //TODO: handle more keys
   if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
     event.preventDefault()
 
     if (event.key === 'ArrowUp') {
-      console.log('up', Math.max(selectedIndex.value - 1, 0))
       useCmdState?.nextItem()
     } else if (event.key === 'ArrowDown') {
-      console.log('down', Math.min(selectedIndex.value + 1, items.value.length - 1))
       useCmdState?.prevItem()
     }
   }
@@ -63,14 +73,13 @@ function handleKeyDown(event: KeyboardEvent): void {
 </script>
 
 <template>
-  <dialog
-    data-cmd-bar
-    class="cmd-bar"
-    ref="dialog"
-    @click="handleClickOutside"
-    @keydown="handleKeyDown"
-  >
-    <div data-cmd-bar-wrapper class="cmd-bar__wrapper" ref="dialogContent">
+  <dialog data-cmd-bar class="cmd-bar" ref="dialog" @keydown="handleKeyDown">
+    <div
+      data-cmd-bar-wrapper
+      class="cmd-bar__wrapper"
+      ref="dialogContent"
+      v-click-outside="handleClickOutside"
+    >
       <div data-cmd-bar-header class="cmd-bar__header">
         <slot name="header" />
       </div>
