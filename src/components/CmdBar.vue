@@ -34,7 +34,6 @@ defineExpose({
 
 /**
  * Close dialog if click is outside of dialog
- * @param event
  */
 function handleClickOutside(): void {
   dialog.value?.close()
