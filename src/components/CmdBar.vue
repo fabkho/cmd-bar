@@ -36,7 +36,7 @@ defineExpose({
  * Close dialog if click is outside of dialog
  * @param event
  */
-function handleClickOutside(event: MouseEvent): void {
+function handleClickOutside(): void {
   dialog.value?.close()
 }
 
