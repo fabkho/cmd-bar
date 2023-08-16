@@ -1,17 +1,17 @@
 import { reactive, readonly } from 'vue'
-import type { State } from '@/types'
+import type { Commands, State } from '@/types'
 
 const state = reactive<State>({
   selectedCommandIndex: 0,
   searchTerm: '',
-  commands: [],
-  filteredCommands: []
+  commands: [] as Commands,
+  filteredCommands: [] as Commands
 })
 
 // Create a store object that provides readonly state and setter methods
 const store = {
   state: readonly(state),
-  setCommands(newItems: Record<string, any>): void {
+  setCommands(newItems: Commands): void {
     state.commands = newItems
     this.filterCommands()
   },

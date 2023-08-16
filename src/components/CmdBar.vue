@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ref, watch, type PropType } from 'vue'
 import store from '@/useCmdBarState'
+import type { Commands } from '@/types'
 
 const props = defineProps({
   commands: {
-    type: Array as PropType<Record<string, any>>,
+    type: Array as PropType<Commands>,
     required: true
   },
   visible: {

@@ -1,8 +1,8 @@
 export type State = {
   selectedCommandIndex: number
   searchTerm: string
-  commands: Record<string, any>
-  filteredCommands: Record<string, any>
+  commands: Commands
+  filteredCommands: Commands
 }
 
 export interface CmdBarStore {
@@ -14,3 +14,18 @@ export interface CmdBarStore {
   setFilteredCommands(newItems: string[]): void
   resetState(): void
 }
+
+export interface Command {
+  id: string
+  title: string
+  leading: string
+  actions: string[]
+  category: string
+  description: string
+}
+
+export type CommandNode = Command & {
+  children?: CommandNode[]
+}
+
+export type Commands = CommandNode[]

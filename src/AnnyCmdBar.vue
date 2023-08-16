@@ -2,42 +2,143 @@
 import { ref } from 'vue'
 import { CmdBar } from './index'
 import KeyboardShortcut from '@/components/KeyboardShortcut.vue'
+import type { Commands } from '@/types'
 
 const cmdBar = ref<typeof CmdBar | null>(null)
 
 // dummy data of 5 items for the CmdBar (id, title, icon, actions)
 // the icon is a link to a random unsplash image https://source.unsplash.com/random/300×300
 // actions are empty for now
-const items = [
+const items: Commands = [
   {
-    id: 1,
-    title: 'New',
+    id: '1',
+    title: 'File',
     leading: 'https://source.unsplash.com/random/300×300',
-    actions: []
+    actions: [],
+    category: 'Categories',
+    description: 'File operations',
+    children: [
+      {
+        id: '1.1',
+        title: 'New',
+        leading: 'https://source.unsplash.com/random/300×300',
+        actions: [],
+        category: 'File',
+        description: 'Create a new file.'
+      },
+      {
+        id: '1.2',
+        title: 'Open',
+        leading: 'https://source.unsplash.com/random/300×300',
+        actions: [],
+        category: 'File',
+        description: 'Open an existing file.'
+      }
+    ]
   },
   {
-    id: 2,
-    title: 'Open',
+    id: '2',
+    title: 'Edit',
     leading: 'https://source.unsplash.com/random/300×300',
-    actions: []
+    actions: [],
+    category: 'Categories',
+    description: 'Edit operations',
+    children: [
+      {
+        id: '2.1',
+        title: 'Cut',
+        leading: 'https://source.unsplash.com/random/300×300',
+        actions: [],
+        category: 'Edit',
+        description: 'Cut selected content.'
+      },
+      {
+        id: '2.2',
+        title: 'Copy',
+        leading: 'https://source.unsplash.com/random/300×300',
+        actions: [],
+        category: 'Edit',
+        description: 'Copy selected content.'
+      }
+    ]
   },
   {
-    id: 3,
-    title: 'Save',
+    id: '3',
+    title: 'View',
     leading: 'https://source.unsplash.com/random/300×300',
-    actions: []
+    actions: [],
+    category: 'Categories',
+    description: 'View operations',
+    children: [
+      {
+        id: '3.1',
+        title: 'Zoom In',
+        leading: 'https://source.unsplash.com/random/300×300',
+        actions: [],
+        category: 'View',
+        description: 'Zoom in on the content.'
+      },
+      {
+        id: '3.2',
+        title: 'Zoom Out',
+        leading: 'https://source.unsplash.com/random/300×300',
+        actions: [],
+        category: 'View',
+        description: 'Zoom out on the content.'
+      }
+    ]
   },
   {
-    id: 4,
-    title: 'Save As',
+    id: '4',
+    title: 'Help',
     leading: 'https://source.unsplash.com/random/300×300',
-    actions: []
+    actions: [],
+    category: 'Categories',
+    description: 'Help operations',
+    children: [
+      {
+        id: '4.1',
+        title: 'About',
+        leading: 'https://source.unsplash.com/random/300×300',
+        actions: [],
+        category: 'Help',
+        description: 'Open the About dialog.'
+      },
+      {
+        id: '4.2',
+        title: 'Documentation',
+        leading: 'https://source.unsplash.com/random/300×300',
+        actions: [],
+        category: 'Help',
+        description: 'Open the documentation.'
+      }
+    ]
   },
   {
-    id: 5,
-    title: 'Export',
+    id: '5',
+    title: 'Settings',
     leading: 'https://source.unsplash.com/random/300×300',
-    actions: []
+    actions: [],
+    category: 'Categories',
+    description: 'Settings operations',
+    children: [
+      {
+        id: '5.1',
+        title: 'General',
+        leading: 'https://source.unsplash.com/random/300×300',
+        actions: [],
+        category: 'Settings',
+        description: 'Open the general settings.'
+      },
+      {
+        id: '5.2',
+        title: 'Advanced',
+        leading: 'https://source.unsplash.com/random/300×300',
+        actions: [],
+        category: 'Settings',
+        description: 'Open the advanced settings.'
+      }
+    ]
   }
 ]
 
