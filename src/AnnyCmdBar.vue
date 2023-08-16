@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { CmdBar } from './index'
-import { requireInjection } from '@/utils'
-import type { CmdBarStore } from '@/types'
-import { USE_CMD_STATE } from '@/useCmdState'
 import KeyboardShortcut from '@/components/KeyboardShortcut.vue'
-
-const useCmdState = requireInjection<CmdBarStore>(USE_CMD_STATE)
 
 const cmdBar = ref<typeof CmdBar | null>(null)
 

@@ -1,10 +1,5 @@
-import { type InjectionKey, reactive, readonly } from 'vue'
-import type { CmdBarStore, State } from '@/types'
-
-/**
- * key for injection
- */
-export const USE_CMD_STATE: InjectionKey<CmdBarStore> = Symbol('useCmdState')
+import { reactive, readonly } from 'vue'
+import type { State } from '@/types'
 
 const state = reactive<State>({
   selectedCommandIndex: 0,

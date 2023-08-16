@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, type PropType } from 'vue'
-import { USE_CMD_STATE } from '@/useCmdState'
-import type { CmdBarStore } from '@/types'
-import { requireInjection } from '@/utils'
+import store from '@/useCmdBarState'
 
 const props = defineProps({
   commands: {
@@ -16,13 +14,11 @@ const props = defineProps({
   }
 })
 
-const useCmdState = requireInjection<CmdBarStore>(USE_CMD_STATE)
-
 const dialog = ref<HTMLDialogElement | null>(null)
 const dialogContent = ref<HTMLDivElement | null>(null)
 
 // provide items
-useCmdState?.setCommands(props.commands)
+store?.setCommands(props.commands)
 
 /**
  * toggle dialog
@@ -32,7 +28,7 @@ function toggleCmdBar(): void {
   if (dialog.value) {
     if (dialog.value?.open || props.visible === false) {
       dialog.value?.close()
-      useCmdState?.resetState()
+      store?.resetState()
     } else {
       dialog.value?.showModal()
     }
@@ -89,9 +85,9 @@ function handleKeyDown(event: KeyboardEvent): void {
 
     if (event.key === 'ArrowUp') {
       console.log('next item')
-      useCmdState?.nextCommand()
+      store?.nextCommand()
     } else if (event.key === 'ArrowDown') {
-      useCmdState?.prevCommand()
+      store?.prevCommand()
     }
   }
 }
