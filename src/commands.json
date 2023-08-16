@@ -1,0 +1,20 @@
+{
+  "commands": [
+    {
+      "id": 1,
+      "name": "Search Account",
+      "actions": ["searchAccount"],
+      "category": "Accounts",
+      "description": "Search for an account.",
+      "icon": "search"
+    },
+    {
+      "id": 2,
+      "name": "Create Booking",
+      "actions": ["createBooking", "openModal"],
+      "category": "Bookings",
+      "description": "Create a new booking and open a modal.",
+      "icon": "plus"
+    }
+  ]
+}

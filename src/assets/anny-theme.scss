@@ -58,13 +58,15 @@
     margin: 0;
     padding: 0;
     &__item {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
       cursor: pointer;
       height: 48px;
       padding: 0 .5rem;
       border-radius: 8px;
       font-size: 14px;
-      display: flex;
-      align-items: center;
       gap: 8px;
       color: var(--text-primary-color);
       user-select: none;
@@ -104,30 +106,31 @@
 /* Item */
 .item {
   &__leading {
-    width: 24px;
-    height: 24px;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
     img {
-      width: 100%;
-      height: 100%;
+      width: 24px;
+      height: 24px;
       aspect-ratio: 16/9;
     }
-  }
-  &__title {
-    font-size: 16px;
     font-weight: bold;
   }
   &__actions{
-    //  display: flex;
-    //  gap: 8px;
-    //  justify-content: flex-end;
+    margin-right: .5rem;
+    svg {
+      margin-top: .25rem;
+      width: 24px;
+      height: 24px;
+    }
   }
 }
 
 /* ANIMATIONS */
 @keyframes dialog {
   from {
-    opacity: 0;
-    transform: scale(0.3);
+    opacity: 0.25;
+    transform: scale(0.33);
   }
   to {
     opacity: 1;

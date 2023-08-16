@@ -1,15 +1,28 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch, type PropType } from 'vue'
 import { USE_CMD_STATE } from '@/useCmdState'
 import type { CmdBarStore } from '@/types'
 import { requireInjection } from '@/utils'
 
+const props = defineProps({
+  items: {
+    type: Array as PropType<Record<string, any>>,
+    required: true
+  },
+  visible: {
+    type: Boolean as PropType<boolean | null>,
+    required: false,
+    default: null
+  }
+})
+
 const useCmdState = requireInjection<CmdBarStore>(USE_CMD_STATE)
 
-const items = ref(useCmdState?.state.items ?? [])
 const dialog = ref<HTMLDialogElement | null>(null)
 const dialogContent = ref<HTMLDivElement | null>(null)
-const selectedIndex = ref(0)
+
+// provide items
+useCmdState?.setItems(props.items)
 
 /**
  * toggle dialog
@@ -17,8 +30,10 @@ const selectedIndex = ref(0)
 function toggleCmdBar(): void {
   // if component is mounted, open dialog
   if (dialog.value) {
-    if (dialog.value?.open) {
+    if (dialog.value?.open || props.visible === false) {
       dialog.value?.close()
+      console.log('close dialog')
+      useCmdState?.resetState()
     } else {
       dialog.value?.showModal()
     }
@@ -26,11 +41,22 @@ function toggleCmdBar(): void {
 }
 
 /**
- * expose toggleCmdBar function to parent component
+ * first option: toggle commandbar via exposed function
  */
 defineExpose({
   toggleCmdBar
 })
+
+/**
+ * second option: toggle commandbar on prop change
+ */
+watch(
+  () => props.visible,
+  () => {
+    toggleCmdBar()
+  },
+  { immediate: true }
+)
 
 /**
  * Close dialog if click is outside of dialog
@@ -40,7 +66,7 @@ function handleClickOutside(): void {
 }
 
 const vClickOutside = {
-  mounted(el: HTMLElement, binding: any) {
+  mounted(el: any, binding: any) {
     el.__ClickOutsideHandler__ = (event: MouseEvent) => {
       if (!(el === event.target || el.contains(event.target as Node))) {
         binding.value(event, el)
@@ -48,7 +74,7 @@ const vClickOutside = {
     }
     document.body.addEventListener('click', el.__ClickOutsideHandler__)
   },
-  unmount(el: HTMLElement) {
+  unmount(el: any) {
     document.body.removeEventListener('click', el.__ClickOutsideHandler__)
   }
 }
@@ -63,6 +89,7 @@ function handleKeyDown(event: KeyboardEvent): void {
     event.preventDefault()
 
     if (event.key === 'ArrowUp') {
+      console.log('next item')
       useCmdState?.nextItem()
     } else if (event.key === 'ArrowDown') {
       useCmdState?.prevItem()
