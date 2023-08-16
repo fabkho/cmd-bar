@@ -15,7 +15,7 @@ const emit = defineEmits<{
 }>()
 
 const useCmdState = requireInjection<CmdBarStore>(USE_CMD_STATE)
-const modelValue = useCmdState?.state.searchTerm ?? ''
+
 /**
  * handle input event
  * emit input event and store value in store
@@ -33,7 +33,7 @@ function handleInput(e: Event): void {
     data-cmd-bar-input
     class="cmd-bar__input"
     autofocus
-    :value="modelValue"
+    :value="useCmdState.state.searchTerm"
     :placeholder="placeholder"
     @input="handleInput"
   />

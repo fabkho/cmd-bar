@@ -83,7 +83,7 @@ const vClickOutside = {
  * @param event
  */
 function handleKeyDown(event: KeyboardEvent): void {
-  //TODO: handle more keys
+  //TODO: handle more keys in Composable helper
   if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
     event.preventDefault()
 
