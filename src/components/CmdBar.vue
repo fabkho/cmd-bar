@@ -5,7 +5,7 @@ import type { CmdBarStore } from '@/types'
 import { requireInjection } from '@/utils'
 
 const props = defineProps({
-  items: {
+  commands: {
     type: Array as PropType<Record<string, any>>,
     required: true
   },
@@ -22,7 +22,7 @@ const dialog = ref<HTMLDialogElement | null>(null)
 const dialogContent = ref<HTMLDivElement | null>(null)
 
 // provide items
-useCmdState?.setItems(props.items)
+useCmdState?.setCommands(props.commands)
 
 /**
  * toggle dialog
@@ -32,7 +32,6 @@ function toggleCmdBar(): void {
   if (dialog.value) {
     if (dialog.value?.open || props.visible === false) {
       dialog.value?.close()
-      console.log('close dialog')
       useCmdState?.resetState()
     } else {
       dialog.value?.showModal()
@@ -90,9 +89,9 @@ function handleKeyDown(event: KeyboardEvent): void {
 
     if (event.key === 'ArrowUp') {
       console.log('next item')
-      useCmdState?.nextItem()
+      useCmdState?.nextCommand()
     } else if (event.key === 'ArrowDown') {
-      useCmdState?.prevItem()
+      useCmdState?.prevCommand()
     }
   }
 }

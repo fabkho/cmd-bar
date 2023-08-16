@@ -9,11 +9,11 @@ defineSlots<{
 }>()
 
 const useCmdState = requireInjection<CmdBarStore>(USE_CMD_STATE)
-const filteredItems = computed(() => useCmdState?.state.filteredItems ?? [])
+const filteredItems = computed(() => useCmdState?.state.filteredCommands ?? [])
 
 const isSelectedItem = computed(() => {
   return (index: number) => {
-    return useCmdState?.state.selectedItemIndex === index
+    return useCmdState?.state.selectedCommandIndex === index
   }
 })
 </script>

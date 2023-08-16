@@ -7,47 +7,47 @@ import type { CmdBarStore, State } from '@/types'
 export const USE_CMD_STATE: InjectionKey<CmdBarStore> = Symbol('useCmdState')
 
 const state = reactive<State>({
-  selectedItemIndex: 0,
+  selectedCommandIndex: 0,
   searchTerm: '',
-  items: [],
-  filteredItems: []
+  commands: [],
+  filteredCommands: []
 })
 
 // Create a store object that provides readonly state and setter methods
 const store = {
   state: readonly(state),
-  setItems(newItems: Record<string, any>): void {
-    state.items = newItems
-    this.filterItems()
+  setCommands(newItems: Record<string, any>): void {
+    state.commands = newItems
+    this.filterCommands()
   },
-  filterItems(): void {
+  filterCommands(): void {
     if (state.searchTerm && state.searchTerm.length > 1) {
       const lowerCaseSearchTerm = state.searchTerm.toLowerCase()
-      state.filteredItems = state.items.filter((item: any) =>
+      state.filteredCommands = state.commands.filter((item: any) =>
         item.title.toLowerCase().includes(lowerCaseSearchTerm)
       )
     } else {
-      state.filteredItems = state.items
+      state.filteredCommands = state.commands
     }
   },
   resetState(): void {
-    state.selectedItemIndex = 0
+    state.selectedCommandIndex = 0
     state.searchTerm = ''
-    this.filterItems()
+    this.filterCommands()
   },
-  nextItem(): void {
-    if (state.selectedItemIndex > 0) {
-      state.selectedItemIndex--
+  nextCommand(): void {
+    if (state.selectedCommandIndex > 0) {
+      state.selectedCommandIndex--
     }
   },
-  prevItem(): void {
-    if (state.selectedItemIndex < state.items.length - 1) {
-      state.selectedItemIndex++
+  prevCommand(): void {
+    if (state.selectedCommandIndex < state.commands.length - 1) {
+      state.selectedCommandIndex++
     }
   },
   setSearchTerm(term: string): void {
     state.searchTerm = term
-    this.filterItems()
+    this.filterCommands()
   }
 }
 

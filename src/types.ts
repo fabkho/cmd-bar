@@ -1,16 +1,16 @@
 export type State = {
-  selectedItemIndex: number
+  selectedCommandIndex: number
   searchTerm: string
-  items: Record<string, any>
-  filteredItems: Record<string, any>
+  commands: Record<string, any>
+  filteredCommands: Record<string, any>
 }
 
 export interface CmdBarStore {
   state: Readonly<State>
-  nextItem(): void
-  prevItem(): void
+  nextCommand(): void
+  prevCommand(): void
   setSearchTerm(term: string): void
-  setItems(newItems: Record<string, any>): void
-  setFilteredItems(newItems: string[]): void
+  setCommands(newItems: Record<string, any>): void
+  setFilteredCommands(newItems: string[]): void
   resetState(): void
 }

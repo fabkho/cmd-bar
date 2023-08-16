@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import KeyboardShortcut from '@/components/KeyboardShortcut.vue'
-import CmdBar from '@/components/CmdBar.vue'
-import CmdBarInput from '@/components/CmdBarInput.vue'
-import CmdBarItems from '@/components/CmdBarItems.vue'
-import { USE_CMD_STATE } from '@/useCmdState'
-import type { CmdBarStore } from '@/types'
+import { CmdBar } from './index'
 import { requireInjection } from '@/utils'
+import type { CmdBarStore } from '@/types'
+import { USE_CMD_STATE } from '@/useCmdState'
+import KeyboardShortcut from '@/components/KeyboardShortcut.vue'
 
 const useCmdState = requireInjection<CmdBarStore>(USE_CMD_STATE)
 
@@ -17,31 +15,31 @@ const cmdBar = ref<typeof CmdBar | null>(null)
 // actions are empty for now
 const items = [
   {
-    id: '1',
+    id: 1,
     title: 'New',
     leading: 'https://source.unsplash.com/random/300×300',
     actions: []
   },
   {
-    id: '2',
+    id: 2,
     title: 'Open',
     leading: 'https://source.unsplash.com/random/300×300',
     actions: []
   },
   {
-    id: '3',
+    id: 3,
     title: 'Save',
     leading: 'https://source.unsplash.com/random/300×300',
     actions: []
   },
   {
-    id: '4',
+    id: 4,
     title: 'Save As',
     leading: 'https://source.unsplash.com/random/300×300',
     actions: []
   },
   {
-    id: '5',
+    id: 5,
     title: 'Export',
     leading: 'https://source.unsplash.com/random/300×300',
     actions: []
@@ -56,12 +54,12 @@ function toggleCmdBar(): void {
 </script>
 
 <template>
-  <CmdBar :items="items" ref="cmdBar">
+  <CmdBar :commands="items" ref="cmdBar">
     <template #header>
-      <CmdBarInput />
+      <CmdBar.Input />
     </template>
     <template #content>
-      <CmdBarItems v-slot="{ item }">
+      <CmdBar.Items v-slot="{ item }">
         <div class="item__leading">
           <img :src="item.leading" alt="icon" />
           {{ item.title }}
@@ -83,7 +81,7 @@ function toggleCmdBar(): void {
             />
           </svg>
         </div>
-      </CmdBarItems>
+      </CmdBar.Items>
     </template>
   </CmdBar>
   <keyboard-shortcut :headless="true" :ctrl="true" shortcut="k" @detected="toggleCmdBar" />

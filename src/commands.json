@@ -1,20 +1,44 @@
 {
   "commands": [
     {
-      "id": 1,
-      "name": "Search Account",
+      "id": "1",
+      "title": "Search Account",
+      "leading": "https://source.unsplash.com/random/300×300",
       "actions": ["searchAccount"],
       "category": "Accounts",
-      "description": "Search for an account.",
-      "icon": "search"
+      "description": "Search for an account."
     },
     {
-      "id": 2,
-      "name": "Create Booking",
+      "id": "2",
+      "title": "Create Booking",
+      "leading": "https://source.unsplash.com/random/300×300",
       "actions": ["createBooking", "openModal"],
       "category": "Bookings",
-      "description": "Create a new booking and open a modal.",
-      "icon": "plus"
+      "description": "Create a new booking and open a modal."
+    },
+    {
+      "id": "3",
+      "title": "Create User",
+      "leading": "https://source.unsplash.com/random/300×300",
+      "actions": ["createUser"],
+      "category": "Users",
+      "description": "Create a new user."
+    },
+    {
+      "id": "4",
+        "title": "Go to Bookings page",
+        "leading": "https://source.unsplash.com/random/300×300",
+        "actions": ["goToBookings"],
+        "category": "Bookings",
+        "description": "Go to the bookings page."
+    },
+    {
+      "id": "5",
+        "title": "Go to Accounts page",
+        "leading": "https://source.unsplash.com/random/300×300",
+        "actions": ["goToAccounts"],
+        "category": "Accounts",
+        "description": "Go to the accounts page."
     }
   ]
 }
