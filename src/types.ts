@@ -2,8 +2,18 @@ export type State = {
   selectedCommandId: string | null
   parentCommandId: string | null
   searchTerm: string
+  /**
+   * The full list of root-level commands
+   */
   commands: Commands
+  /**
+   * The list of commands that are currently visible
+   */
   visibleCommands: Commands
+  /**
+   * A cache of the last visible commands
+   */
+  visibleCommandsCache: Commands
 }
 
 export interface CmdBarStore {

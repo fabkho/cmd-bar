@@ -8,7 +8,8 @@ const state = reactive<State>({
   parentCommandId: null,
   searchTerm: '',
   commands: [] as Commands,
-  visibleCommands: [] as Commands
+  visibleCommands: [] as Commands,
+  visibleCommandsCache: [] as Commands
 })
 
 const store = {
@@ -22,22 +23,12 @@ const store = {
   },
   filterCommands(children = false): void {
     if (children) {
-      state.visibleCommands = getChildren()
-      state.parentCommandId = state.selectedCommandId
-    } else if (state.searchTerm && state.searchTerm.length > 1) {
-      const lowerCaseSearchTerm = state.searchTerm.toLowerCase()
-      state.visibleCommands = state.commands.filter((item: CommandNode) =>
-        item.title.toLowerCase().includes(lowerCaseSearchTerm)
-      )
-      state.selectedCommandId = state.parentCommandId ?? state.visibleCommands[0].id
-      state.parentCommandId = null
+      applyChildFilter()
+    } else if (state.searchTerm) {
+      applySearchFilter()
     } else {
-      state.visibleCommands = state.commands
-      state.selectedCommandId = state.parentCommandId ?? state.visibleCommands[0].id
-      state.parentCommandId = null
+      applyDefaultFilter()
     }
-
-    state.selectedCommandId = state.visibleCommands[0].id
   },
   resetState(): void {
     state.selectedCommandId = null
@@ -73,6 +64,45 @@ const store = {
 }
 
 /**
+ * helper function to apply the child filter
+ */
+function applyChildFilter(): void {
+  state.visibleCommands = getChildren()
+  state.parentCommandId = state.selectedCommandId
+  state.selectedCommandId = state.visibleCommands[0].id
+}
+/**
+ * helper function to cache the visible commands and apply the search filter
+ */
+function applySearchFilter(): void {
+  if (state.searchTerm.length > 1) {
+    const lowerCaseSearchTerm = state.searchTerm.toLowerCase()
+    state.visibleCommandsCache = state.visibleCommands
+    state.visibleCommands = state.visibleCommands.filter((item: CommandNode) =>
+      item.title.toLowerCase().includes(lowerCaseSearchTerm)
+    )
+  }
+  selectCommand(state.visibleCommands[0].id)
+}
+/**
+ * helper function to apply the default filter
+ */
+function applyDefaultFilter(): void {
+  state.visibleCommands =
+    state.visibleCommandsCache.length > 0 ? state.visibleCommandsCache : state.commands
+  selectCommand(state.visibleCommands[0].id)
+}
+
+/**
+ * helper function to select a command
+ * @param commandId
+ */
+function selectCommand(commandId: string): void {
+  state.selectedCommandId = state.parentCommandId ?? commandId
+  state.parentCommandId = null
+}
+
+/**
  * helper function to get the index of the selected command
  */
 function getSelectedIndex(): number {
@@ -98,10 +128,10 @@ function getChildren(): Commands {
 function uniquifyIds(): void {
   const prefix = 'command-'
   state.commands.forEach((item) => {
-    item.id = `${prefix}-${item.id + nanoid()}`
+    item.id = `${prefix}${item.id + nanoid()}`
     if (item.children) {
       item.children.forEach((child, childIndex) => {
-        child.id = `${prefix}-${item.id}.${childIndex}`
+        child.id = `${prefix}${item.id}.${childIndex}`
       })
     }
   })
