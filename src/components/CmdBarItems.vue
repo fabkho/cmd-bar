@@ -14,21 +14,23 @@ const isSelectedItem = computed(() => {
 })
 
 const visibleItems = computed(() => {
-  return showChildren.value ? store?.getChildren() ?? [] : store?.state.filteredCommands
+  console.log('visibleItems computed')
+  return store?.state.visibleCommands
 })
 
 /**
  * Keybindings
  */
 whenever(keys.Tab, () => {
-  // check if both shift and tab are pressed
-  whenever(back, () => {
-    showChildren.value = false
-    return
-  })
-  showChildren.value = true
+  if (keys.Shift.value) return
+  store?.filterCommands(true)
   // reset search term
-  store?.setSearchTerm('')
+  store?.resetSearchTerm()
+})
+whenever(back, () => {
+  showChildren.value = false
+  store?.filterCommands()
+  return
 })
 </script>
 

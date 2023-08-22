@@ -7,7 +7,7 @@ const state = reactive<State>({
   selectedCommandId: null,
   searchTerm: '',
   commands: [] as Commands,
-  filteredCommands: [] as Commands
+  visibleCommands: [] as Commands
 })
 
 const store = {
@@ -16,7 +16,6 @@ const store = {
     state.commands = newItems
     // make id unique and assign it to the state
     uniquifyIds()
-    state.selectedCommandId = state.commands[0].id
     // init filtered commands
     this.filterCommands()
   },
@@ -26,23 +25,23 @@ const store = {
   //   uniquifyIds()
   //   this.filterCommands()
   // },
-  getChildren(): Commands | null {
-    const command = findNodeById(state.commands, state.selectedCommandId)
-    if (command && command.children) {
-      return command.children
-    }
-    return null
-  },
   //TODO: let user define threshold for search (default 1)
-  filterCommands(): void {
-    if (state.searchTerm && state.searchTerm.length > 1) {
+  filterCommands(children = false): void {
+    console.log('filterCommands', children)
+    if (children) {
+      console.log('children')
+      state.visibleCommands = getChildren()
+    } else if (state.searchTerm && state.searchTerm.length > 1) {
+      console.log('search')
       const lowerCaseSearchTerm = state.searchTerm.toLowerCase()
-      state.filteredCommands = state.commands.filter((item: CommandNode) =>
+      state.visibleCommands = state.commands.filter((item: CommandNode) =>
         item.title.toLowerCase().includes(lowerCaseSearchTerm)
       )
     } else {
-      state.filteredCommands = state.commands
+      console.log('no children')
+      state.visibleCommands = state.commands
     }
+    state.selectedCommandId = state.visibleCommands[0].id
   },
   resetState(): void {
     state.selectedCommandId = null
@@ -53,7 +52,7 @@ const store = {
     if (state.selectedCommandId) {
       const selectedIndex = getSelectedIndex()
       if (selectedIndex > 0) {
-        state.selectedCommandId = state.filteredCommands[selectedIndex - 1].id
+        state.selectedCommandId = state.visibleCommands[selectedIndex - 1].id
       }
     }
   },
@@ -61,8 +60,8 @@ const store = {
   prevCommand(): void {
     if (state.selectedCommandId) {
       const selectedIndex = getSelectedIndex()
-      if (selectedIndex < state.filteredCommands.length - 1) {
-        state.selectedCommandId = state.filteredCommands[selectedIndex + 1].id
+      if (selectedIndex < state.visibleCommands.length - 1) {
+        state.selectedCommandId = state.visibleCommands[selectedIndex + 1].id
       }
     }
   },
@@ -70,13 +69,19 @@ const store = {
   setSearchTerm(term: string): void {
     state.searchTerm = term
     this.filterCommands()
+  },
+  resetSearchTerm(): void {
+    state.searchTerm = ''
+  },
+  selectItem(id: string): void {
+    state.selectedCommandId = id
   }
 }
 
 // Private helper function to get the index of the selected command
 function getSelectedIndex(): number {
   if (state.selectedCommandId) {
-    return state.filteredCommands.findIndex((command) => command.id === state.selectedCommandId)
+    return state.visibleCommands.findIndex((command) => command.id === state.selectedCommandId)
   }
   return -1
 }
@@ -87,6 +92,17 @@ function getSelectedIndex(): number {
 //         item.children.forEach(makeIdUnique)
 //       }
 //     }
+
+/**
+ * helper function to get the children of the selected command
+ */
+function getChildren(): Commands {
+  const command = findNodeById(state.commands, state.selectedCommandId)
+  if (command && command.children) {
+    return command.children
+  }
+  return []
+}
 
 /**
  * makes the id of evey command unique

@@ -2,7 +2,7 @@ export type State = {
   selectedCommandId: string | null
   searchTerm: string
   commands: Commands
-  filteredCommands: Commands
+  visibleCommands: Commands
 }
 
 export interface CmdBarStore {
