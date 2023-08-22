@@ -96,11 +96,12 @@ function getChildren(): Commands {
  * helper function to make the id unique
  */
 function uniquifyIds(): void {
+  const prefix = 'command-'
   state.commands.forEach((item) => {
-    item.id = `command-${item.id + nanoid()}`
+    item.id = `${prefix}-${item.id + nanoid()}`
     if (item.children) {
       item.children.forEach((child, childIndex) => {
-        child.id = `command-${item.id}.${childIndex}`
+        child.id = `${prefix}-${item.id}.${childIndex}`
       })
     }
   })
