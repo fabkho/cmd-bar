@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { CmdBar } from './index'
-import KeyboardShortcut from '@/components/KeyboardShortcut.vue'
 import type { Commands } from '@/types'
+import { useMagicKeys, whenever } from '@vueuse/core'
 
 const cmdBar = ref<typeof CmdBar | null>(null)
+const keys = useMagicKeys()
+const cmdK = keys['Meta+k']
 
 // dummy data of 5 items for the CmdBar (id, title, icon, actions)
 // the icon is a link to a random unsplash image https://source.unsplash.com/random/300×300
@@ -142,11 +144,11 @@ const items: Commands = [
   }
 ]
 
-function toggleCmdBar(): void {
+whenever(cmdK, () => {
   if (cmdBar.value) {
     cmdBar.value.toggleCmdBar()
   }
-}
+})
 </script>
 
 <template>
@@ -195,7 +197,6 @@ function toggleCmdBar(): void {
       </CmdBar.Items>
     </template>
   </CmdBar>
-  <keyboard-shortcut :headless="true" :ctrl="true" shortcut="k" @detected="toggleCmdBar" />
 </template>
 
 <style lang="scss">
