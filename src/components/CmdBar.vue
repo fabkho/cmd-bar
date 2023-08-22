@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, type PropType, toRef, computed } from 'vue'
+import { ref, type PropType, toRef } from 'vue'
 import { useMagicKeys, whenever } from '@vueuse/core'
 import store from '@/useCmdBarState'
 import type { Commands } from '@/types'
@@ -22,7 +22,7 @@ const keys = useMagicKeys()
 const metaK = ref(['Meta+k'])
 
 // provide items
-store?.setCommands(props.commands)
+store?.registerCommands(props.commands)
 
 /**
  * toggle dialog
@@ -85,13 +85,6 @@ whenever(keys.arrowDown, () => {
 // listen for meta+ k and toggle commandbar
 whenever(metaK, () => {
   toggleCmdBar()
-})
-
-whenever(keys.Tab, () => {
-  console.log('tab')
-  // now we need to show the child commands of the current selected command
-  const children = computed(() => store?.getChildren(store?.state.selectedCommandId ?? ''))
-  console.log(children.value)
 })
 </script>
 
