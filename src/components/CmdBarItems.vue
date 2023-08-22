@@ -1,9 +1,8 @@
 <script setup lang="ts" generic="T">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import store from '@/useCmdBarState'
 import { useMagicKeys, whenever } from '@vueuse/core'
 
-const showChildren = ref<boolean>(false)
 const keys = useMagicKeys()
 const back = keys['Shift+Tab']
 
@@ -14,7 +13,6 @@ const isSelectedItem = computed(() => {
 })
 
 const visibleItems = computed(() => {
-  console.log('visibleItems computed')
   return store?.state.visibleCommands
 })
 
@@ -28,7 +26,6 @@ whenever(keys.Tab, () => {
   store?.resetSearchTerm()
 })
 whenever(back, () => {
-  showChildren.value = false
   store?.filterCommands()
   return
 })

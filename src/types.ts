@@ -1,5 +1,6 @@
 export type State = {
   selectedCommandId: string | null
+  parentCommandId: string | null
   searchTerm: string
   commands: Commands
   visibleCommands: Commands
