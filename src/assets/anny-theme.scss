@@ -117,6 +117,8 @@
     font-weight: bold;
   }
   &__actions{
+    display: flex;
+    gap: 0.5rem;
     margin-right: .5rem;
     svg {
       margin-top: .25rem;
