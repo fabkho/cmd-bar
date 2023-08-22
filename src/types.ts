@@ -1,5 +1,5 @@
 export type State = {
-  selectedCommandIndex: number
+  selectedCommandId: string | null
   searchTerm: string
   commands: Commands
   filteredCommands: Commands

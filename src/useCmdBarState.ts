@@ -1,19 +1,30 @@
 import { reactive, readonly } from 'vue'
 import type { Commands, State } from '@/types'
+import { findNodeById } from '@/utils'
+import { nanoid } from 'nanoid'
 
 const state = reactive<State>({
-  selectedCommandIndex: 0,
+  selectedCommandId: null,
   searchTerm: '',
   commands: [] as Commands,
   filteredCommands: [] as Commands
 })
 
-// Create a store object that provides readonly state and setter methods
 const store = {
   state: readonly(state),
   setCommands(newItems: Commands): void {
     state.commands = newItems
+    uniquifyIds()
+    state.selectedCommandId = state.commands[0].id
     this.filterCommands()
+  },
+  //TODO: addCommands method to add new commands on runtime
+  getChildren(commandId: string | null): Commands | false {
+    const command = findNodeById(state.commands, commandId)
+    if (command && command.children) {
+      return command.children
+    }
+    return false
   },
   filterCommands(): void {
     if (state.searchTerm && state.searchTerm.length > 1) {
@@ -26,24 +37,60 @@ const store = {
     }
   },
   resetState(): void {
-    state.selectedCommandIndex = 0
+    state.selectedCommandId = null
     state.searchTerm = ''
     this.filterCommands()
   },
   nextCommand(): void {
-    if (state.selectedCommandIndex > 0) {
-      state.selectedCommandIndex--
+    if (state.selectedCommandId) {
+      const selectedIndex = getSelectedIndex()
+      if (selectedIndex > 0) {
+        state.selectedCommandId = state.filteredCommands[selectedIndex - 1].id
+      }
     }
   },
+
   prevCommand(): void {
-    if (state.selectedCommandIndex < state.commands.length - 1) {
-      state.selectedCommandIndex++
+    if (state.selectedCommandId) {
+      const selectedIndex = getSelectedIndex()
+      if (selectedIndex < state.filteredCommands.length - 1) {
+        state.selectedCommandId = state.filteredCommands[selectedIndex + 1].id
+      }
     }
   },
+
   setSearchTerm(term: string): void {
     state.searchTerm = term
     this.filterCommands()
   }
 }
 
+// Private helper function to get the index of the selected command
+function getSelectedIndex(): number {
+  if (state.selectedCommandId) {
+    return state.filteredCommands.findIndex((command) => command.id === state.selectedCommandId)
+  }
+  return -1
+}
+//  // make id unique
+//     const makeIdUnique = (item: CommandNode): void => {
+//       item.id = `command-${item.id + nanoid()}`
+//       if (item.children) {
+//         item.children.forEach(makeIdUnique)
+//       }
+//     }
+
+/**
+ * makes the id of evey command unique
+ */
+function uniquifyIds(): void {
+  state.commands.forEach((item) => {
+    item.id = `command-${item.id + nanoid()}`
+    if (item.children) {
+      item.children.forEach((child, childIndex) => {
+        child.id = `command-${item.id}.${childIndex}`
+      })
+    }
+  })
+}
 export default store

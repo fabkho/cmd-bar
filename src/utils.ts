@@ -7,3 +7,10 @@ export function requireInjection<T>(key: InjectionKey<T>, defaultValue?: T) {
   }
   return resolved
 }
+
+export function findNodeById<T extends { id: string | null }>(
+  nodes: T[],
+  id: string | null
+): T | undefined {
+  return nodes.find((node) => node.id === id)
+}

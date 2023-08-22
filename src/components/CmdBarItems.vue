@@ -9,8 +9,8 @@ import store from '@/useCmdBarState'
 const filteredItems = computed(() => store?.state.filteredCommands ?? [])
 
 const isSelectedItem = computed(() => {
-  return (index: number) => {
-    return store?.state.selectedCommandIndex === index
+  return (id: string) => {
+    return store?.state.selectedCommandId === id
   }
 })
 </script>
@@ -19,9 +19,9 @@ const isSelectedItem = computed(() => {
   <ul data-cmd-bar-items class="cmd-bar__items">
     <li
       data-cmd-bar-item
-      v-for="(item, index) in filteredItems"
+      v-for="item in filteredItems"
       class="cmd-bar__items__item"
-      :class="{ selected: isSelectedItem(Number(index)) }"
+      :class="{ selected: isSelectedItem(item.id) }"
     >
       <slot :item="item" />
     </li>

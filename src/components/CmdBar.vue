@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, watch, type PropType } from 'vue'
+import { ref, type PropType, toRef, computed } from 'vue'
+import { useMagicKeys, whenever } from '@vueuse/core'
 import store from '@/useCmdBarState'
 import type { Commands } from '@/types'
 
@@ -17,6 +18,8 @@ const props = defineProps({
 
 const dialog = ref<HTMLDialogElement | null>(null)
 const dialogContent = ref<HTMLDivElement | null>(null)
+const keys = useMagicKeys()
+const metaK = ref(['Meta+k'])
 
 // provide items
 store?.setCommands(props.commands)
@@ -46,13 +49,9 @@ defineExpose({
 /**
  * second option: toggle commandbar on prop change
  */
-watch(
-  () => props.visible,
-  () => {
-    toggleCmdBar()
-  },
-  { immediate: true }
-)
+whenever(toRef(props.visible) ?? false, () => {
+  toggleCmdBar()
+})
 
 /**
  * Close dialog if click is outside of dialog
@@ -75,27 +74,29 @@ const vClickOutside = {
   }
 }
 
-/**
- * Handle keyboard events
- * @param event
- */
-function handleKeyDown(event: KeyboardEvent): void {
-  //TODO: handle more keys in Composable helper
-  if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-    event.preventDefault()
+whenever(keys.arrowUp, () => {
+  store?.nextCommand()
+})
 
-    if (event.key === 'ArrowUp') {
-      console.log('next item')
-      store?.nextCommand()
-    } else if (event.key === 'ArrowDown') {
-      store?.prevCommand()
-    }
-  }
-}
+whenever(keys.arrowDown, () => {
+  store?.prevCommand()
+})
+
+// listen for meta+ k and toggle commandbar
+whenever(metaK, () => {
+  toggleCmdBar()
+})
+
+whenever(keys.Tab, () => {
+  console.log('tab')
+  // now we need to show the child commands of the current selected command
+  const children = computed(() => store?.getChildren(store?.state.selectedCommandId ?? ''))
+  console.log(children.value)
+})
 </script>
 
 <template>
-  <dialog data-cmd-bar class="cmd-bar" ref="dialog" @keydown="handleKeyDown">
+  <dialog data-cmd-bar class="cmd-bar" ref="dialog">
     <div
       data-cmd-bar-wrapper
       class="cmd-bar__wrapper"
