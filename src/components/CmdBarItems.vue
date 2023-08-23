@@ -19,7 +19,6 @@ const visibleItems = computed(() => {
       data-cmd-bar-item
       v-for="item in visibleItems"
       class="cmd-bar__items__item"
-      :class="{ selected: isSelectedItem(item.id) }"
       role="option"
       :aria-selected="isSelectedItem(item.id)"
     >
