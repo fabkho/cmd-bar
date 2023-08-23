@@ -90,7 +90,7 @@ function applySearchFilter(): void {
       item.title.toLowerCase().includes(lowerCaseSearchTerm)
     )
   }
-  selectCommand(state.visibleCommands[0].id)
+  selectCommand(state.visibleCommands[0]?.id)
 }
 /**
  * helper function to apply the default filter
