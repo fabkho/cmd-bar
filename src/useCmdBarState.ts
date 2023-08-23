@@ -12,6 +12,8 @@ const state = reactive<State>({
   visibleCommandsCache: [] as Commands
 })
 
+let closeCmdBarFunction = () => {}
+
 const store = {
   state: readonly(state),
   registerCommands(newItems: Commands): void {
@@ -53,11 +55,19 @@ const store = {
     }
   },
 
+  registerToggleCmdBar(toggleCmdBar: () => void) {
+    closeCmdBarFunction = toggleCmdBar
+  },
+
   executeCommand(): void {
     const command = findNodeById(state.commands, state.selectedCommandId)
     console.log('execute', command)
     if (command) {
       command.action()
+      if (command.actionClosesCmdBar) {
+        // close dialog
+        closeCmdBarFunction()
+      }
     }
   },
 

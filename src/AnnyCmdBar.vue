@@ -19,6 +19,7 @@ const items: Commands = [
     action: () => {
       alert('File action triggered!')
     },
+    actionClosesCmdBar: true,
     category: 'Categories',
     description: 'File operations'
   },
@@ -29,6 +30,7 @@ const items: Commands = [
     action: () => {
       alert('Edit action triggered!')
     },
+    actionClosesCmdBar: false,
     category: 'Categories',
     description: 'Edit operations'
   },
@@ -39,6 +41,7 @@ const items: Commands = [
     action: () => {
       alert('View action triggered!')
     },
+    actionClosesCmdBar: false,
     category: 'Categories',
     description: 'View operations'
   },
@@ -49,6 +52,7 @@ const items: Commands = [
     action: () => {
       alert('Help action triggered!')
     },
+    actionClosesCmdBar: false,
     category: 'Categories',
     description: 'Help operations'
   },
@@ -59,6 +63,7 @@ const items: Commands = [
     action: () => {
       alert('Settings action triggered!')
     },
+    actionClosesCmdBar: false,
     category: 'Categories',
     description: 'Settings operations'
   }

@@ -33,6 +33,7 @@ export interface Command {
   category: string
   description: string
   action: () => void
+  actionClosesCmdBar: boolean
 }
 
 export type CommandNode = Command & {

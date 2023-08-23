@@ -48,6 +48,8 @@ function toggleCmdBar(): void {
     }
   }
 }
+// provide toggle function to store
+store.registerToggleCmdBar(toggleCmdBar)
 
 /**
  * first option: toggle commandbar via exposed function

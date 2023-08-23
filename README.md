@@ -1,6 +1,8 @@
 # CmdBarVue
+TODO
 
 ## Features
+TODO
 
 ### Commands
 To add commands to the command bar, you can pass an array of `Command` objects to the component. A `Command` object has the following properties:
