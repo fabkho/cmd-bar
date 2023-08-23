@@ -78,7 +78,7 @@
 
       &[aria-selected='true'],
       &:hover:not([aria-selected='false']) {
-        background: var(--gray4);
+        background: var(--gray3);
 
 
         &:after {
@@ -98,8 +98,8 @@
       }
 
       &:active {
-        transition-property: background;
-        background: var(--gray4);
+        //transition-property: background;
+        //background: var(--gray1);
       }
 
       svg {
@@ -115,11 +115,15 @@
     &__leading {
       display: flex;
       align-items: center;
-      gap: .5rem;
+      gap: 1rem;
       img {
         width: 24px;
         height: 24px;
         aspect-ratio: 16/9;
+
+        /* to white */
+        filter: brightness(0) invert(1);
+
       }
       font-weight: bold;
     }

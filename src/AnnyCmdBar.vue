@@ -14,7 +14,7 @@ const cmdK = keys['Meta+k']
 const items: Commands = [
   {
     id: '1',
-    leading: 'https://source.unsplash.com/random/300×300',
+    leading: './src/assets/icons/user.svg',
     title: 'Thomas Shelby',
     action: () => {
       alert('I need a cigarette')
@@ -25,7 +25,7 @@ const items: Commands = [
   },
   {
     id: '2',
-    leading: 'https://source.unsplash.com/random/300×300',
+    leading: './src/assets/icons/user.svg',
     title: 'Arthur Shelby',
     action: () => {
       alert('Arthur will kill you!')
@@ -36,29 +36,29 @@ const items: Commands = [
   },
   {
     id: '3',
-    leading: 'https://source.unsplash.com/random/300×300',
-    title: 'Gun',
+    leading: './src/assets/icons/create.svg',
+    title: 'Booking',
     action: () => {
-      alert('Peng!')
+      alert('create Booking!')
     },
     actionClosesCmdBar: false,
-    group: 'Equipment',
+    group: 'Create',
     description: 'View operations'
   },
   {
     id: '4',
-    leading: 'https://source.unsplash.com/random/300×300',
-    title: 'Knife',
+    leading: './src/assets/icons/create.svg',
+    title: 'Resource',
     action: () => {
-      alert('u dead!')
+      alert('create Resource')
     },
     actionClosesCmdBar: false,
-    group: 'actionClosesCmdBar',
+    group: 'Create',
     description: 'Help operations'
   },
   {
     id: '5',
-    leading: 'https://source.unsplash.com/random/300×300',
+    leading: './src/assets/icons/settings.svg',
     title: 'Settings',
     action: () => {
       alert('Settings action triggered!')
@@ -83,7 +83,7 @@ whenever(cmdK, () => {
     ref="cmdBar"
   >
     <template #header>
-      <CmdBar.Input />
+      <CmdBar.Input :icon="'../assets/icons/search.svg'" />
     </template>
     <template #content>
       <CmdBar.Items v-slot="{ item }">
