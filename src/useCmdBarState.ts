@@ -4,7 +4,7 @@ import { findNodeById } from '@/utils'
 import { nanoid } from 'nanoid'
 
 const state = reactive<State>({
-  selectedCommandId: null,
+  selectedCommandId: null, //TODO: make store the commandNode instead of the id to avoid the findNodeById
   parentCommandId: null,
   searchTerm: '',
   commands: [] as Commands,
