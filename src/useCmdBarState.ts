@@ -73,6 +73,10 @@ const store = {
 
   setSearchTerm(term: string): void {
     state.searchTerm = term
+    //reset cache
+    if (term.length === 0) {
+      state.visibleCommandsCache = []
+    }
     this.filterCommands()
   },
 
