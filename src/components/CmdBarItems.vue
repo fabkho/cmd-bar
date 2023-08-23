@@ -22,6 +22,7 @@ const visibleItems = computed(() => {
       role="option"
       :aria-selected="isSelectedItem(item.id)"
       @mouseover="store?.selectCommand(item.id)"
+      @click="store?.executeCommand()"
     >
       <slot :item="item" />
     </li>
