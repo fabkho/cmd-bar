@@ -82,9 +82,8 @@ whenever(keys.arrowDown, () => {
   store?.prevCommand()
 })
 
-// listen for meta+ k and toggle commandbar
-whenever(metaK, () => {
-  toggleCmdBar()
+whenever(keys.enter, () => {
+  store?.executeCommand()
 })
 </script>
 

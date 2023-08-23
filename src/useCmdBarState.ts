@@ -53,6 +53,14 @@ const store = {
     }
   },
 
+  executeCommand(): void {
+    const command = findNodeById(state.commands, state.selectedCommandId)
+    console.log('execute', command)
+    if (command) {
+      command.action()
+    }
+  },
+
   setSearchTerm(term: string): void {
     state.searchTerm = term
     this.filterCommands()

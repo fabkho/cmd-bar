@@ -30,7 +30,7 @@ export interface Command {
   id: string
   title: string
   leading: string
-  actions: string[]
+  action: () => void
   category: string
   description: string
 }
