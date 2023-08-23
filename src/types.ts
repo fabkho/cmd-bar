@@ -40,3 +40,9 @@ export type CommandNode = Command & {
 }
 
 export type Commands = CommandNode[]
+
+export type Keybindings = {
+  arrowUp: Lowercase<string>
+  arrowDown: Lowercase<string>
+  enter: Lowercase<string>
+}

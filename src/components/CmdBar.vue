@@ -2,7 +2,7 @@
 import { ref, type PropType, toRef } from 'vue'
 import { useMagicKeys, whenever } from '@vueuse/core'
 import store from '@/useCmdBarState'
-import type { Commands } from '@/types'
+import type { Commands, Keybindings } from '@/types'
 
 const props = defineProps({
   commands: {
@@ -13,13 +13,23 @@ const props = defineProps({
     type: Boolean as PropType<boolean | null>,
     required: false,
     default: null
+  },
+  keybindings: {
+    type: Object as PropType<Keybindings>,
+    required: false,
+    default: null
   }
 })
 
 const dialog = ref<HTMLDialogElement | null>(null)
 const dialogContent = ref<HTMLDivElement | null>(null)
-const keys = useMagicKeys()
-const metaK = ref(['Meta+k'])
+const { custom_up, custom_down, custom_enter } = useMagicKeys({
+  aliasMap: {
+    custom_up: props.keybindings?.arrowUp ?? 'arrowup',
+    custom_down: props.keybindings?.arrowDown ?? 'arrowdown',
+    custom_enter: props.keybindings?.enter ?? 'enter'
+  }
+})
 
 // provide items
 store?.registerCommands(props.commands)
@@ -74,15 +84,13 @@ const vClickOutside = {
   }
 }
 
-whenever(keys.arrowUp, () => {
+whenever(custom_up, () => {
   store?.nextCommand()
 })
-
-whenever(keys.arrowDown, () => {
+whenever(custom_down, () => {
   store?.prevCommand()
 })
-
-whenever(keys.enter, () => {
+whenever(custom_enter, () => {
   store?.executeCommand()
 })
 </script>

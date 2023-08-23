@@ -1,10 +1,6 @@
 <script setup lang="ts" generic="T">
 import { computed } from 'vue'
 import store from '@/useCmdBarState'
-import { useMagicKeys } from '@vueuse/core'
-
-const keys = useMagicKeys()
-const back = keys['Shift+Tab']
 
 const isSelectedItem = computed(() => {
   return (id: string) => {
@@ -15,20 +11,6 @@ const isSelectedItem = computed(() => {
 const visibleItems = computed(() => {
   return store?.state.visibleCommands
 })
-
-/**
- * Keybindings
- */
-// whenever(keys.Tab, () => {
-//   if (keys.Shift.value) return
-//   store?.filterCommands(true)
-//   // reset search term
-//   store?.resetSearchTerm()
-// })
-// whenever(back, () => {
-//   store?.filterCommands()
-//   return
-// })
 </script>
 
 <template>

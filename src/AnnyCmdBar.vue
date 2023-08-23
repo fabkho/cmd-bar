@@ -72,7 +72,11 @@ whenever(cmdK, () => {
 </script>
 
 <template>
-  <CmdBar :commands="items" ref="cmdBar">
+  <CmdBar
+    :commands="items"
+    :keybindings="{ arrowUp: 'arrowup', arrowDown: 'arrowdown', enter: 'enter' }"
+    ref="cmdBar"
+  >
     <template #header>
       <CmdBar.Input />
     </template>
