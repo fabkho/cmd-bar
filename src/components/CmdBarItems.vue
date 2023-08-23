@@ -21,6 +21,7 @@ const visibleItems = computed(() => {
       class="cmd-bar__items__item"
       role="option"
       :aria-selected="isSelectedItem(item.id)"
+      @mouseover="store?.selectCommand(item.id)"
     >
       <slot :item="item" />
     </li>

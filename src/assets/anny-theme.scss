@@ -77,7 +77,7 @@
       position: relative;
 
       &[aria-selected='true'],
-      &:hover {
+      &:hover:not([aria-selected='false']) {
         background: var(--gray4);
 
 

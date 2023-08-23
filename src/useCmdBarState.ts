@@ -37,6 +37,10 @@ const store = {
     state.searchTerm = ''
     this.filterCommands()
   },
+
+  selectCommand(commandId: string): void {
+    state.selectedCommandId = commandId
+  },
   nextCommand(): void {
     if (state.selectedCommandId) {
       const selectedIndex = getSelectedIndex()
