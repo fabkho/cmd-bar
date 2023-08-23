@@ -30,7 +30,7 @@ export interface Command {
   id: string
   leading: string
   title: string
-  category: string
+  group: string
   description: string
   action: () => void
   actionClosesCmdBar: boolean
@@ -41,6 +41,10 @@ export type CommandNode = Command & {
 }
 
 export type Commands = CommandNode[]
+
+export interface GroupedCommands {
+  [groupName: string]: Command[]
+}
 
 export type Keybindings = {
   arrowUp: Lowercase<string>

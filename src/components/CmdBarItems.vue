@@ -20,6 +20,8 @@ const visibleItems = computed(() => {
       v-for="item in visibleItems"
       class="cmd-bar__items__item"
       :class="{ selected: isSelectedItem(item.id) }"
+      role="option"
+      :aria-selected="isSelectedItem(item.id)"
     >
       <slot :item="item" />
     </li>

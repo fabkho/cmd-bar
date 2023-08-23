@@ -22,7 +22,6 @@ const props = defineProps({
 })
 
 const dialog = ref<HTMLDialogElement | null>(null)
-const dialogContent = ref<HTMLDivElement | null>(null)
 const { custom_up, custom_down, custom_enter } = useMagicKeys({
   aliasMap: {
     custom_up: props.keybindings?.arrowUp ?? 'arrowup',
@@ -99,12 +98,7 @@ whenever(custom_enter, () => {
 
 <template>
   <dialog data-cmd-bar class="cmd-bar" ref="dialog">
-    <div
-      data-cmd-bar-wrapper
-      class="cmd-bar__wrapper"
-      ref="dialogContent"
-      v-click-outside="handleClickOutside"
-    >
+    <div data-cmd-bar-wrapper class="cmd-bar__wrapper" v-click-outside="handleClickOutside">
       <div data-cmd-bar-header class="cmd-bar__header">
         <slot name="header" />
       </div>
