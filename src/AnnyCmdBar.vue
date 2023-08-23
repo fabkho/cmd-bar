@@ -14,8 +14,8 @@ const cmdK = keys['Meta+k']
 const items: Commands = [
   {
     id: '1',
-    title: 'File',
     leading: 'https://source.unsplash.com/random/300×300',
+    title: 'File',
     action: () => {
       alert('File action triggered!')
     },
@@ -24,8 +24,8 @@ const items: Commands = [
   },
   {
     id: '2',
-    title: 'Edit',
     leading: 'https://source.unsplash.com/random/300×300',
+    title: 'Edit',
     action: () => {
       alert('Edit action triggered!')
     },
@@ -34,8 +34,8 @@ const items: Commands = [
   },
   {
     id: '3',
-    title: 'View',
     leading: 'https://source.unsplash.com/random/300×300',
+    title: 'View',
     action: () => {
       alert('View action triggered!')
     },
@@ -44,8 +44,8 @@ const items: Commands = [
   },
   {
     id: '4',
-    title: 'Help',
     leading: 'https://source.unsplash.com/random/300×300',
+    title: 'Help',
     action: () => {
       alert('Help action triggered!')
     },
@@ -54,8 +54,8 @@ const items: Commands = [
   },
   {
     id: '5',
-    title: 'Settings',
     leading: 'https://source.unsplash.com/random/300×300',
+    title: 'Settings',
     action: () => {
       alert('Settings action triggered!')
     },

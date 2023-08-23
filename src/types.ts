@@ -28,11 +28,11 @@ export interface CmdBarStore {
 
 export interface Command {
   id: string
-  title: string
   leading: string
-  action: () => void
+  title: string
   category: string
   description: string
+  action: () => void
 }
 
 export type CommandNode = Command & {
