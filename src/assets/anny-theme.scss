@@ -1,6 +1,7 @@
 @import "global";
 
 .cmd-bar {
+  $footer-height: 40px;
   width: 100%;
   max-width: 640px;
   overflow-y: hidden;
@@ -73,6 +74,7 @@
     overscroll-behavior: contain;
     transition: 100ms ease;
     transition-property: height;
+    padding: 0 8px $footer-height;
 
     &__item {
       content-visibility: auto;
@@ -120,7 +122,7 @@
   &__footer {
     display: flex;
     flex-direction: row;
-    height: 40px;
+    height: $footer-height;
     align-items: center;
     justify-content: end;
     width: 100%;
