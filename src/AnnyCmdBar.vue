@@ -66,6 +66,28 @@ const items: Commands = [
     actionClosesCmdBar: false,
     group: 'Setting',
     description: 'Settings operations'
+  },
+  {
+    id: '4',
+    leading: './src/assets/icons/create.svg',
+    title: 'Resource',
+    action: () => {
+      alert('create Resource')
+    },
+    actionClosesCmdBar: false,
+    group: 'Create',
+    description: 'Help operations'
+  },
+  {
+    id: '5',
+    leading: './src/assets/icons/settings.svg',
+    title: 'Settings',
+    action: () => {
+      alert('Settings action triggered!')
+    },
+    actionClosesCmdBar: false,
+    group: 'Setting',
+    description: 'Settings operations'
   }
 ]
 
@@ -95,6 +117,19 @@ whenever(cmdK, () => {
           <kbd key="enter">↵</kbd>
         </div>
       </CmdBar.Items>
+    </template>
+    <template #footer>
+      <span class="footer__trigger">
+        Execute Command
+        <kbd>↵</kbd>
+      </span>
+
+      <hr />
+      <span class="footer__subTrigger">
+        Navigate
+        <kbd>↑</kbd>
+        <kbd>↓</kbd>
+      </span>
     </template>
   </CmdBar>
 </template>

@@ -29,7 +29,7 @@ function handleInput(e: Event): void {
     data-cmd-bar-input
     class="cmd-bar__input"
     autofocus
-    :value="store.state.searchTerm"
+    :value="store?.state.searchTerm"
     :placeholder="placeholder"
     @input="handleInput"
   />
