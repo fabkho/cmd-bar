@@ -88,6 +88,83 @@ const items: Commands = [
     actionClosesCmdBar: false,
     group: 'Setting',
     description: 'Settings operations'
+  },
+  {
+    id: '1',
+    leading: './src/assets/icons/user.svg',
+    title: 'Thomas Shelby',
+    action: () => {
+      alert('I need a cigarette')
+    },
+    actionClosesCmdBar: true,
+    group: 'User',
+    description: 'File operations'
+  },
+  {
+    id: '2',
+    leading: './src/assets/icons/user.svg',
+    title: 'Arthur Shelby',
+    action: () => {
+      alert('Arthur will kill you!')
+    },
+    actionClosesCmdBar: false,
+    group: 'User',
+    description: 'Edit operations'
+  },
+  {
+    id: '3',
+    leading: './src/assets/icons/create.svg',
+    title: 'Booking',
+    action: () => {
+      alert('create Booking!')
+    },
+    actionClosesCmdBar: false,
+    group: 'Create',
+    description: 'View operations'
+  },
+  {
+    id: '4',
+    leading: './src/assets/icons/create.svg',
+    title: 'Resource',
+    action: () => {
+      alert('create Resource')
+    },
+    actionClosesCmdBar: false,
+    group: 'Create',
+    description: 'Help operations'
+  },
+  {
+    id: '5',
+    leading: './src/assets/icons/settings.svg',
+    title: 'Settings',
+    action: () => {
+      alert('Settings action triggered!')
+    },
+    actionClosesCmdBar: false,
+    group: 'Setting',
+    description: 'Settings operations'
+  },
+  {
+    id: '4',
+    leading: './src/assets/icons/create.svg',
+    title: 'Resource',
+    action: () => {
+      alert('create Resource')
+    },
+    actionClosesCmdBar: false,
+    group: 'Create',
+    description: 'Help operations'
+  },
+  {
+    id: '5',
+    leading: './src/assets/icons/settings.svg',
+    title: 'Settings',
+    action: () => {
+      alert('Settings action triggered!')
+    },
+    actionClosesCmdBar: false,
+    group: 'Setting',
+    description: 'Settings operations'
   }
 ]
 
@@ -99,16 +176,12 @@ whenever(cmdK, () => {
 </script>
 
 <template>
-  <CmdBar
-    :commands="items"
-    :keybindings="{ arrowUp: 'arrowup', arrowDown: 'arrowdown', enter: 'enter' }"
-    ref="cmdBar"
-  >
+  <CmdBar :commands="items" ref="cmdBar">
     <template #header>
       <CmdBar.Input :icon="'../assets/icons/search.svg'" />
     </template>
     <template #content>
-      <CmdBar.Items v-slot="{ item }">
+      <CmdBar.Items v-slot="{ item }" :item-height="48">
         <div class="item__leading">
           <img :src="item.leading" alt="icon" />
           {{ item.title }}

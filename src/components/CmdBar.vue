@@ -13,22 +13,10 @@ const props = defineProps({
     type: Boolean as PropType<boolean | null>,
     required: false,
     default: null
-  },
-  keybindings: {
-    type: Object as PropType<Keybindings>,
-    required: false,
-    default: null
   }
 })
 
 const dialog = ref<HTMLDialogElement | null>(null)
-const { custom_up, custom_down, custom_enter } = useMagicKeys({
-  aliasMap: {
-    custom_up: props.keybindings?.arrowUp ?? 'arrowup',
-    custom_down: props.keybindings?.arrowDown ?? 'arrowdown',
-    custom_enter: props.keybindings?.enter ?? 'enter'
-  }
-})
 
 // provide items
 store?.registerCommands(props.commands)
@@ -85,20 +73,38 @@ const vClickOutside = {
   }
 }
 
-whenever(custom_up, () => {
-  store?.nextCommand()
-})
-whenever(custom_down, () => {
-  store?.prevCommand()
-})
-whenever(custom_enter, () => {
-  store?.executeCommand()
-})
+function handleKeyDown(event: KeyboardEvent): void {
+  switch (event.key) {
+    case 'ArrowUp':
+      store?.nextCommand()
+      break
+    case 'ArrowDown':
+      store?.prevCommand()
+      break
+    case 'ArrowLeft':
+      // Insert your custom logic here
+      break
+    case 'ArrowRight':
+      // Insert your custom logic here
+      break
+    case 'Enter':
+      store?.executeCommand()
+      break
+    default:
+      // Insert your custom logic here
+      break
+  }
+}
 </script>
 
 <template>
   <dialog data-cmd-bar class="cmd-bar" ref="dialog">
-    <div data-cmd-bar-wrapper class="cmd-bar__wrapper" v-click-outside="handleClickOutside">
+    <div
+      data-cmd-bar-wrapper
+      class="cmd-bar__wrapper"
+      v-click-outside="handleClickOutside"
+      @keydown="handleKeyDown"
+    >
       <div data-cmd-bar-header class="cmd-bar__header">
         <slot name="header" />
       </div>
