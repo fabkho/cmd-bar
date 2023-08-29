@@ -1,6 +1,6 @@
 export type State = {
-  selectedCommandId: string | null
-  parentCommandId: string | null
+  selectedNode: string
+  parentCommandId: string
   searchTerm: string
   /**
    * The full list of root-level commands
@@ -9,11 +9,11 @@ export type State = {
   /**
    * The list of commands that are currently visible
    */
-  visibleCommands: Commands
+  filteredCommands: Commands
   /**
    * A cache of the last visible commands
    */
-  visibleCommandsCache: Commands
+  filteredCommandsCache: Commands
 }
 
 export interface CmdBarStore {

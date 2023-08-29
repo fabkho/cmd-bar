@@ -181,7 +181,7 @@ whenever(cmdK, () => {
       <CmdBar.Input :icon="'../assets/icons/search.svg'" />
     </template>
     <template #content>
-      <CmdBar.Items v-slot="{ item }" :item-height="48">
+      <CmdBar.Items v-slot="{ item }">
         <div class="item__leading">
           <img :src="item.leading" alt="icon" />
           {{ item.title }}

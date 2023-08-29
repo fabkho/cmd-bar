@@ -4,17 +4,17 @@ import { findNodeById } from '@/utils'
 import { nanoid } from 'nanoid'
 
 const state = reactive<State>({
-  selectedCommandId: null, //TODO: make store the commandNode instead of the id to avoid the findNodeById
-  parentCommandId: null,
+  selectedNode: '',
+  parentCommandId: '',
   searchTerm: '',
   commands: [] as Commands,
-  visibleCommands: [] as Commands,
-  visibleCommandsCache: [] as Commands
+  filteredCommands: [] as Commands,
+  filteredCommandsCache: [] as Commands
 })
 
 let closeCmdBarFunction = () => {}
 
-const store = {
+const useCmdBarState = {
   state: readonly(state),
   registerCommands(newItems: Commands): void {
     state.commands = newItems
@@ -33,28 +33,28 @@ const store = {
     }
   },
   resetState(): void {
-    state.selectedCommandId = null
+    state.selectedNode = ''
     state.searchTerm = ''
     this.filterCommands()
   },
 
   selectCommand(commandId: string): void {
-    state.selectedCommandId = commandId
+    state.selectedNode = commandId
   },
   nextCommand(): void {
-    if (state.selectedCommandId) {
+    if (state.selectedNode) {
       const selectedIndex = getSelectedIndex()
       if (selectedIndex > 0) {
-        state.selectedCommandId = state.visibleCommands[selectedIndex - 1].id
+        state.selectedNode = state.filteredCommands[selectedIndex - 1].id
       }
     }
   },
 
   prevCommand(): void {
-    if (state.selectedCommandId) {
+    if (state.selectedNode) {
       const selectedIndex = getSelectedIndex()
-      if (selectedIndex < state.visibleCommands.length - 1) {
-        state.selectedCommandId = state.visibleCommands[selectedIndex + 1].id
+      if (selectedIndex < state.filteredCommands.length - 1) {
+        state.selectedNode = state.filteredCommands[selectedIndex + 1].id
       }
     }
   },
@@ -64,7 +64,7 @@ const store = {
   },
 
   executeCommand(): void {
-    const command = findNodeById(state.commands, state.selectedCommandId)
+    const command = findNodeById(state.commands, state.selectedNode)
     console.log('execute', command)
     if (command) {
       command.action()
@@ -79,7 +79,7 @@ const store = {
     state.searchTerm = term
     //reset cache
     if (term.length === 0) {
-      state.visibleCommandsCache = []
+      state.filteredCommandsCache = []
     }
     this.filterCommands()
   },
@@ -93,9 +93,9 @@ const store = {
  * helper function to apply the child filter
  */
 function applyChildFilter(): void {
-  state.visibleCommands = getChildren()
-  state.parentCommandId = state.selectedCommandId
-  state.selectedCommandId = state.visibleCommands[0].id
+  state.filteredCommands = getChildren()
+  state.parentCommandId = state.selectedNode
+  state.selectedNode = state.filteredCommands[0].id
 }
 /**
  * helper function to cache the visible commands and apply the search filter
@@ -103,20 +103,20 @@ function applyChildFilter(): void {
 function applySearchFilter(): void {
   if (state.searchTerm.length > 1) {
     const lowerCaseSearchTerm = state.searchTerm.toLowerCase()
-    state.visibleCommandsCache = state.visibleCommands
-    state.visibleCommands = state.visibleCommands.filter((item: CommandNode) =>
+    state.filteredCommandsCache = state.filteredCommands
+    state.filteredCommands = state.filteredCommands.filter((item: CommandNode) =>
       item.title.toLowerCase().includes(lowerCaseSearchTerm)
     )
   }
-  selectCommand(state.visibleCommands[0]?.id)
+  selectCommand(state.filteredCommands[0]?.id)
 }
 /**
  * helper function to apply the default filter
  */
 function applyDefaultFilter(): void {
-  state.visibleCommands =
-    state.visibleCommandsCache.length > 0 ? state.visibleCommandsCache : state.commands
-  selectCommand(state.visibleCommands[0].id)
+  state.filteredCommands =
+    state.filteredCommandsCache.length > 0 ? state.filteredCommandsCache : state.commands
+  selectCommand(state.filteredCommands[0].id)
 }
 
 /**
@@ -124,16 +124,16 @@ function applyDefaultFilter(): void {
  * @param commandId
  */
 function selectCommand(commandId: string): void {
-  state.selectedCommandId = state.parentCommandId ?? commandId
-  state.parentCommandId = null
+  state.selectedNode = state.parentCommandId ?? commandId
+  state.parentCommandId = ''
 }
 
 /**
  * helper function to get the index of the selected command
  */
 function getSelectedIndex(): number {
-  if (state.selectedCommandId) {
-    return state.visibleCommands.findIndex((command) => command.id === state.selectedCommandId)
+  if (state.selectedNode) {
+    return state.filteredCommands.findIndex((command) => command.id === state.selectedNode)
   }
   return -1
 }
@@ -141,7 +141,7 @@ function getSelectedIndex(): number {
  * helper function to get the children of the selected command
  */
 function getChildren(): Commands {
-  const command = findNodeById(state.commands, state.selectedCommandId)
+  const command = findNodeById(state.commands, state.selectedNode)
   if (command && command.children) {
     return command.children
   }
@@ -162,4 +162,4 @@ function uniquifyIds(): void {
     }
   })
 }
-export default store
+export { useCmdBarState }

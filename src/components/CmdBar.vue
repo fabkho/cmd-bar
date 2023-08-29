@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, type PropType, toRef } from 'vue'
-import { useMagicKeys, whenever } from '@vueuse/core'
-import store from '@/useCmdBarState'
+import { whenever } from '@vueuse/core'
+import { useCmdBarState } from '@/useCmdBarState'
 import type { Commands, Keybindings } from '@/types'
 
 const props = defineProps({
@@ -19,7 +19,7 @@ const props = defineProps({
 const dialog = ref<HTMLDialogElement | null>(null)
 
 // provide items
-store?.registerCommands(props.commands)
+useCmdBarState?.registerCommands(props.commands)
 
 /**
  * toggle dialog
@@ -29,14 +29,14 @@ function toggleCmdBar(): void {
   if (dialog.value) {
     if (dialog.value?.open || props.visible === false) {
       dialog.value?.close()
-      store?.resetState()
+      useCmdBarState?.resetState()
     } else {
       dialog.value?.showModal()
     }
   }
 }
 // provide toggle function to store
-store.registerToggleCmdBar(toggleCmdBar)
+useCmdBarState.registerToggleCmdBar(toggleCmdBar)
 
 /**
  * first option: toggle commandbar via exposed function
@@ -76,10 +76,10 @@ const vClickOutside = {
 function handleKeyDown(event: KeyboardEvent): void {
   switch (event.key) {
     case 'ArrowUp':
-      store?.nextCommand()
+      useCmdBarState?.nextCommand()
       break
     case 'ArrowDown':
-      store?.prevCommand()
+      useCmdBarState?.prevCommand()
       break
     case 'ArrowLeft':
       // Insert your custom logic here
@@ -88,7 +88,7 @@ function handleKeyDown(event: KeyboardEvent): void {
       // Insert your custom logic here
       break
     case 'Enter':
-      store?.executeCommand()
+      useCmdBarState?.executeCommand()
       break
     default:
       // Insert your custom logic here

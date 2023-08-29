@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import store from '@/useCmdBarState'
+import { useCmdBarState } from '@/useCmdBarState'
 
 defineProps({
   placeholder: {
@@ -20,7 +20,7 @@ function handleInput(e: Event): void {
   const target = e.target as HTMLInputElement
   const value = target.value
   emit('input', value)
-  store.setSearchTerm(value)
+  useCmdBarState.setSearchTerm(value)
 }
 </script>
 
@@ -29,7 +29,7 @@ function handleInput(e: Event): void {
     data-cmd-bar-input
     class="cmd-bar__input"
     autofocus
-    :value="store?.state.searchTerm"
+    :value="useCmdBarState?.state.searchTerm"
     :placeholder="placeholder"
     @input="handleInput"
   />

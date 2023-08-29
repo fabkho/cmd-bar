@@ -71,8 +71,8 @@
 
   &__items {
     //TODO: implement height
-    height: min(300px, var(--cmd-list-height));
-    overflow: auto;
+    height: 21rem;
+    overflow-y: scroll;
     overscroll-behavior: contain;
     transition: 100ms ease;
     transition-property: height;
