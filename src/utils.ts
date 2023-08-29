@@ -14,3 +14,19 @@ export function findNodeById<T extends { id: string | null }>(
 ): T | undefined {
   return nodes.find((node) => node.id === id)
 }
+
+/**
+ * @param node
+ * @returns the inner dimensions (without padding and border) of the node as an DOMRect
+ */
+export const innerDimensions = (node: HTMLElement): DOMRect => {
+  const style = getComputedStyle(node)
+
+  let clientRect = node.getBoundingClientRect()
+
+  const left = clientRect.left + parseInt(style.paddingLeft)
+  const top = clientRect.top + parseInt(style.paddingTop)
+  const width = clientRect.width - parseInt(style.paddingLeft) - parseInt(style.paddingRight)
+  const height = clientRect.height - parseInt(style.paddingTop) - parseInt(style.paddingBottom)
+  return new DOMRect(left, top, width, height)
+}

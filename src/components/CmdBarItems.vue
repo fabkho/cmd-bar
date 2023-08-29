@@ -1,10 +1,14 @@
-<script setup lang="ts" generic="T">
-import { computed, nextTick, ref, watchEffect } from 'vue'
+<script setup lang="ts">
+import { computed, nextTick, ref, unref, watch, watchEffect } from 'vue'
 import store from '@/useCmdBarState'
+import { useVirtualList } from '@vueuse/core'
 
-const listRef = ref<HTMLDivElement>()
-const wrapperRef = ref<HTMLDivElement>()
-const dialogRef = ref<HTMLDialogElement>()
+const props = defineProps<{
+  itemHeight: number
+}>()
+
+const containerRef = ref<HTMLDivElement>()
+const index = ref<number>(0)
 
 const isSelectedItem = computed(() => {
   return (id: string) => {
@@ -16,41 +20,55 @@ const visibleItems = computed(() => {
   return store?.state.visibleCommands
 })
 
-// Function to update the list height as a CSS variable
-const updateListHeight = () => {
-  const listHeight = listRef.value?.offsetHeight
-  if (listHeight) {
-    nextTick(() => {
-      console.log('listHeight', listHeight)
-      document.documentElement.style.setProperty('--cmd-list-height', `${listHeight.toFixed(1)}px`)
-    })
-  }
-}
-
-// Use ResizeObserver to watch for dialog resize
-const resizeObserver = new ResizeObserver(updateListHeight)
-
-watchEffect(() => {
-  const list = listRef.value
-  if (list) {
-    resizeObserver.observe(list)
-  }
+const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(visibleItems, {
+  itemHeight: props.itemHeight
 })
+
+watch(
+  () => store?.state.selectedCommandId,
+  (id) => {
+    if (id) {
+      const containerRef = containerProps.ref
+      if (containerRef) {
+        const container = unref(containerRef)
+        if (!container) return
+
+        const item = container.querySelector(`[aria-selected="true"]`)
+        if (!item) return
+
+        const itemRect = item.getBoundingClientRect()
+        const containerRect = container.getBoundingClientRect()
+
+        console.log(itemRect.bottom, containerRect.bottom)
+
+        if (itemRect.bottom > containerRect.bottom) {
+          // Selected item is below the visible area
+          const scrollToY = container.scrollTop + itemRect.height
+          scrollTo(scrollToY)
+        } else if (itemRect.top < containerRect.top) {
+          // Selected item is above the visible area
+          const scrollToY = container.scrollTop - itemRect.height
+          scrollTo(scrollToY)
+        }
+      }
+    }
+  }
+)
 </script>
 
 <template>
-  <div ref="wrapperRef">
-    <ul data-cmd-bar-items class="cmd-bar__items" ref="listRef">
+  <div class="cmd-bar__items-container" v-bind="containerProps">
+    <ul data-cmd-bar-items class="cmd-bar__items" v-bind="wrapperProps">
       <li
         data-cmd-bar-item
-        v-for="item in visibleItems"
+        v-for="item in list"
         class="cmd-bar__items__item"
         role="option"
-        :aria-selected="isSelectedItem(item.id)"
-        @mouseover="store?.selectCommand(item.id)"
+        :aria-selected="isSelectedItem(item.data.id)"
+        @mouseover="store?.selectCommand(item.data.id)"
         @click="store?.executeCommand()"
       >
-        <slot :item="item" />
+        <slot :item="item.data" />
       </li>
     </ul>
   </div>
