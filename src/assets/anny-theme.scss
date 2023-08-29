@@ -2,17 +2,20 @@
 
 .cmd-bar {
   $footer-height: 40px;
-  $spacing: 0.5rem;
   width: 100%;
   max-width: 640px;
+  overflow-y: hidden;
+  padding: 8px;
   background: rgba(22, 22, 22, 0.7);
   border-radius: 12px;
-  padding: $spacing;
   font-family: var(--font-sans);
   border: 1px solid var(--gray6);
   box-shadow: var(--command-shadow);
   transition: transform 100ms ease;
   position: relative;
+
+  //TEST
+
 
   &__wrapper {
 
@@ -40,12 +43,20 @@
     }
   }
 
+  //&__wrapper {
+  //  max-width: 640px;
+  //  width: 100%;
+  //  overflow: hidden;
+  //  font-family: var(--font-sans);
+  //  box-shadow: var(--command-shadow);
+  //}
+
   &__input {
     font-family: var(--font-sans);
     border: none;
     width: 100%;
     font-size: 17px;
-    padding: 8px;
+    padding: 8px 8px 16px 8px;
     outline: none;
     background: var(--bg);
     color: var(--gray12);
@@ -59,26 +70,25 @@
   }
 
   &__items {
-
-    &-container {
-      //TODO: implement height
-      height: 21rem;
-      margin: 0 $spacing $footer-height;
-    }
+    //TODO: implement height
+    height: 21rem;
+    overflow-y: scroll;
+    overscroll-behavior: contain;
     transition: 100ms ease;
     transition-property: height;
+    padding: 0 8px $footer-height;
 
     &__item {
       content-visibility: auto;
-      cursor: pointer;
 
-      padding: calc($spacing + 0.25rem);
+      cursor: pointer;
       height: 48px;
       border-radius: 8px;
       font-size: 14px;
       display: flex;
       align-items: center;
       gap: 8px;
+      padding: 0 16px;
       color: var(--gray11);
       user-select: none;
       will-change: background, color;

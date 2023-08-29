@@ -22,7 +22,7 @@ export function findNodeById<T extends { id: string | null }>(
 export const innerDimensions = (node: HTMLElement): DOMRect => {
   const style = getComputedStyle(node)
 
-  let clientRect = node.getBoundingClientRect()
+  const clientRect = node.getBoundingClientRect()
 
   const left = clientRect.left + parseInt(style.paddingLeft)
   const top = clientRect.top + parseInt(style.paddingTop)
