@@ -176,7 +176,7 @@ whenever(cmdK, () => {
 </script>
 
 <template>
-  <CmdBar :commands="items" ref="cmdBar">
+  <CmdBar ref="cmdBar" :commands="items">
     <template #header>
       <CmdBar.Input :icon="'../assets/icons/search.svg'" />
     </template>

@@ -98,11 +98,11 @@ function handleKeyDown(event: KeyboardEvent): void {
 </script>
 
 <template>
-  <dialog data-cmd-bar class="cmd-bar" ref="dialog">
+  <dialog ref="dialog" data-cmd-bar class="cmd-bar">
     <div
+      v-click-outside="handleClickOutside"
       data-cmd-bar-wrapper
       class="cmd-bar__wrapper"
-      v-click-outside="handleClickOutside"
       @keydown="handleKeyDown"
     >
       <div data-cmd-bar-header class="cmd-bar__header">

@@ -60,8 +60,8 @@ watch(
   <div class="cmd-bar__items-container" v-bind="containerProps">
     <ul data-cmd-bar-items class="cmd-bar__items" v-bind="wrapperProps">
       <li
-        data-cmd-bar-item
         v-for="item in list"
+        data-cmd-bar-item
         class="cmd-bar__items__item"
         role="option"
         :aria-selected="isSelectedItem(item.data.id)"

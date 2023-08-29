@@ -15,7 +15,7 @@ module.exports = {
     'plugin:prettier/recommended'
   ],
   rules: {
-    'vue/no-multiple-template-root': 'off',
+    'vue/no-multiple-template-root': 'off'
   },
   ignorePatterns: ['node_modules', 'build', 'dist', 'public']
 }
