@@ -4,8 +4,8 @@ import { findNodeById } from '@/utils'
 import { nanoid } from 'nanoid'
 
 const state = reactive<State>({
-  selectedNode: '',
-  parentCommandId: '',
+  selectedCommandId: null,
+  parentCommandId: null,
   searchTerm: '',
   commands: [] as Commands,
   filteredCommands: [] as Commands,
@@ -33,28 +33,28 @@ const useCmdBarState = {
     }
   },
   resetState(): void {
-    state.selectedNode = ''
+    state.selectedCommandId = null
     state.searchTerm = ''
     this.filterCommands()
   },
 
   selectCommand(commandId: string): void {
-    state.selectedNode = commandId
+    state.selectedCommandId = commandId
   },
   nextCommand(): void {
-    if (state.selectedNode) {
+    if (state.selectedCommandId) {
       const selectedIndex = getSelectedIndex()
       if (selectedIndex > 0) {
-        state.selectedNode = state.filteredCommands[selectedIndex - 1].id
+        state.selectedCommandId = state.filteredCommands[selectedIndex - 1].id
       }
     }
   },
 
   prevCommand(): void {
-    if (state.selectedNode) {
+    if (state.selectedCommandId) {
       const selectedIndex = getSelectedIndex()
       if (selectedIndex < state.filteredCommands.length - 1) {
-        state.selectedNode = state.filteredCommands[selectedIndex + 1].id
+        state.selectedCommandId = state.filteredCommands[selectedIndex + 1].id
       }
     }
   },
@@ -64,8 +64,7 @@ const useCmdBarState = {
   },
 
   executeCommand(): void {
-    const command = findNodeById(state.commands, state.selectedNode)
-    console.log('execute', command)
+    const command = findNodeById(state.commands, state.selectedCommandId)
     if (command) {
       command.action()
       if (command.actionClosesCmdBar) {
@@ -94,8 +93,8 @@ const useCmdBarState = {
  */
 function applyChildFilter(): void {
   state.filteredCommands = getChildren()
-  state.parentCommandId = state.selectedNode
-  state.selectedNode = state.filteredCommands[0].id
+  state.parentCommandId = state.selectedCommandId
+  state.selectedCommandId = state.filteredCommands[0].id
 }
 /**
  * helper function to cache the visible commands and apply the search filter
@@ -124,16 +123,16 @@ function applyDefaultFilter(): void {
  * @param commandId
  */
 function selectCommand(commandId: string): void {
-  state.selectedNode = state.parentCommandId ?? commandId
-  state.parentCommandId = ''
+  state.selectedCommandId = state.parentCommandId ?? commandId
+  state.parentCommandId = null
 }
 
 /**
  * helper function to get the index of the selected command
  */
 function getSelectedIndex(): number {
-  if (state.selectedNode) {
-    return state.filteredCommands.findIndex((command) => command.id === state.selectedNode)
+  if (state.selectedCommandId) {
+    return state.filteredCommands.findIndex((command) => command.id === state.selectedCommandId)
   }
   return -1
 }
@@ -141,7 +140,7 @@ function getSelectedIndex(): number {
  * helper function to get the children of the selected command
  */
 function getChildren(): Commands {
-  const command = findNodeById(state.commands, state.selectedNode)
+  const command = findNodeById(state.commands, state.selectedCommandId)
   if (command && command.children) {
     return command.children
   }

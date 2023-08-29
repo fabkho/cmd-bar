@@ -43,14 +43,6 @@
     }
   }
 
-  //&__wrapper {
-  //  max-width: 640px;
-  //  width: 100%;
-  //  overflow: hidden;
-  //  font-family: var(--font-sans);
-  //  box-shadow: var(--command-shadow);
-  //}
-
   &__input {
     font-family: var(--font-sans);
     border: none;
@@ -70,13 +62,13 @@
   }
 
   &__items {
-    //TODO: implement height
-    height: 21rem;
-    overflow-y: scroll;
-    overscroll-behavior: contain;
-    transition: 100ms ease;
-    transition-property: height;
-    padding: 0 8px $footer-height;
+
+    &-container{
+      height: 21rem;
+      margin: 0 8px $footer-height;
+      overflow-y: scroll;
+      overscroll-behavior: contain;
+    }
 
     &__item {
       content-visibility: auto;

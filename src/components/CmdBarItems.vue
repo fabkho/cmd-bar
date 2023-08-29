@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
-import store from '@/useCmdBarState'
+import { useCmdBarState } from '@/useCmdBarState'
 import { useVirtualList } from '@vueuse/core'
 
 const props = defineProps<{
@@ -11,12 +11,12 @@ const index = ref<number>(0)
 
 const isSelectedItem = computed(() => {
   return (id: string) => {
-    return store?.state.selectedCommandId === id
+    return useCmdBarState?.state.selectedCommandId === id
   }
 })
 
 const visibleItems = computed(() => {
-  return store?.state.visibleCommands
+  return useCmdBarState?.state.filteredCommands
 })
 
 const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(visibleItems, {
@@ -26,8 +26,6 @@ const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(visibleI
 const scrollSelectedIntoView = () => {
   const item = getSelectedItem()
 
-  console.log('item', item)
-
   if (item) {
     // Ensure the item is always in view
     item.scrollIntoView({ block: 'nearest' })
@@ -36,8 +34,7 @@ const scrollSelectedIntoView = () => {
 
 const getSelectedItem = () => {
   const containerRef = containerProps.ref
-  const selectedId = store?.state.selectedCommandId
-  console.log('selectedId', `[data-id="${selectedId}"]`)
+  const selectedId = useCmdBarState?.state.selectedCommandId
   return containerRef.value?.querySelector(`[data-id="${selectedId}"]`) as HTMLElement
 }
 
@@ -45,7 +42,7 @@ const getSelectedItem = () => {
  * handle scroll into view
  */
 watch(
-  () => store?.state.selectedCommandId,
+  () => useCmdBarState?.state.selectedCommandId,
   (newVal) => {
     if (newVal) {
       nextTick(scrollSelectedIntoView)
@@ -65,8 +62,8 @@ watch(
         class="cmd-bar__items__item"
         role="option"
         :aria-selected="isSelectedItem(item.data.id)"
-        @mouseover="store?.selectCommand(item.data.id)"
-        @click="store?.executeCommand()"
+        @mouseover="useCmdBarState?.selectCommand(item.data.id)"
+        @click="useCmdBarState?.executeCommand()"
       >
         <slot :item="item.data" />
       </li>

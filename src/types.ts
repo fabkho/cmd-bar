@@ -1,6 +1,6 @@
 export type State = {
-  selectedNode: string
-  parentCommandId: string
+  selectedCommandId: string | null
+  parentCommandId: string | null
   searchTerm: string
   /**
    * The full list of root-level commands
