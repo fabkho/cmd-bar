@@ -2,7 +2,7 @@
 import { ref, type PropType, toRef } from 'vue'
 import { whenever } from '@vueuse/core'
 import { useCmdBarState } from '@/useCmdBarState'
-import type { Commands, Keybindings } from '@/types'
+import type { Commands } from '@/types'
 
 const props = defineProps({
   commands: {
@@ -16,7 +16,7 @@ const props = defineProps({
   }
 })
 
-const dialog = ref<HTMLDialogElement | null>(null)
+const dialogRef = ref<HTMLDialogElement | null>(null)
 
 // provide items
 useCmdBarState?.registerCommands(props.commands)
@@ -26,12 +26,12 @@ useCmdBarState?.registerCommands(props.commands)
  */
 function toggleCmdBar(): void {
   // if component is mounted, open dialog
-  if (dialog.value) {
-    if (dialog.value?.open || props.visible === false) {
-      dialog.value?.close()
+  if (dialogRef.value) {
+    if (dialogRef.value?.open || props.visible === false) {
+      dialogRef.value?.close()
       useCmdBarState?.resetState()
     } else {
-      dialog.value?.showModal()
+      dialogRef.value?.showModal()
     }
   }
 }
@@ -56,7 +56,7 @@ whenever(toRef(props.visible) ?? false, () => {
  * Close dialog if click is outside of dialog
  */
 function handleClickOutside(): void {
-  dialog.value?.close()
+  dialogRef.value?.close()
 }
 
 const vClickOutside = {
@@ -98,7 +98,7 @@ function handleKeyDown(event: KeyboardEvent): void {
 </script>
 
 <template>
-  <dialog ref="dialog" data-cmd-bar class="cmd-bar">
+  <dialog ref="dialogRef" data-cmd-bar class="cmd-bar">
     <div
       v-click-outside="handleClickOutside"
       data-cmd-bar-wrapper

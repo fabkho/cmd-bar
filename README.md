@@ -33,6 +33,9 @@ whenever(cmdK, () => {
 
 ### CmdBarInput
 
+### CmdBarList
+To ensure great performance and scalability, the `CmdBarList` component uses [useVirtualList](https://vueuse.org/core/useVirtualList/#usevirtuallist) under the hood, to render a virtualized list of commands. To work properly, it needs the **exact height** of a single item in the list. This has to be passed via the `itemHeight` prop.
+
 ## Misc
 
 ### Commands
