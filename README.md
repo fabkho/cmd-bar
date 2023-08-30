@@ -4,6 +4,37 @@ TODO
 ## Features
 TODO
 
+## Usage
+
+### CmdBar
+The `CmdBar` component is the main component of this library. It is used to display the command bar. It takes the following props:
+- `commands`: An array of `Command` objects. (See [Commands](#commands))
+- `visible`: Whether the command bar is visible or not. (Default: `false`)
+
+And it takes 3 slots: `header`, `content` and `footer`.
+
+Additionally, it exposes a `toogleCmdBar` method to toggle the visibility of the command bar. In combination with [useMagicKeys](https://vueuse.org/core/useMagicKeys/#usemagickeys), it can be used like this:
+``` vue
+import type { Commands } from '@/types'
+import { useMagicKeys, whenever } from '@vueuse/core'
+
+const cmdBar = ref<typeof CmdBar | null>(null)
+const keys = useMagicKeys()
+const cmdK = keys['Meta+k']
+
+whenever(cmdK, () => {
+  if (cmdBar.value) {
+    cmdBar.value.toggleCmdBar()
+  }
+})
+```
+
+
+
+### CmdBarInput
+
+## Misc
+
 ### Commands
 To add commands to the command bar, you can pass an array of `Command` objects to the component. A `Command` object has the following properties:
 - `id`: The id of the command. This is used to identify the command when the user selects it. (This is made unique internally, so don't worry about that.)
