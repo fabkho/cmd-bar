@@ -31,7 +31,7 @@ export interface Command {
   id: string
   leading: string
   title: string
-  group: string
+  groups: string[]
   description: string
   action: () => void
   actionClosesCmdBar: boolean

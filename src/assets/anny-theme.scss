@@ -73,7 +73,7 @@
   }
 
   &__content{
-    margin-bottom: $footer-height;
+    margin-bottom: calc($footer-height + $spacing);
     .list {
       &-container{
         height: 21rem;
@@ -113,6 +113,10 @@
 
         &:first-of-type {
           margin-top: $spacing;
+        }
+
+        &:last-of-type {
+          margin-bottom: $spacing;
         }
 
         &[aria-selected='true'] {

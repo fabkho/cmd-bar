@@ -20,7 +20,7 @@ const items: Commands = [
       alert('I need a cigarette')
     },
     actionClosesCmdBar: true,
-    group: 'User',
+    groups: ['ALL', 'User'],
     description: 'File operations'
   },
   {
@@ -31,7 +31,7 @@ const items: Commands = [
       alert('Arthur will kill you!')
     },
     actionClosesCmdBar: false,
-    group: 'User',
+    groups: ['ALL', 'User'],
     description: 'Edit operations'
   },
   {
@@ -42,7 +42,7 @@ const items: Commands = [
       alert('create Booking!')
     },
     actionClosesCmdBar: false,
-    group: 'Create',
+    groups: ['ALL', 'Create'],
     description: 'View operations'
   },
   {
@@ -53,7 +53,7 @@ const items: Commands = [
       alert('create Resource')
     },
     actionClosesCmdBar: false,
-    group: 'Create',
+    groups: ['ALL', 'Create'],
     description: 'Help operations'
   },
   {
@@ -64,29 +64,7 @@ const items: Commands = [
       alert('Settings action triggered!')
     },
     actionClosesCmdBar: false,
-    group: 'Setting',
-    description: 'Settings operations'
-  },
-  {
-    id: '4',
-    leading: './src/assets/icons/create.svg',
-    title: 'Resource',
-    action: () => {
-      alert('create Resource')
-    },
-    actionClosesCmdBar: false,
-    group: 'Create',
-    description: 'Help operations'
-  },
-  {
-    id: '5',
-    leading: './src/assets/icons/settings.svg',
-    title: 'Settings',
-    action: () => {
-      alert('Settings action triggered!')
-    },
-    actionClosesCmdBar: false,
-    group: 'Setting',
+    groups: ['ALL', 'Setting'],
     description: 'Settings operations'
   },
   {
@@ -97,7 +75,7 @@ const items: Commands = [
       alert('I need a cigarette')
     },
     actionClosesCmdBar: true,
-    group: 'User',
+    groups: ['ALL', 'User'],
     description: 'File operations'
   },
   {
@@ -108,7 +86,7 @@ const items: Commands = [
       alert('Arthur will kill you!')
     },
     actionClosesCmdBar: false,
-    group: 'User',
+    groups: ['ALL', 'User'],
     description: 'Edit operations'
   },
   {
@@ -119,7 +97,7 @@ const items: Commands = [
       alert('create Booking!')
     },
     actionClosesCmdBar: false,
-    group: 'Create',
+    groups: ['ALL', 'Create'],
     description: 'View operations'
   },
   {
@@ -130,7 +108,7 @@ const items: Commands = [
       alert('create Resource')
     },
     actionClosesCmdBar: false,
-    group: 'Create',
+    groups: ['ALL', 'Create'],
     description: 'Help operations'
   },
   {
@@ -141,34 +119,13 @@ const items: Commands = [
       alert('Settings action triggered!')
     },
     actionClosesCmdBar: false,
-    group: 'Setting',
-    description: 'Settings operations'
-  },
-  {
-    id: '4',
-    leading: './src/assets/icons/create.svg',
-    title: 'Resource',
-    action: () => {
-      alert('create Resource')
-    },
-    actionClosesCmdBar: false,
-    group: 'Create',
-    description: 'Help operations'
-  },
-  {
-    id: '5',
-    leading: './src/assets/icons/settings.svg',
-    title: 'Settings',
-    action: () => {
-      alert('Settings action triggered!')
-    },
-    actionClosesCmdBar: false,
-    group: 'Setting',
+    groups: ['ALL', 'Setting'],
     description: 'Settings operations'
   }
 ]
 
-const groups = items.map((item) => item.group)
+const groups = items.flatMap((item) => item.groups)
+const defaultGroup = 'ALL'
 
 whenever(cmdK, () => {
   if (cmdBar.value) {
@@ -181,7 +138,7 @@ whenever(cmdK, () => {
   <CmdBar ref="cmdBar" :commands="items">
     <template #header>
       <CmdBar.Input :icon="'../assets/icons/search.svg'" />
-      <CmdBar.Filter :groups="groups" />
+      <CmdBar.Filter :groups="groups" :default-group="defaultGroup" />
     </template>
     <template #content>
       <CmdBar.List v-slot="{ item }" :item-height="48">

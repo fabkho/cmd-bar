@@ -5,7 +5,7 @@ import { nanoid } from 'nanoid'
 
 const state = reactive<State>({
   selectedCommandId: null,
-  selectedGroups: new Set(),
+  selectedGroups: new Set<string>(),
   parentCommandId: null,
   searchTerm: '',
   commands: [] as Commands,
@@ -29,6 +29,8 @@ const useCmdBarState = {
       applyChildFilter()
     } else if (state.searchTerm) {
       applySearchFilter()
+    } else if (state.selectedGroups.size > 0) {
+      applyGroupFilter()
     } else {
       applyDefaultFilter()
     }
@@ -48,6 +50,11 @@ const useCmdBarState = {
     } else {
       state.selectedGroups.add(groupName)
     }
+    applyGroupFilter()
+  },
+  resetGroups(): void {
+    state.selectedGroups.clear()
+    applyDefaultFilter()
   },
   nextCommand(): void {
     if (state.selectedCommandId) {
@@ -117,6 +124,18 @@ function applySearchFilter(): void {
   }
   selectCommand(state.filteredCommands[0]?.id)
 }
+
+/**
+ *
+ */
+function applyGroupFilter(): void {
+  //TODO: optimize this (if a defaultGroup is set, we can skip this, and apply the default filter)
+  state.filteredCommands = state.commands.filter((item: CommandNode) =>
+    item.groups.some((group) => state.selectedGroups.has(group))
+  )
+  selectCommand(state.filteredCommands[0]?.id)
+}
+
 /**
  * helper function to apply the default filter
  */

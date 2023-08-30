@@ -6,6 +6,10 @@ const props = defineProps({
   groups: {
     type: Array as PropType<Array<string>>,
     required: true
+  },
+  defaultGroup: {
+    type: String as PropType<string>,
+    default: ''
   }
 })
 
@@ -14,27 +18,50 @@ const emit = defineEmits<{
 }>()
 
 const selectedGroups = useCmdBarState?.state.selectedGroups
-const groupSet = new Set(['All', ...props.groups])
+const groupSet = new Set(props.groups)
 
-// preselect "All" group
-if (selectedGroups.size === 0) {
-  useCmdBarState?.toggleGroup('All')
+// preselect the default
+if (props.defaultGroup) {
+  useCmdBarState?.toggleGroup(props.defaultGroup)
+  emit('filterChange', Array.from(useCmdBarState?.state.selectedGroups))
 }
 
 function isSelected(group: string) {
-  return useCmdBarState?.state.selectedGroups.has(group)
+  // return useCmdBarState.state.selectedGroups.has(group)
+  if (group === props.defaultGroup && useCmdBarState.state.selectedGroups.size === 1) {
+    return true
+  } else {
+    return useCmdBarState.state.selectedGroups.has(group)
+  }
 }
 
 function toggleGroup(group: string) {
-  useCmdBarState?.toggleGroup(group)
-  emit('filterChange', Array.from(useCmdBarState?.state.selectedGroups))
+  const filterChips = document.querySelectorAll('.filter-chip')
+  const defaultChips = document.querySelector(`.filter-chip[data-id="${props.defaultGroup}"]`)
+
+  if (group !== props.defaultGroup) {
+    useCmdBarState?.toggleGroup(group)
+    emit('filterChange', Array.from(useCmdBarState?.state.selectedGroups))
+
+    // remove selected class from default group
+    defaultChips?.classList.remove('filter-chip--selected')
+  } else {
+    // remove selected class from all groups
+    filterChips.forEach((chip) => {
+      chip.classList.remove('filter-chip--selected')
+    })
+    // add selected class to default "All" group
+    const defaultChips = document.querySelector(`.filter-chip[data-id="${props.defaultGroup}"]`)
+    defaultChips?.classList.add('filter-chip--selected')
+    useCmdBarState?.resetGroups()
+  }
 }
 </script>
 
 <template>
   <div class="filter">
     <div
-      data-cmd-bar-filter-chip
+      :data-id="group"
       v-for="group in groupSet"
       :key="group"
       class="filter-chip"
