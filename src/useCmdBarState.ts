@@ -5,6 +5,7 @@ import { nanoid } from 'nanoid'
 
 const state = reactive<State>({
   selectedCommandId: null,
+  selectedGroups: new Set(),
   parentCommandId: null,
   searchTerm: '',
   commands: [] as Commands,
@@ -40,6 +41,13 @@ const useCmdBarState = {
 
   selectCommand(commandId: string): void {
     state.selectedCommandId = commandId
+  },
+  toggleGroup(groupName: string): void {
+    if (state.selectedGroups.has(groupName)) {
+      state.selectedGroups.delete(groupName)
+    } else {
+      state.selectedGroups.add(groupName)
+    }
   },
   nextCommand(): void {
     if (state.selectedCommandId) {

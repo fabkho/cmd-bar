@@ -1,6 +1,7 @@
 import CmdBar from './components/CmdBar.vue'
 import CmdBarInput from './components/CmdBarInput.vue'
 import CmdBarList from './components/CmdBarList.vue'
+import CmdBarFilter from './components/CmdBarFilter.vue'
 
 // /**
 //  * Command Empty Node
@@ -69,6 +70,7 @@ import CmdBarList from './components/CmdBarList.vue'
 const components = Object.assign(CmdBar, {
   Input: CmdBarInput,
   List: CmdBarList,
+  Filter: CmdBarFilter,
   // Loading,
   // Separator,
   Root: CmdBar

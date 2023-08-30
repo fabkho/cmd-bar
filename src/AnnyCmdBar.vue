@@ -168,6 +168,8 @@ const items: Commands = [
   }
 ]
 
+const groups = items.map((item) => item.group)
+
 whenever(cmdK, () => {
   if (cmdBar.value) {
     cmdBar.value.toggleCmdBar()
@@ -179,6 +181,7 @@ whenever(cmdK, () => {
   <CmdBar ref="cmdBar" :commands="items">
     <template #header>
       <CmdBar.Input :icon="'../assets/icons/search.svg'" />
+      <CmdBar.Filter :groups="groups" />
     </template>
     <template #content>
       <CmdBar.List v-slot="{ item }" :item-height="48">
