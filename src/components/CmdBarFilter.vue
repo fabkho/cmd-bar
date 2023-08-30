@@ -14,7 +14,12 @@ const emit = defineEmits<{
 }>()
 
 const selectedGroups = useCmdBarState?.state.selectedGroups
-const groupSet = new Set(props.groups)
+const groupSet = new Set(['All', ...props.groups])
+
+// preselect "All" group
+if (selectedGroups.size === 0) {
+  useCmdBarState?.toggleGroup('All')
+}
 
 function isSelected(group: string) {
   return useCmdBarState?.state.selectedGroups.has(group)
