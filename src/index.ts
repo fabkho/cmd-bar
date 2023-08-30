@@ -1,7 +1,6 @@
-import { defineComponent, h, computed } from 'vue'
 import CmdBar from './components/CmdBar.vue'
 import CmdBarInput from './components/CmdBarInput.vue'
-import CmdBarItems from './components/CmdBarItems.vue'
+import CmdBarList from './components/CmdBarList.vue'
 
 // /**
 //  * Command Empty Node
@@ -69,7 +68,7 @@ import CmdBarItems from './components/CmdBarItems.vue'
 
 const components = Object.assign(CmdBar, {
   Input: CmdBarInput,
-  Items: CmdBarItems,
+  List: CmdBarList,
   // Loading,
   // Separator,
   Root: CmdBar

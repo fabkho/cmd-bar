@@ -25,11 +25,7 @@ const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(visibleI
 
 const scrollSelectedIntoView = () => {
   const item = getSelectedItem()
-
-  if (item) {
-    // Ensure the item is always in view
-    item.scrollIntoView({ block: 'nearest' })
-  }
+  item?.scrollIntoView({ block: 'nearest' })
 }
 
 const getSelectedItem = () => {

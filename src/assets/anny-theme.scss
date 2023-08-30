@@ -2,10 +2,11 @@
 
 .cmd-bar {
   $footer-height: 40px;
+  $spacing: 0.5rem;
   width: 100%;
   max-width: 640px;
   overflow-y: hidden;
-  padding: 8px;
+  padding: $spacing;
   background: rgba(22, 22, 22, 0.7);
   border-radius: 12px;
   font-family: var(--font-sans);
@@ -13,13 +14,6 @@
   box-shadow: var(--command-shadow);
   transition: transform 100ms ease;
   position: relative;
-
-  //TEST
-
-
-  &__wrapper {
-
-  }
 
   &[open] {
     animation: dialog 0.2s ease forwards;
@@ -65,22 +59,24 @@
 
     &-container{
       height: 21rem;
-      margin: 0 8px $footer-height;
+      margin: 0 0 $footer-height;
       overflow-y: scroll;
       overscroll-behavior: contain;
     }
+    transition: 100ms ease;
+    transition-property: height;
 
     &__item {
       content-visibility: auto;
 
       cursor: pointer;
       height: 48px;
+      padding: 0 calc($spacing + 0.5rem);
       border-radius: 8px;
       font-size: 14px;
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 0 16px;
       color: var(--gray11);
       user-select: none;
       will-change: background, color;
@@ -176,6 +172,10 @@
       display: flex;
       margin-left: auto;
       gap: 8px;
+
+      :last-child{
+        margin-right: 0.25rem;
+      }
 
       kbd {
         font-family: var(--font-sans);
