@@ -182,23 +182,23 @@ whenever(cmdK, () => {
     </template>
     <template #content>
       <CmdBar.List v-slot="{ item }" :item-height="48">
-        <div class="item__leading">
+        <div class="custom-item__leading">
           <img :src="item.leading" alt="icon" />
           {{ item.title }}
         </div>
-        <div class="item__actions">
+        <div class="custom-item__actions">
           <kbd key="enter">↵</kbd>
         </div>
       </CmdBar.List>
     </template>
     <template #footer>
-      <span class="footer__trigger">
+      <span class="custom-footer__trigger">
         Execute Command
         <kbd>↵</kbd>
       </span>
 
       <hr />
-      <span class="footer__subTrigger">
+      <span class="custom-footer__subTrigger">
         Navigate
         <kbd>↑</kbd>
         <kbd>↓</kbd>

@@ -27,7 +27,7 @@ function handleInput(e: Event): void {
 <template>
   <input
     data-cmd-bar-input
-    class="cmd-bar__input"
+    class="input"
     autofocus
     :value="useCmdBarState?.state.searchTerm"
     :placeholder="placeholder"

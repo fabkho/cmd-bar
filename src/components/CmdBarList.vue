@@ -49,13 +49,13 @@ watch(
 </script>
 
 <template>
-  <div class="cmd-bar__items-container" v-bind="containerProps">
-    <ul data-cmd-bar-items class="cmd-bar__items" v-bind="wrapperProps">
+  <div class="list-container" v-bind="containerProps">
+    <ul data-cmd-bar-items class="list" v-bind="wrapperProps">
       <li
         data-cmd-bar-item
         :data-id="item.data.id"
         v-for="item in list"
-        class="cmd-bar__items__item"
+        class="list-item"
         role="option"
         :aria-selected="isSelectedItem(item.data.id)"
         @mouseover="useCmdBarState?.selectCommand(item.data.id)"
