@@ -20,39 +20,35 @@ const emit = defineEmits<{
 const selectedGroups = useCmdBarState?.state.selectedGroups
 const groupSet = new Set(props.groups)
 
-// preselect the default
-if (props.defaultGroup) {
-  useCmdBarState?.toggleGroup(props.defaultGroup)
-  emit('filterChange', Array.from(useCmdBarState?.state.selectedGroups))
-}
-
 function isSelected(group: string) {
-  // return useCmdBarState.state.selectedGroups.has(group)
-  if (group === props.defaultGroup && useCmdBarState.state.selectedGroups.size === 1) {
+  if (group === props.defaultGroup && selectedGroups.size === 0) {
     return true
   } else {
-    return useCmdBarState.state.selectedGroups.has(group)
+    return selectedGroups.has(group)
   }
 }
 
 function toggleGroup(group: string) {
   const filterChips = document.querySelectorAll('.filter-chip')
-  const defaultChips = document.querySelector(`.filter-chip[data-id="${props.defaultGroup}"]`)
+  const defaultChip = document.querySelector(`.filter-chip[data-id="${props.defaultGroup}"]`)
 
   if (group !== props.defaultGroup) {
     useCmdBarState?.toggleGroup(group)
-    emit('filterChange', Array.from(useCmdBarState?.state.selectedGroups))
+    emit('filterChange', Array.from(selectedGroups))
 
     // remove selected class from default group
-    defaultChips?.classList.remove('filter-chip--selected')
+    if (selectedGroups.size > 1) {
+      defaultChip?.classList.remove('filter-chip--selected')
+    }
   } else {
     // remove selected class from all groups
     filterChips.forEach((chip) => {
       chip.classList.remove('filter-chip--selected')
     })
     // add selected class to default "All" group
-    const defaultChips = document.querySelector(`.filter-chip[data-id="${props.defaultGroup}"]`)
-    defaultChips?.classList.add('filter-chip--selected')
+    const defaultChip = document.querySelector(`.filter-chip[data-id="${props.defaultGroup}"]`)
+    defaultChip?.classList.add('filter-chip--selected')
+
     useCmdBarState?.resetGroups()
   }
 }

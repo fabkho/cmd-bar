@@ -11,10 +11,6 @@ export type State = {
    * The list of commands that are currently visible
    */
   filteredCommands: Commands
-  /**
-   * A cache of the last visible commands
-   */
-  filteredCommandsCache: Commands
 }
 
 export interface CmdBarStore {

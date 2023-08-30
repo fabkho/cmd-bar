@@ -9,8 +9,7 @@ const state = reactive<State>({
   parentCommandId: null,
   searchTerm: '',
   commands: [] as Commands,
-  filteredCommands: [] as Commands,
-  filteredCommandsCache: [] as Commands
+  filteredCommands: [] as Commands
 })
 
 let closeCmdBarFunction = () => {}
@@ -91,10 +90,6 @@ const useCmdBarState = {
 
   setSearchTerm(term: string): void {
     state.searchTerm = term
-    //reset cache
-    if (term.length === 0) {
-      state.filteredCommandsCache = []
-    }
     this.filterCommands()
   },
 
@@ -117,7 +112,6 @@ function applyChildFilter(): void {
 function applySearchFilter(): void {
   if (state.searchTerm.length > 1) {
     const lowerCaseSearchTerm = state.searchTerm.toLowerCase()
-    state.filteredCommandsCache = state.filteredCommands
     state.filteredCommands = state.filteredCommands.filter((item: CommandNode) =>
       item.title.toLowerCase().includes(lowerCaseSearchTerm)
     )
@@ -129,10 +123,10 @@ function applySearchFilter(): void {
  *
  */
 function applyGroupFilter(): void {
-  //TODO: optimize this (if a defaultGroup is set, we can skip this, and apply the default filter)
   state.filteredCommands = state.commands.filter((item: CommandNode) =>
     item.groups.some((group) => state.selectedGroups.has(group))
   )
+
   selectCommand(state.filteredCommands[0]?.id)
 }
 
@@ -140,8 +134,7 @@ function applyGroupFilter(): void {
  * helper function to apply the default filter
  */
 function applyDefaultFilter(): void {
-  state.filteredCommands =
-    state.filteredCommandsCache.length > 0 ? state.filteredCommandsCache : state.commands
+  state.filteredCommands = state.commands
   selectCommand(state.filteredCommands[0].id)
 }
 
