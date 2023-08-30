@@ -1,8 +1,10 @@
 # CmdBarVue
-TODO
+
+![screenshot of commandbar](./screenshot.png)
+
+
 
 ## Features
-TODO
 
 ## Usage
 
