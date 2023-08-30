@@ -23,7 +23,6 @@
   }
 
   &__header {
-    margin-bottom: 16px;
     border-bottom: 1px solid var(--gray6);
 
     padding:  $spacing  $spacing  0  $spacing;
@@ -52,6 +51,7 @@
       &-chip {
         position: relative;
         padding: 0.25rem 0.5rem 0.75rem;
+        transition: all 150ms ease-in-out;
 
         &--selected {
           color: var(--gray12);
@@ -73,10 +73,10 @@
   }
 
   &__content{
+    margin-bottom: $footer-height;
     .list {
       &-container{
         height: 21rem;
-        margin: 0 0 $footer-height;
         overflow: hidden scroll;
         overscroll-behavior: contain;
         content-visibility: auto;
@@ -110,6 +110,10 @@
         user-select: none;
         transition: all 150ms ease;
         transition-property: none;
+
+        &:first-of-type {
+          margin-top: $spacing;
+        }
 
         &[aria-selected='true'] {
           background: var(--grayA3);
