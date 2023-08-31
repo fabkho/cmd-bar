@@ -125,7 +125,7 @@ const items: Commands = [
 ]
 
 const groups = items.flatMap((item) => item.groups)
-const defaultGroup = 'ALL'
+const defaultFilterOption = 'ALL'
 
 whenever(cmdK, () => {
   if (cmdBar.value) {
@@ -138,7 +138,7 @@ whenever(cmdK, () => {
   <CmdBar ref="cmdBar" :commands="items">
     <template #header>
       <CmdBar.Input :icon="'../assets/icons/search.svg'" />
-      <CmdBar.Filter :groups="groups" :default-group="defaultGroup" />
+      <CmdBar.Filter :filter-options="groups" :default-filter-option="defaultFilterOption" />
     </template>
     <template #content>
       <CmdBar.List v-slot="{ item }" :item-height="48">

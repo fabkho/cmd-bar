@@ -3,11 +3,11 @@ import type { PropType } from 'vue'
 import { useCmdBarState } from '@/useCmdBarState'
 
 const props = defineProps({
-  groups: {
+  filterOptions: {
     type: Array as PropType<Array<string>>,
     required: true
   },
-  defaultGroup: {
+  defaultFilterOption: {
     type: String as PropType<string>,
     default: ''
   }
@@ -18,10 +18,10 @@ const emit = defineEmits<{
 }>()
 
 const selectedGroups = useCmdBarState?.state.selectedGroups
-const groupSet = new Set(props.groups)
+const groupSet = new Set(props.filterOptions)
 
 function isSelected(group: string) {
-  if (group === props.defaultGroup && selectedGroups.size === 0) {
+  if (group === props.defaultFilterOption && selectedGroups.size === 0) {
     return true
   } else {
     return selectedGroups.has(group)
@@ -30,9 +30,9 @@ function isSelected(group: string) {
 
 function toggleGroup(group: string) {
   const filterChips = document.querySelectorAll('.filter-chip')
-  const defaultChip = document.querySelector(`.filter-chip[data-id="${props.defaultGroup}"]`)
+  const defaultChip = document.querySelector(`.filter-chip[data-id="${props.defaultFilterOption}"]`)
 
-  if (group !== props.defaultGroup) {
+  if (group !== props.defaultFilterOption) {
     useCmdBarState?.toggleGroup(group)
     emit('filterChange', Array.from(selectedGroups))
 
@@ -46,7 +46,9 @@ function toggleGroup(group: string) {
       chip.classList.remove('filter-chip--selected')
     })
     // add selected class to default "All" group
-    const defaultChip = document.querySelector(`.filter-chip[data-id="${props.defaultGroup}"]`)
+    const defaultChip = document.querySelector(
+      `.filter-chip[data-id="${props.defaultFilterOption}"]`
+    )
     defaultChip?.classList.add('filter-chip--selected')
 
     useCmdBarState?.resetGroups()
