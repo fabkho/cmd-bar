@@ -37,8 +37,10 @@ function toggleGroup(group: string) {
     emit('filterChange', Array.from(selectedGroups))
 
     // remove selected class from default group
-    if (selectedGroups.size > 1) {
+    if (selectedGroups.size > 0) {
       defaultChip?.classList.remove('filter-chip--selected')
+    } else {
+      useCmdBarState?.resetGroups()
     }
   } else {
     // remove selected class from all groups
