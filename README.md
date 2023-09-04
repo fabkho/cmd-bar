@@ -71,6 +71,11 @@ const items: Commands = [
 
 
 ### CmdBarInput
+The `CmdBarInput` component is used to display the input field of the command bar. It takes the following props:
+- `placeholder`: The placeholder of the input field. (Default: `''`)
+- `modelValue`: The value of the input field. | **Optional**
+
+**Important**: If `modelValue`prop is **not** passed, the filtering of the commands will be done automatically. Otherwise, you have to filter the commands yourself.
 
 ### CmdBarFilter
 Let you define filter options for the command bar. It takes the following props:

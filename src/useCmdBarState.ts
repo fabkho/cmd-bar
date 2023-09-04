@@ -95,9 +95,11 @@ const useCmdBarState = {
     }
   },
 
-  setSearchTerm(term: string): void {
+  setSearchTerm(term: string, filter: boolean): void {
     state.searchTerm = term
-    this.filterCommands()
+    if (filter) {
+      this.filterCommands()
+    }
   },
 
   resetSearchTerm(): void {

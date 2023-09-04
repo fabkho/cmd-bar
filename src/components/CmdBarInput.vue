@@ -2,16 +2,10 @@
 import { useCmdBarState } from '@/useCmdBarState'
 import { computed } from 'vue'
 
-defineProps({
-  placeholder: {
-    type: String,
-    default: 'search for anything'
-  },
-  modelValue: {
-    type: String,
-    default: ''
-  }
-})
+const props = defineProps<{
+  placeholder: string
+  modelValue?: string
+}>()
 
 const emit = defineEmits<{
   (e: 'input', ie: InputEvent): void
@@ -27,7 +21,9 @@ const localSearchTerm = computed(() => useCmdBarState?.state.searchTerm)
 function handleInput(e: Event): void {
   const event = e as InputEvent
   const input = e.target as HTMLInputElement
-  useCmdBarState?.setSearchTerm(input?.value)
+
+  useCmdBarState?.setSearchTerm(input?.value, !!props.modelValue)
+
   emit('input', event)
   emit('update:modelValue', input?.value)
 }
@@ -38,6 +34,9 @@ function handleInput(e: Event): void {
     data-cmd-bar-input
     class="input"
     autofocus
+    aria-autocomplete="list"
+    role="combobox"
+    :aria-expanded="true"
     :value="localSearchTerm"
     :placeholder="placeholder"
     @input="handleInput"

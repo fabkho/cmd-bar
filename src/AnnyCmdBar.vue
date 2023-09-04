@@ -138,7 +138,7 @@ whenever(cmdK, () => {
 <template>
   <CmdBar ref="cmdBar" :commands="items" loop>
     <template #header>
-      <CmdBar.Input v-model="searchTerm" :icon="'../assets/icons/search.svg'" />
+      <CmdBar.Input :placeholder="'search fo annything'" :icon="'../assets/icons/search.svg'" />
       <CmdBar.Filter :filter-options="groups" :default-filter-option="defaultFilterOption" />
     </template>
     <template #content>
