@@ -10,6 +10,10 @@ const props = defineProps({
   defaultFilterOption: {
     type: String as PropType<string>,
     default: ''
+  },
+  allowMultiSelect: {
+    type: Boolean as PropType<boolean>,
+    default: true
   }
 })
 
@@ -33,7 +37,7 @@ function toggleGroup(group: string) {
   const defaultChip = document.querySelector(`.filter-chip[data-id="${props.defaultFilterOption}"]`)
 
   if (group !== props.defaultFilterOption) {
-    useCmdBarState?.toggleGroup(group)
+    useCmdBarState?.toggleGroup(group, props.allowMultiSelect)
     emit('filterChange', Array.from(selectedGroups))
 
     // remove selected class from default group

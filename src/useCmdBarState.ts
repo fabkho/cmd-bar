@@ -43,13 +43,16 @@ const useCmdBarState = {
   selectCommand(commandId: string): void {
     state.selectedCommandId = commandId
   },
-  toggleGroup(groupName: string): void {
+  toggleGroup(groupName: string, multiSelect: boolean): void {
     if (state.selectedGroups.has(groupName)) {
       state.selectedGroups.delete(groupName)
     } else {
+      if (!multiSelect) {
+        state.selectedGroups.clear()
+      }
       state.selectedGroups.add(groupName)
     }
-    applyGroupFilter()
+    this.filterCommands()
   },
   resetGroups(): void {
     state.selectedGroups.clear()
