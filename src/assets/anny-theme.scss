@@ -73,6 +73,7 @@
   }
 
   &__content{
+    margin-top: $spacing;
     margin-bottom: calc($footer-height + $spacing);
     .list {
       &-container{
@@ -110,14 +111,6 @@
         user-select: none;
         transition: all 150ms ease;
         transition-property: none;
-
-        &:first-of-type {
-          margin-top: $spacing;
-        }
-
-        &:last-of-type {
-          margin-bottom: $spacing;
-        }
 
         &[aria-selected='true'] {
           background: var(--grayA3);
