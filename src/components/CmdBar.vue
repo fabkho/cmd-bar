@@ -13,6 +13,10 @@ const props = defineProps({
     type: Boolean as PropType<boolean | null>,
     required: false,
     default: null
+  },
+  loop: {
+    type: Boolean as PropType<boolean>,
+    default: false
   }
 })
 
@@ -76,10 +80,10 @@ const vClickOutside = {
 function handleKeyDown(event: KeyboardEvent): void {
   switch (event.key) {
     case 'ArrowUp':
-      useCmdBarState?.nextCommand()
+      useCmdBarState?.nextCommand(props.loop)
       break
     case 'ArrowDown':
-      useCmdBarState?.prevCommand()
+      useCmdBarState?.prevCommand(props.loop)
       break
     case 'ArrowLeft':
       // Insert your custom logic here

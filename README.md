@@ -10,6 +10,7 @@
 The `CmdBar` component is the main component of this library. It is used to display the command bar. It takes the following props:
 - `commands`: An array of `Command` objects. (See [Commands](#commands))
 - `visible`: Whether the command bar is visible or not. (Default: `false`)
+- `loop`: Whether the command bar should loop through the commands or not. (Default: `false`)
 
 And it takes 3 slots: `header`, `content` and `footer`.
 

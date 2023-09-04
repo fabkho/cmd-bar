@@ -58,20 +58,24 @@ const useCmdBarState = {
     state.selectedGroups.clear()
     applyDefaultFilter()
   },
-  nextCommand(): void {
+  nextCommand(loop: boolean): void {
     if (state.selectedCommandId) {
       const selectedIndex = getSelectedIndex()
       if (selectedIndex > 0) {
         state.selectedCommandId = state.filteredCommands[selectedIndex - 1].id
+      } else if (loop) {
+        state.selectedCommandId = state.filteredCommands[state.filteredCommands.length - 1].id
       }
     }
   },
 
-  prevCommand(): void {
+  prevCommand(loop: boolean): void {
     if (state.selectedCommandId) {
       const selectedIndex = getSelectedIndex()
       if (selectedIndex < state.filteredCommands.length - 1) {
         state.selectedCommandId = state.filteredCommands[selectedIndex + 1].id
+      } else if (loop) {
+        state.selectedCommandId = state.filteredCommands[0].id
       }
     }
   },

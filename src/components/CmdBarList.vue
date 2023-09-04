@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, nextTick, type PropType, ref, watch } from 'vue'
 import { useCmdBarState } from '@/useCmdBarState'
 import { useVirtualList } from '@vueuse/core'
 
-const props = defineProps<{
-  itemHeight: number
-}>()
+const props = defineProps({
+  itemHeight: {
+    type: Number as PropType<number>,
+    required: true
+  }
+})
 
 const index = ref<number>(0)
 

@@ -135,7 +135,7 @@ whenever(cmdK, () => {
 </script>
 
 <template>
-  <CmdBar ref="cmdBar" :commands="items">
+  <CmdBar ref="cmdBar" :commands="items" loop>
     <template #header>
       <CmdBar.Input :icon="'../assets/icons/search.svg'" />
       <CmdBar.Filter :filter-options="groups" :default-filter-option="defaultFilterOption" />
