@@ -1,26 +1,35 @@
 <script setup lang="ts">
 import { useCmdBarState } from '@/useCmdBarState'
+import { computed } from 'vue'
 
 defineProps({
   placeholder: {
     type: String,
     default: 'search for anything'
+  },
+  modelValue: {
+    type: String,
+    default: ''
   }
 })
 
 const emit = defineEmits<{
-  (e: 'input', val: any): void
+  (e: 'input', ie: InputEvent): void
+  (e: 'update:modelValue', val: any): void
 }>()
+
+const localSearchTerm = computed(() => useCmdBarState?.state.searchTerm)
 
 /**
  * handle input event
  * emit input event and store value in store
  */
 function handleInput(e: Event): void {
-  const target = e.target as HTMLInputElement
-  const value = target.value
-  emit('input', value)
-  useCmdBarState.setSearchTerm(value)
+  const event = e as InputEvent
+  const input = e.target as HTMLInputElement
+  useCmdBarState?.setSearchTerm(input?.value)
+  emit('input', event)
+  emit('update:modelValue', input?.value)
 }
 </script>
 
@@ -29,7 +38,7 @@ function handleInput(e: Event): void {
     data-cmd-bar-input
     class="input"
     autofocus
-    :value="useCmdBarState?.state.searchTerm"
+    :value="localSearchTerm"
     :placeholder="placeholder"
     @input="handleInput"
   />

@@ -7,6 +7,7 @@ import { useMagicKeys, whenever } from '@vueuse/core'
 const cmdBar = ref<typeof CmdBar | null>(null)
 const keys = useMagicKeys()
 const cmdK = keys['Meta+k']
+const searchTerm = ref('test')
 
 // dummy data of 5 items for the CmdBar (id, title, icon, actions)
 // the icon is a link to a random unsplash image https://source.unsplash.com/random/300×300
@@ -137,7 +138,7 @@ whenever(cmdK, () => {
 <template>
   <CmdBar ref="cmdBar" :commands="items" loop>
     <template #header>
-      <CmdBar.Input :icon="'../assets/icons/search.svg'" />
+      <CmdBar.Input v-model="searchTerm" :icon="'../assets/icons/search.svg'" />
       <CmdBar.Filter :filter-options="groups" :default-filter-option="defaultFilterOption" />
     </template>
     <template #content>
