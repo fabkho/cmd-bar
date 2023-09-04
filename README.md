@@ -75,6 +75,7 @@ const items: Commands = [
 Let you define filter options for the command bar. It takes the following props:
 - `filterOptions`: An array of `FilterOption` objects.
 - `defaultFilterOption`: The default filter option. (Default: `null`) | **Optional**
+- `allowMultiSelect`: Whether the user can select multiple filter options or not. (Default: `true`) | **Optional**
 
 #### FilterOptions
 This should be a collection of all your groups that you have declared in your commands. 

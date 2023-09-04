@@ -58,7 +58,7 @@ watch(
         class="list-item"
         role="option"
         :aria-selected="isSelectedItem(item.data.id)"
-        @mouseover="useCmdBarState?.selectCommand(item.data.id)"
+        @mousemove="useCmdBarState?.selectCommand(item.data.id)"
         @click="useCmdBarState?.executeCommand()"
       >
         <slot :item="item.data" />
