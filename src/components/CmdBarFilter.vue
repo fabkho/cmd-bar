@@ -18,7 +18,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits<{
-  (e: 'filterChange', groups: Array<string>): void
+  filterChange: [groups: Array<string>]
 }>()
 
 const selectedGroups = useCmdBarState?.state.selectedGroups

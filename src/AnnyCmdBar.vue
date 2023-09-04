@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { CmdBar } from './index'
 import type { Commands } from '@/types'
 import { useMagicKeys, whenever } from '@vueuse/core'
@@ -133,12 +133,21 @@ whenever(cmdK, () => {
     cmdBar.value.toggleCmdBar()
   }
 })
+
+// watch and log searchTerm
+watch(searchTerm, (newVal) => {
+  console.log(newVal)
+})
 </script>
 
 <template>
   <CmdBar ref="cmdBar" :commands="items" loop>
     <template #header>
-      <CmdBar.Input :placeholder="'search fo anything'" :icon="'../assets/icons/search.svg'" />
+      <CmdBar.Input
+        v-model="searchTerm"
+        :placeholder="'search fo anything'"
+        :icon="'../assets/icons/search.svg'"
+      />
       <CmdBar.Filter :filter-options="groups" :default-filter-option="defaultFilterOption" />
     </template>
     <template #content>

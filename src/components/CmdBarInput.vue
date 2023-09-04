@@ -8,8 +8,8 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'input', ie: InputEvent): void
-  (e: 'update:modelValue', val: any): void
+  input: [ie: InputEvent]
+  'update:modelValue': [val: any]
 }>()
 
 const localSearchTerm = computed(() => useCmdBarState?.state.searchTerm)
