@@ -1,14 +1,11 @@
 <script setup lang="ts">
-import { computed, nextTick, type PropType, ref, watch } from 'vue'
+import { computed, type ComputedRef, nextTick, ref, watch } from 'vue'
 import { useCmdBarState } from '@/useCmdBarState'
 import { useVirtualList } from '@vueuse/core'
 
-const props = defineProps({
-  itemHeight: {
-    type: Number as PropType<number>,
-    required: true
-  }
-})
+const props = defineProps<{
+  itemHeight: number
+}>()
 
 const index = ref<number>(0)
 
@@ -22,9 +19,12 @@ const visibleItems = computed(() => {
   return useCmdBarState?.state.filteredCommands
 })
 
-const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(visibleItems, {
-  itemHeight: props.itemHeight
-})
+const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(
+  visibleItems as ComputedRef,
+  {
+    itemHeight: props.itemHeight
+  }
+)
 
 const scrollSelectedIntoView = () => {
   const item = getSelectedItem()
