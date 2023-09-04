@@ -2,9 +2,14 @@
 import { computed, type ComputedRef, nextTick, ref, watch } from 'vue'
 import { useCmdBarState } from '@/useCmdBarState'
 import { useVirtualList } from '@vueuse/core'
+import type { Command } from '@/types'
 
 const props = defineProps<{
   itemHeight: number
+}>()
+
+defineSlots<{
+  default?: (props: { item: Command }) => any
 }>()
 
 const index = ref<number>(0)
