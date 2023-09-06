@@ -43,6 +43,12 @@ export interface GroupedCommands {
   [groupName: string]: Command[]
 }
 
+//TODO
+export interface DatatProvider<R> {
+  load: () => Promise<R[]>
+  transform: (item: R) => Command
+}
+
 export type Keybindings = {
   arrowUp: Lowercase<string>
   arrowDown: Lowercase<string>
