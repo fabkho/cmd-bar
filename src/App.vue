@@ -2,7 +2,9 @@
   <header></header>
 
   <main>
-    <AnnyCmdBar />
+    <Suspense>
+      <AnnyCmdBar />
+    </Suspense>
   </main>
 </template>
 

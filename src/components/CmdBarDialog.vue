@@ -1,18 +1,11 @@
 <script setup lang="ts">
-import { ref, type PropType, toRef } from 'vue'
-import { whenever } from '@vueuse/core'
+import { ref, type PropType, watch } from 'vue'
 import { useCmdBarState } from '@/useCmdBarState'
-import type { Commands } from '@/types'
 
 const props = defineProps({
-  commands: {
-    type: Array as PropType<Commands>,
-    required: true
-  },
   visible: {
-    type: Boolean as PropType<boolean | null>,
-    required: false,
-    default: null
+    type: Boolean as PropType<boolean>,
+    default: false
   },
   loop: {
     type: Boolean as PropType<boolean>,
@@ -22,16 +15,13 @@ const props = defineProps({
 
 const dialogRef = ref<HTMLDialogElement | null>(null)
 
-// provide items
-useCmdBarState?.registerCommands(props.commands)
-
 /**
  * toggle dialog
  */
 function toggleCmdBar(): void {
   // if component is mounted, open dialog
   if (dialogRef.value) {
-    if (dialogRef.value?.open || props.visible === false) {
+    if (dialogRef.value?.open) {
       dialogRef.value?.close()
       useCmdBarState?.resetState()
     } else {
@@ -40,21 +30,15 @@ function toggleCmdBar(): void {
   }
 }
 // provide toggle function to store
-useCmdBarState.registerToggleCmdBar(toggleCmdBar)
-
-/**
- * first option: toggle commandbar via exposed function
- */
-defineExpose({
-  toggleCmdBar
-})
+useCmdBarState.registerToggle(toggleCmdBar)
 
 /**
  * second option: toggle commandbar on prop change
  */
-whenever(toRef(props.visible) ?? false, () => {
-  toggleCmdBar()
-})
+watch(
+  () => props.visible,
+  () => toggleCmdBar()
+)
 
 /**
  * Close dialog if click is outside of dialog

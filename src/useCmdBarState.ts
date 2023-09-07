@@ -80,7 +80,7 @@ const useCmdBarState = {
     }
   },
 
-  registerToggleCmdBar(toggleCmdBar: () => void) {
+  registerToggle(toggleCmdBar: () => void) {
     closeCmdBarFunction = toggleCmdBar
   },
 

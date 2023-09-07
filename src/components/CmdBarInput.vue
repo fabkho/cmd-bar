@@ -22,7 +22,7 @@ function handleInput(e: Event): void {
   const event = e as InputEvent
   const input = e.target as HTMLInputElement
 
-  useCmdBarState?.setSearchTerm(input?.value, !!props.modelValue)
+  useCmdBarState?.setSearchTerm(input?.value, !props.modelValue)
 
   emit('input', event)
   emit('update:modelValue', input?.value)
