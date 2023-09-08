@@ -7,6 +7,7 @@
   $spacing: 0.5rem;
   $scrollbar-width: 12px;
   $border-radius: 12px;
+  $item-height: 48px;
   width: 100%;
   max-width: 640px;
   padding: 0;
@@ -105,7 +106,7 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        height: 48px;
+        height: $item-height;
         padding: 0 calc($spacing * 2);
         margin-left: calc($scrollbar-width/2);
         border-radius: calc($border-radius/2);
@@ -219,6 +220,28 @@
       margin-left: auto;
       gap: 8px;
 
+    }
+  }
+
+  .custom-skeleton {
+    height: $item-height;
+    margin: $spacing;
+    border-radius: calc($border-radius/2);
+    will-change: background;
+    user-select: none;
+    transition: all 150ms ease;
+    background: var(--grayA3);
+    animation: pulse 1.5s ease-in-out infinite;
+    @keyframes pulse {
+      0% {
+        opacity: 0.5;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0.5;
+      }
     }
   }
 }

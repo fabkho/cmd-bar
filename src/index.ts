@@ -40,17 +40,31 @@ import { defineComponent, h } from 'vue'
  */
 const Loading = defineComponent({
   name: 'Command.Loading',
-  setup(props, { attrs, slots }) {
-    return () =>
-      h(
-        'div',
-        {
-          'command-loading': '',
-          role: 'progressbar',
-          ...attrs
-        },
-        slots
-      )
+  props: {
+    count: {
+      type: Number
+    }
+  },
+  setup(props, { slots }) {
+    return () => {
+      const loadingComponents = []
+      const count = props.count ?? 1
+
+      for (let i = 0; i < count; i++) {
+        loadingComponents.push(
+          h(
+            'div',
+            {
+              'command-loading': '',
+              role: 'progressbar'
+            },
+            slots
+          )
+        )
+      }
+
+      return loadingComponents
+    }
   }
 })
 //

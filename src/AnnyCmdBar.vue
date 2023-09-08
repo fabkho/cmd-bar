@@ -190,7 +190,7 @@ whenever(cmdK, () => {
         <CmdBar.Filter :filter-options="groups" :default-filter-option="defaultFilterOption" />
       </template>
       <template #content>
-        <CmdBar.List v-if="!loading" v-slot="{ item }" :item-height="48">
+        <CmdBar.List v-if="false" v-slot="{ item }" :item-height="48">
           <div class="custom-item__leading">
             <img :src="item.leading" alt="icon" />
             {{ item.title }}
@@ -199,7 +199,9 @@ whenever(cmdK, () => {
             <kbd key="enter">↵</kbd>
           </div>
         </CmdBar.List>
-        <CmdBar.Loading v-else>Loading...</CmdBar.Loading>
+        <CmdBar.Loading :count="6" v-else>
+          <div class="custom-skeleton" />
+        </CmdBar.Loading>
       </template>
       <template #footer>
         <span class="custom-footer__trigger">
