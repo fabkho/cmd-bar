@@ -75,6 +75,8 @@
   }
 
   &__content{
+    height: 21rem;
+
     margin-top: $spacing;
     margin-bottom: calc($footer-height + $spacing);
     .list {

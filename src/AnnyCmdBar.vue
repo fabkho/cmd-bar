@@ -4,9 +4,11 @@ import { CmdBar } from './index'
 import type { Command, Commands } from '@/types'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
 import { useDefineCommand } from '@/useDefineCommand'
+import { useRegisterCommands } from '@/useRegisterCommands'
 
 const cmdBar = ref<typeof CmdBar | null>(null)
 const items = ref<Commands>([])
+let loading = ref(false)
 const visibility = ref(false)
 const keys = useMagicKeys()
 const cmdK = keys['Meta+k']
@@ -15,8 +17,16 @@ const searchTerm = ref('')
 //TODO:
 // - fetch commands from faker API
 await useFetch('https://jsonplaceholder.typicode.com/users', {
+  beforeFetch(ctx) {
+    loading.value = true
+    return ctx
+  },
   afterFetch(ctx) {
-    items.value = transformUserDataToCommand(ctx.data)
+    setTimeout(() => {
+      items.value = transformUserDataToCommand(ctx.data)
+      useRegisterCommands(items.value, true)
+      loading.value = false
+    }, 2000)
     return ctx
   }
 }).json()
@@ -169,8 +179,8 @@ whenever(cmdK, () => {
 </script>
 
 <template>
-  <CmdBar :commands="items">
-    <CmdBar.Dialog :visible="visibility" loop>
+  <CmdBar :commands="defaultItems">
+    <CmdBar.Dialog :visible="visibility">
       <template #header>
         <CmdBar.Input
           v-model="searchTerm"
@@ -180,7 +190,7 @@ whenever(cmdK, () => {
         <CmdBar.Filter :filter-options="groups" :default-filter-option="defaultFilterOption" />
       </template>
       <template #content>
-        <CmdBar.List v-slot="{ item }" :item-height="48">
+        <CmdBar.List v-if="!loading" v-slot="{ item }" :item-height="48">
           <div class="custom-item__leading">
             <img :src="item.leading" alt="icon" />
             {{ item.title }}
@@ -189,6 +199,7 @@ whenever(cmdK, () => {
             <kbd key="enter">↵</kbd>
           </div>
         </CmdBar.List>
+        <CmdBar.Loading v-else>Loading...</CmdBar.Loading>
       </template>
       <template #footer>
         <span class="custom-footer__trigger">

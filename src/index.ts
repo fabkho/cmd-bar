@@ -3,6 +3,7 @@ import CmdBarInput from './components/CmdBarInput.vue'
 import CmdBarList from './components/CmdBarList.vue'
 import CmdBarFilter from './components/CmdBarFilter.vue'
 import CmdBarDialog from './components/CmdBarDialog.vue'
+import { defineComponent, h } from 'vue'
 
 // /**
 //  * Command Empty Node
@@ -33,25 +34,25 @@ import CmdBarDialog from './components/CmdBarDialog.vue'
 //           })
 //   }
 // })
-//
-// /**
-//  * Command Loading Node
-//  */
-// const Loading = defineComponent({
-//   name: 'Command.Loading',
-//   setup(props, { attrs, slots }) {
-//     return () =>
-//       h(
-//         'div',
-//         {
-//           'command-loading': '',
-//           role: 'progressbar',
-//           ...attrs
-//         },
-//         slots
-//       )
-//   }
-// })
+
+/**
+ * Command Loading Node
+ */
+const Loading = defineComponent({
+  name: 'Command.Loading',
+  setup(props, { attrs, slots }) {
+    return () =>
+      h(
+        'div',
+        {
+          'command-loading': '',
+          role: 'progressbar',
+          ...attrs
+        },
+        slots
+      )
+  }
+})
 //
 // /**
 //  * Command Separator Node
@@ -73,6 +74,7 @@ const components = Object.assign(CmdBar, {
   List: CmdBarList,
   Filter: CmdBarFilter,
   Dialog: CmdBarDialog,
+  Loading,
   // Loading,
   // Separator,
   Root: CmdBar

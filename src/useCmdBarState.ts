@@ -16,10 +16,10 @@ let closeCmdBarFunction = () => {}
 
 const useCmdBarState = {
   state: readonly(state),
-  registerCommands(newItems: Commands): void {
-    state.commands = newItems
-    // make id unique and assign it to the state
+  registerCommands(newCommands: Commands, prepend: boolean): void {
+    prepend ? state.commands.unshift(...newCommands) : state.commands.push(...newCommands)
     uniquifyIds()
+
     // init filtered commands
     this.filterCommands()
   },
@@ -59,24 +59,20 @@ const useCmdBarState = {
     applyDefaultFilter()
   },
   nextCommand(loop: boolean): void {
-    if (state.selectedCommandId) {
-      const selectedIndex = getSelectedIndex()
-      if (selectedIndex > 0) {
-        state.selectedCommandId = state.filteredCommands[selectedIndex - 1].id
-      } else if (loop) {
-        state.selectedCommandId = state.filteredCommands[state.filteredCommands.length - 1].id
-      }
+    const selectedIndex = getSelectedIndex()
+    if (selectedIndex > 0) {
+      state.selectedCommandId = state.filteredCommands[selectedIndex - 1].id
+    } else if (loop) {
+      state.selectedCommandId = state.filteredCommands[state.filteredCommands.length - 1].id
     }
   },
 
   prevCommand(loop: boolean): void {
-    if (state.selectedCommandId) {
-      const selectedIndex = getSelectedIndex()
-      if (selectedIndex < state.filteredCommands.length - 1) {
-        state.selectedCommandId = state.filteredCommands[selectedIndex + 1].id
-      } else if (loop) {
-        state.selectedCommandId = state.filteredCommands[0].id
-      }
+    const selectedIndex = getSelectedIndex()
+    if (selectedIndex < state.filteredCommands.length - 1) {
+      state.selectedCommandId = state.filteredCommands[selectedIndex + 1].id
+    } else if (loop) {
+      state.selectedCommandId = state.filteredCommands[0].id
     }
   },
 
@@ -160,10 +156,7 @@ function selectCommand(commandId: string): void {
  * helper function to get the index of the selected command
  */
 function getSelectedIndex(): number {
-  if (state.selectedCommandId) {
-    return state.filteredCommands.findIndex((command) => command.id === state.selectedCommandId)
-  }
-  return -1
+  return state.filteredCommands.findIndex((command) => command.id === state.selectedCommandId)
 }
 /**
  * helper function to get the children of the selected command
@@ -182,6 +175,10 @@ function getChildren(): Commands {
 function uniquifyIds(): void {
   const prefix = 'command-'
   state.commands.forEach((item) => {
+    // skip if already prefixed
+    if (item.id.startsWith(prefix)) {
+      return
+    }
     item.id = `${prefix}${item.id + nanoid()}`
     if (item.children) {
       item.children.forEach((child, childIndex) => {

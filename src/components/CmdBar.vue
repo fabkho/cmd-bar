@@ -14,7 +14,7 @@ const props = defineProps({
   }
 })
 
-useCmdBarState?.registerCommands(props.commands)
+useCmdBarState?.registerCommands(props.commands, false)
 
 //TODO:
 // - provide store

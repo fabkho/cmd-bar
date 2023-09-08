@@ -6,29 +6,37 @@
 
 ## Usage
 
+### Define your commands
+To define your commands, you can use the `useDefineCommand` composable. Which is basically just a wrapper to provide type safety. Here is an example:
+``` ts
+function transformUserDataToCommand(userData: Record<string, any>[]): Command[] {
+  return userData.map((user: Record<string, any>) =>
+    useDefineCommand({
+      id: user.id.toString(),
+      leading: './src/assets/icons/user.svg',
+      title: user.name,
+      groups: [], // You can set this as needed.
+      description: user.email, // You can choose a relevant property for 'description'.
+      action: () => {
+        // Define your action here.
+      },
+      actionClosesCmdBar: false // You can set this as needed.
+    })
+  )
+}
+```
+
 ### CmdBar
-The `CmdBar` component is the main component of this library. It is used to display the command bar. It takes the following props:
+The `CmdBar` component is the main component of this library. It is used to Provide the data to the other components. It takes the following props:
 - `commands`: An array of `Command` objects. (See [Commands](#commands))
+...
+
+### CmdBar.Dialog
+The `CmdBar.Dialog` component is used to display the command bar. It takes the following props:
 - `visible`: Whether the command bar is visible or not. (Default: `false`)
 - `loop`: Whether the command bar should loop through the commands or not. (Default: `false`)
 
 And it takes 3 slots: `header`, `content` and `footer`.
-
-Additionally, it exposes a `toogleCmdBar` method to toggle the visibility of the command bar. In combination with [useMagicKeys](https://vueuse.org/core/useMagicKeys/#usemagickeys), it can be used like this:
-``` vue
-import type { Commands } from '@/types'
-import { useMagicKeys, whenever } from '@vueuse/core'
-
-const cmdBar = ref<typeof CmdBar | null>(null)
-const keys = useMagicKeys()
-const cmdK = keys['Meta+k']
-
-whenever(cmdK, () => {
-  if (cmdBar.value) {
-    cmdBar.value.toggleCmdBar()
-  }
-})
-```
 
 #### Commands
 To add commands to the command bar, you can pass an array of `Command` objects to the component. A `Command` object has the following properties:
