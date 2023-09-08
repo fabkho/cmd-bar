@@ -55,7 +55,7 @@ const Loading = defineComponent({
           h(
             'div',
             {
-              'command-loading': '',
+              class: 'skeleton',
               role: 'progressbar'
             },
             slots

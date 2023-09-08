@@ -199,9 +199,7 @@ whenever(cmdK, () => {
             <kbd key="enter">↵</kbd>
           </div>
         </CmdBar.List>
-        <CmdBar.Loading :count="6" v-else>
-          <div class="custom-skeleton" />
-        </CmdBar.Loading>
+        <CmdBar.Loading :count="6" v-else />
       </template>
       <template #footer>
         <span class="custom-footer__trigger">
