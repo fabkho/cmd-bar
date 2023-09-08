@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { CmdBar } from './index'
 import type { Command, Commands } from '@/types'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
+import { useDefineCommand } from '@/useDefineCommand'
 
 const cmdBar = ref<typeof CmdBar | null>(null)
 const items = ref<Commands>([])
@@ -21,141 +22,137 @@ await useFetch('https://jsonplaceholder.typicode.com/users', {
 }).json()
 
 function transformUserDataToCommand(userData: Record<string, any>[]): Command[] {
-  return userData.map((user: Record<string, any>) => ({
-    id: user.id.toString(),
-    leading: './src/assets/icons/user.svg',
-    title: user.name,
-    groups: [], // You can set this as needed.
-    description: user.email, // You can choose a relevant property for 'description'.
-    action: () => {
-      // Define your action here.
-    },
-    actionClosesCmdBar: false // You can set this as needed.
-  }))
+  return userData.map((user: Record<string, any>) =>
+    useDefineCommand({
+      id: user.id.toString(),
+      leading: './src/assets/icons/user.svg',
+      title: user.name,
+      groups: [], // You can set this as needed.
+      description: user.email, // You can choose a relevant property for 'description'.
+      action: () => {
+        // Define your action here.
+      },
+      actionClosesCmdBar: false // You can set this as needed.
+    })
+  )
 }
 
-// - pass commands to CmdBar
+const defaultItems: Commands = [
+  {
+    id: '1',
+    leading: './src/assets/icons/user.svg',
+    title: 'Thomas Shelby',
+    action: () => {
+      alert('I need a cigarette')
+    },
+    actionClosesCmdBar: true,
+    groups: ['ALL', 'User'],
+    description: 'File operations'
+  },
+  {
+    id: '2',
+    leading: './src/assets/icons/user.svg',
+    title: 'Arthur Shelby',
+    action: () => {
+      alert('Arthur will kill you!')
+    },
+    actionClosesCmdBar: false,
+    groups: ['ALL', 'User'],
+    description: 'Edit operations'
+  },
+  {
+    id: '3',
+    leading: './src/assets/icons/create.svg',
+    title: 'Booking',
+    action: () => {
+      alert('create Booking!')
+    },
+    actionClosesCmdBar: false,
+    groups: ['ALL', 'Create'],
+    description: 'View operations'
+  },
+  {
+    id: '4',
+    leading: './src/assets/icons/create.svg',
+    title: 'Resource',
+    action: () => {
+      alert('create Resource')
+    },
+    actionClosesCmdBar: false,
+    groups: ['ALL', 'Create'],
+    description: 'Help operations'
+  },
+  {
+    id: '5',
+    leading: './src/assets/icons/settings.svg',
+    title: 'Settings',
+    action: () => {
+      alert('Settings action triggered!')
+    },
+    actionClosesCmdBar: false,
+    groups: ['ALL', 'Setting'],
+    description: 'Settings operations'
+  },
+  {
+    id: '1',
+    leading: './src/assets/icons/user.svg',
+    title: 'Thomas Shelby',
+    action: () => {
+      alert('I need a cigarette')
+    },
+    actionClosesCmdBar: true,
+    groups: ['ALL', 'User'],
+    description: 'File operations'
+  },
+  {
+    id: '2',
+    leading: './src/assets/icons/user.svg',
+    title: 'Arthur Shelby',
+    action: () => {
+      alert('Arthur will kill you!')
+    },
+    actionClosesCmdBar: false,
+    groups: ['ALL', 'User'],
+    description: 'Edit operations'
+  },
+  {
+    id: '3',
+    leading: './src/assets/icons/create.svg',
+    title: 'Booking',
+    action: () => {
+      alert('create Booking!')
+    },
+    actionClosesCmdBar: false,
+    groups: ['ALL', 'Create'],
+    description: 'View operations'
+  },
+  {
+    id: '4',
+    leading: './src/assets/icons/create.svg',
+    title: 'Resource',
+    action: () => {
+      alert('create Resource')
+    },
+    actionClosesCmdBar: false,
+    groups: ['ALL', 'Create'],
+    description: 'Help operations'
+  },
+  {
+    id: '5',
+    leading: './src/assets/icons/settings.svg',
+    title: 'Settings',
+    action: () => {
+      alert('Settings action triggered!')
+    },
+    actionClosesCmdBar: false,
+    groups: ['ALL', 'Setting'],
+    description: 'Settings operations'
+  }
+]
 
-// const items: Commands = [
-//   {
-//     id: '1',
-//     leading: './src/assets/icons/user.svg',
-//     title: 'Thomas Shelby',
-//     action: () => {
-//       alert('I need a cigarette')
-//     },
-//     actionClosesCmdBar: true,
-//     groups: ['ALL', 'User'],
-//     description: 'File operations'
-//   },
-//   {
-//     id: '2',
-//     leading: './src/assets/icons/user.svg',
-//     title: 'Arthur Shelby',
-//     action: () => {
-//       alert('Arthur will kill you!')
-//     },
-//     actionClosesCmdBar: false,
-//     groups: ['ALL', 'User'],
-//     description: 'Edit operations'
-//   },
-//   {
-//     id: '3',
-//     leading: './src/assets/icons/create.svg',
-//     title: 'Booking',
-//     action: () => {
-//       alert('create Booking!')
-//     },
-//     actionClosesCmdBar: false,
-//     groups: ['ALL', 'Create'],
-//     description: 'View operations'
-//   },
-//   {
-//     id: '4',
-//     leading: './src/assets/icons/create.svg',
-//     title: 'Resource',
-//     action: () => {
-//       alert('create Resource')
-//     },
-//     actionClosesCmdBar: false,
-//     groups: ['ALL', 'Create'],
-//     description: 'Help operations'
-//   },
-//   {
-//     id: '5',
-//     leading: './src/assets/icons/settings.svg',
-//     title: 'Settings',
-//     action: () => {
-//       alert('Settings action triggered!')
-//     },
-//     actionClosesCmdBar: false,
-//     groups: ['ALL', 'Setting'],
-//     description: 'Settings operations'
-//   },
-//   {
-//     id: '1',
-//     leading: './src/assets/icons/user.svg',
-//     title: 'Thomas Shelby',
-//     action: () => {
-//       alert('I need a cigarette')
-//     },
-//     actionClosesCmdBar: true,
-//     groups: ['ALL', 'User'],
-//     description: 'File operations'
-//   },
-//   {
-//     id: '2',
-//     leading: './src/assets/icons/user.svg',
-//     title: 'Arthur Shelby',
-//     action: () => {
-//       alert('Arthur will kill you!')
-//     },
-//     actionClosesCmdBar: false,
-//     groups: ['ALL', 'User'],
-//     description: 'Edit operations'
-//   },
-//   {
-//     id: '3',
-//     leading: './src/assets/icons/create.svg',
-//     title: 'Booking',
-//     action: () => {
-//       alert('create Booking!')
-//     },
-//     actionClosesCmdBar: false,
-//     groups: ['ALL', 'Create'],
-//     description: 'View operations'
-//   },
-//   {
-//     id: '4',
-//     leading: './src/assets/icons/create.svg',
-//     title: 'Resource',
-//     action: () => {
-//       alert('create Resource')
-//     },
-//     actionClosesCmdBar: false,
-//     groups: ['ALL', 'Create'],
-//     description: 'Help operations'
-//   },
-//   {
-//     id: '5',
-//     leading: './src/assets/icons/settings.svg',
-//     title: 'Settings',
-//     action: () => {
-//       alert('Settings action triggered!')
-//     },
-//     actionClosesCmdBar: false,
-//     groups: ['ALL', 'Setting'],
-//     description: 'Settings operations'
-//   }
-// ]
-
-const groups = items.value.flatMap((item) => item.groups)
+const groups = defaultItems.flatMap((item) => item.groups)
 const defaultFilterOption = 'ALL'
 
-/**
- * search here -> https://fakerapi.it/api/v1/persons?
- *
- */
 // async function handleUpdate() {
 //   const { data } = await useFetch(`https://fakerapi.it/api/v1/persons?name=${searchTerm.value}`, {
 //     onResponse({ request, response, options }) {

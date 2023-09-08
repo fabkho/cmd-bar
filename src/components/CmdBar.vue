@@ -7,15 +7,11 @@ const props = defineProps({
   commands: {
     type: Array as PropType<Commands>,
     required: true
+  },
+  asyncCommands: {
+    type: Array as PropType<Commands>,
+    default: () => []
   }
-  // loadAsyncCommands: {
-  //   type: () => Promise<Commands[]>,
-  //   default: null
-  // },
-  // transformer: {
-  //   type: () => (commands: Commands) => commands,
-  //   default: (commands: Commands) => commands
-  // }
 })
 
 useCmdBarState?.registerCommands(props.commands)
