@@ -187,10 +187,14 @@ whenever(cmdK, () => {
           :placeholder="'search fo anything'"
           :icon="'../assets/icons/search.svg'"
         />
-        <CmdBar.Filter :filter-options="groups" :default-filter-option="defaultFilterOption" />
+        <CmdBar.Filter
+          :filter-options="groups"
+          :default-filter-option="defaultFilterOption"
+          :auto-filter="true"
+        />
       </template>
       <template #content>
-        <CmdBar.List v-if="false" v-slot="{ item }" :item-height="48">
+        <CmdBar.List v-if="!loading" v-slot="{ item }" :item-height="48">
           <div class="custom-item__leading">
             <img :src="item.leading" alt="icon" />
             {{ item.title }}

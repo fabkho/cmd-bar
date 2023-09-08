@@ -11,7 +11,11 @@ const props = defineProps({
     type: String as PropType<string>,
     default: ''
   },
-  allowMultiSelect: {
+  autoFilter: {
+    type: Boolean as PropType<boolean>,
+    default: false
+  },
+  asCheckbox: {
     type: Boolean as PropType<boolean>,
     default: true
   }
@@ -37,7 +41,7 @@ function toggleGroup(group: string) {
   const defaultChip = document.querySelector(`.filter-chip[data-id="${props.defaultFilterOption}"]`)
 
   if (group !== props.defaultFilterOption) {
-    useCmdBarState?.toggleGroup(group, props.allowMultiSelect)
+    useCmdBarState?.toggleGroup(group, props.asCheckbox, props.autoFilter)
     emit('filterChange', Array.from(selectedGroups))
 
     // remove selected class from default group
