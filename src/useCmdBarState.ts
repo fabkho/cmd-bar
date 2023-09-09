@@ -16,11 +16,16 @@ let closeCmdBarFunction = () => {}
 
 const useCmdBarState = {
   state: readonly(state),
-  registerCommands(newCommands: Commands, prepend: boolean): void {
+  registerCommands(newCommands: Commands, prepend: boolean, async: boolean): void {
     prepend ? state.commands.unshift(...newCommands) : state.commands.push(...newCommands)
     uniquifyIds()
 
     // init filtered commands
+    if (!async) this.filterCommands()
+  },
+  unregisterCommands(commandIds: string[]): void {
+    const commands = state.commands.filter((command) => commandIds.includes(command.id))
+    state.commands = state.commands.filter((command) => !commandIds.includes(command.id))
     this.filterCommands()
   },
   filterCommands(children = false): void {

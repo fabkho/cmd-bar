@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { CmdBar } from './index'
 import type { Command, Commands } from '@/types'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
 import { useDefineCommand } from '@/useDefineCommand'
 import { useRegisterCommands } from '@/useRegisterCommands'
+import { useUnregisterCommands } from '@/useUnregisterCommands'
 
 const cmdBar = ref<typeof CmdBar | null>(null)
-const items = ref<Commands>([])
+const asyncItems = ref<Commands>([])
 let loading = ref(false)
 const visibility = ref(false)
 const keys = useMagicKeys()
@@ -16,20 +17,20 @@ const searchTerm = ref('')
 
 //TODO:
 // - fetch commands from faker API
-await useFetch('https://jsonplaceholder.typicode.com/users', {
-  beforeFetch(ctx) {
-    loading.value = true
-    return ctx
-  },
-  afterFetch(ctx) {
-    setTimeout(() => {
-      items.value = transformUserDataToCommand(ctx.data)
-      useRegisterCommands(items.value, true)
-      loading.value = false
-    }, 2000)
-    return ctx
-  }
-}).json()
+async function fetchCommands() {
+  const { data } = await useFetch('https://jsonplaceholder.typicode.com/users', {
+    beforeFetch(ctx) {
+      loading.value = true
+      return ctx
+    }
+  }).json()
+  console.log('data', data.value)
+  setTimeout(() => {
+    asyncItems.value = transformUserDataToCommand(data.value)
+    useRegisterCommands(asyncItems.value, true)
+    loading.value = false
+  }, 2000)
+}
 
 function transformUserDataToCommand(userData: Record<string, any>[]): Command[] {
   return userData.map((user: Record<string, any>) =>
@@ -163,18 +164,41 @@ const defaultItems: Commands = [
 const groups = defaultItems.flatMap((item) => item.groups)
 const defaultFilterOption = 'ALL'
 
-// async function handleUpdate() {
-//   const { data } = await useFetch(`https://fakerapi.it/api/v1/persons?name=${searchTerm.value}`, {
-//     onResponse({ request, response, options }) {
-//       console.log(request, response, options)
-//     }
-//   })
-//   console.log(data)
-// }
+async function handleSearch(search: string) {
+  searchTerm.value = search
+
+  const { data } = await useFetch(
+    `https://jsonplaceholder.typicode.com/users?name=${searchTerm.value}`,
+    {
+      beforeFetch(ctx) {
+        loading.value = true
+        useUnregisterCommands(asyncItems.value.map((item) => item.id))
+        return ctx
+      }
+    }
+  ).json()
+
+  if (data.value.length === 0) {
+    loading.value = false
+    return
+  }
+
+  asyncItems.value = transformUserDataToCommand(data.value)
+  useRegisterCommands(asyncItems.value, true)
+  loading.value = false
+}
 
 whenever(cmdK, () => {
   visibility.value = !visibility.value
   console.log('visibility', visibility.value)
+})
+
+onMounted(() => {
+  fetchCommands()
+})
+
+onUnmounted(() => {
+  useUnregisterCommands(asyncItems.value.map((item) => item.id))
 })
 </script>
 
@@ -182,7 +206,12 @@ whenever(cmdK, () => {
   <CmdBar :commands="defaultItems">
     <CmdBar.Dialog :visible="visibility">
       <template #header>
-        <CmdBar.Input :placeholder="'search fo anything'" :icon="'../assets/icons/search.svg'" />
+        <CmdBar.Input
+          :model-value="searchTerm"
+          @update:modelValue="handleSearch"
+          :placeholder="'search fo anything'"
+          :icon="'../assets/icons/search.svg'"
+        />
         <CmdBar.Filter
           :filter-options="groups"
           :default-filter-option="defaultFilterOption"
