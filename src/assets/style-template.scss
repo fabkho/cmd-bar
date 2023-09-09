@@ -1,0 +1,29 @@
+.cmd-bar{
+  &__header {
+    .input {
+        &::placeholder{}
+
+    }
+    .filter{
+      &-chip{}
+      &-chip--selected{}
+    }
+  }
+  &__body {
+    .list{
+      &__container{}
+      &__items{}
+      &__item{}
+    }
+    /* loading element*/
+    .skeleton{}
+  }
+  &__footer {}
+
+  /* keyboard shortcut */
+  .kbd {}
+
+  /* Animations */
+
+}
+

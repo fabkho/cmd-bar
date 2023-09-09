@@ -79,7 +79,7 @@ watch(
 
 <template>
   <div class="list-container" v-bind="containerProps">
-    <ul data-cmd-bar-items class="list" v-bind="wrapperProps">
+    <ul data-cmd-bar-items class="list-items" v-bind="wrapperProps">
       <li
         data-cmd-bar-item
         :data-id="item.data.id"

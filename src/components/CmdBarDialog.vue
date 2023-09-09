@@ -96,7 +96,7 @@ function handleKeyDown(event: KeyboardEvent): void {
       <div data-cmd-bar-header class="cmd-bar__header">
         <slot name="header" />
       </div>
-      <div data-cmd-bar-content class="cmd-bar__content">
+      <div data-cmd-bar-content class="cmd-bar__body">
         <slot name="content" />
       </div>
       <div data-cmd-bar-footer class="cmd-bar__footer">
