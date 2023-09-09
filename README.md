@@ -88,7 +88,7 @@ The `CmdBarInput` component is used to display the input field of the command ba
 ### CmdBarFilter
 Let you define filter options for the command bar. It takes the following props:
 - `filterOptions`: An array of `FilterOption` objects.
-- `defaultFilterOption`: The default filter option. (Default: `null`) 
+- `defaultFilterOption`: This option is preselected. If asCheckbox is enabled the other option are disabled when clicked on default option. (Default: `null`) 
 - `autoFilter`: If set, the commands will be filtered automatically. (Default: `false`)
 - `asCheckbox`: Whether the user can select multiple filter options or not. (Default: `false`)
 

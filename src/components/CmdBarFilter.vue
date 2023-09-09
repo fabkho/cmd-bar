@@ -8,8 +8,8 @@ const props = defineProps({
     required: true
   },
   defaultFilterOption: {
-    type: String as PropType<string>,
-    default: ''
+    type: String as PropType<string | null>,
+    default: null
   },
   autoFilter: {
     type: Boolean as PropType<boolean>,
