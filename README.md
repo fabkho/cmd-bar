@@ -103,9 +103,12 @@ In this case (See [Commands](#commands)) I declared a group called "ALL" to all 
 To ensure great performance and scalability, the `CmdBarList` component uses [useVirtualList](https://vueuse.org/core/useVirtualList/#usevirtuallist) under the hood, to render a virtualized list of commands. 
 To work properly, it needs the **exact height** of a single item and the container. This has to be passed via the following props:
 - `itemHeight`: The height of a single item, in **Pixel**.
-- `containerHeight`: The height of the container, as a string with a unit of your choice. 
+- `containerHeight`: The height of the container, as a string with a unit of your choice. This is internally applied to the container, so you don't have to worry about that.
 
 ## Misc
+
+### Styles
+The CmdBar is completely headless. This means that you have to style it yourself. You can find a template, with all available classes in the `styles` folder. Or you can use the themes in the same folder.
 
 ### Keybindings
 You can pass a keybinding object to the component to add keybindings to the command bar. The keybinding object has to be of type `Keybindings` (string must be in lowercase). Here is an example:

@@ -3,37 +3,37 @@ import CmdBarInput from './components/CmdBarInput.vue'
 import CmdBarList from './components/CmdBarList.vue'
 import CmdBarFilter from './components/CmdBarFilter.vue'
 import CmdBarDialog from './components/CmdBarDialog.vue'
-import { defineComponent, h } from 'vue'
+import { computed, defineComponent, h } from 'vue'
+import { useCmdBarState } from '@/useCmdBarState'
 
-// /**
-//  * Command Empty Node
-//  */
-// const Empty = defineComponent({
-//   name: 'Command.Empty',
-//   setup(props, { attrs, slots }) {
-//     const { filtered } = useCommandState()
-//     const isRender = computed(() => filtered.value.count === 0)
-//     return () =>
-//       isRender.value
-//         ? h(
-//             'div',
-//             {
-//               'command-empty': '',
-//               role: 'presentation',
-//               ...attrs
-//             },
-//             slots
-//           )
-//         : h('div', {
-//             'command-empty': 'hidden',
-//             role: 'presentation',
-//             style: {
-//               display: 'none'
-//             },
-//             ...attrs
-//           })
-//   }
-// })
+/**
+ * Command Empty Node
+ */
+const Empty = defineComponent({
+  name: 'Command.Empty',
+  setup(props, { attrs, slots }) {
+    const hasResults = computed(() => useCmdBarState.state.filteredCommands.length === 0)
+    return () =>
+      hasResults.value
+        ? h(
+            'div',
+            {
+              class: 'empty',
+              role: 'presentation',
+              ...attrs
+            },
+            slots
+          )
+        : h('div', {
+            role: 'presentation',
+            class: 'empty',
+            style: {
+              display: 'none'
+            },
+            ...attrs
+          })
+  }
+})
 
 /**
  * Command Loading Node
@@ -89,6 +89,7 @@ const components = Object.assign(CmdBar, {
   Filter: CmdBarFilter,
   Dialog: CmdBarDialog,
   Loading,
+  Empty,
   // Loading,
   // Separator,
   Root: CmdBar

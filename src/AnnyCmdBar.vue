@@ -182,11 +182,7 @@ whenever(cmdK, () => {
   <CmdBar :commands="defaultItems">
     <CmdBar.Dialog :visible="visibility">
       <template #header>
-        <CmdBar.Input
-          v-model="searchTerm"
-          :placeholder="'search fo anything'"
-          :icon="'../assets/icons/search.svg'"
-        />
+        <CmdBar.Input :placeholder="'search fo anything'" :icon="'../assets/icons/search.svg'" />
         <CmdBar.Filter
           :filter-options="groups"
           :default-filter-option="defaultFilterOption"
@@ -194,6 +190,7 @@ whenever(cmdK, () => {
         />
       </template>
       <template #content>
+        <CmdBar.Empty> No results found </CmdBar.Empty>
         <CmdBar.List
           v-if="!loading"
           v-slot="{ item }"

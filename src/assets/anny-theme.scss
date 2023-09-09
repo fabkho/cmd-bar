@@ -77,6 +77,7 @@
   }
 
   &__body{
+    position: relative;
     margin-top: $spacing;
     margin-bottom: calc($footer-height + $spacing);
     .list-container{
@@ -155,6 +156,16 @@
         gap: 8px;
 
       }
+    }
+
+    .no-results {
+      position: absolute;
+      top: 5%;  /* position the top  edge of the element at the middle of the parent */
+      left: 50%; /* position the left edge of the element at the middle of the parent */
+
+      transform: translate(-50%, -50%);
+      white-space: pre-wrap;
+      color: var(--gray11);
     }
 
     .skeleton {
