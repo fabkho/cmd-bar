@@ -17,7 +17,7 @@ const props = defineProps({
   },
   asCheckbox: {
     type: Boolean as PropType<boolean>,
-    default: true
+    default: false
   }
 })
 

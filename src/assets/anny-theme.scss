@@ -76,13 +76,10 @@
   }
 
   &__content{
-    height: 21rem;
-
     margin-top: $spacing;
     margin-bottom: calc($footer-height + $spacing);
     .list {
       &-container{
-        height: 21rem;
         overflow: hidden scroll;
         overscroll-behavior: contain;
         content-visibility: auto;

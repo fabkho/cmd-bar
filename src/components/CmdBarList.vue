@@ -5,14 +5,20 @@ import { useVirtualList } from '@vueuse/core'
 import type { Command } from '@/types'
 
 const props = defineProps<{
-  itemHeight: number
+  itemHeightInPixel: number
+  containerHeight: string
 }>()
 
 defineSlots<{
   default?: (props: { item: Command }) => any
 }>()
 
+const emit = defineEmits<{
+  execute: [command: Command]
+}>()
+
 const index = ref<number>(0)
+const containerRef = ref<HTMLDivElement | null>(null)
 
 const isSelectedItem = computed(() => {
   return (id: string) => {
@@ -27,8 +33,18 @@ const visibleItems = computed(() => {
 const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(
   visibleItems as ComputedRef,
   {
-    itemHeight: props.itemHeight
+    itemHeight: props.itemHeightInPixel
   }
+)
+// set fixed height for container
+watch(
+  () => props.containerHeight,
+  () => {
+    containerProps.style = {
+      height: props.containerHeight
+    }
+  },
+  { immediate: true }
 )
 
 const scrollSelectedIntoView = () => {
@@ -40,6 +56,11 @@ const getSelectedItem = () => {
   const containerRef = containerProps.ref
   const selectedId = useCmdBarState?.state.selectedCommandId
   return containerRef.value?.querySelector(`[data-id="${selectedId}"]`) as HTMLElement
+}
+
+function handleClick(clickedItem: Command) {
+  emit('execute', clickedItem)
+  useCmdBarState?.executeCommand()
 }
 
 /**
@@ -67,7 +88,7 @@ watch(
         role="option"
         :aria-selected="isSelectedItem(item.data.id)"
         @mousemove="useCmdBarState?.selectCommand(item.data.id)"
-        @click="useCmdBarState?.executeCommand()"
+        @click="handleClick(item.data)"
       >
         <slot :item="item.data" />
       </li>

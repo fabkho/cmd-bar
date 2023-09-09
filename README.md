@@ -90,7 +90,7 @@ Let you define filter options for the command bar. It takes the following props:
 - `filterOptions`: An array of `FilterOption` objects.
 - `defaultFilterOption`: The default filter option. (Default: `null`) 
 - `autoFilter`: If set, the commands will be filtered automatically. (Default: `false`)
-- `asCheckbox`: Whether the user can select multiple filter options or not. (Default: `true`)
+- `asCheckbox`: Whether the user can select multiple filter options or not. (Default: `false`)
 
 #### FilterOptions
 This should be a collection of all your groups that you have declared in your commands. 
@@ -100,8 +100,10 @@ This should be the group that you want to be selected by default.The behaviour o
 In this case (See [Commands](#commands)) I declared a group called "ALL" to all commands and I want it to be selected by default. So I pass it to the `defaultFilterOption` prop.
 
 ### CmdBarList
-To ensure great performance and scalability, the `CmdBarList` component uses [useVirtualList](https://vueuse.org/core/useVirtualList/#usevirtuallist) under the hood, to render a virtualized list of commands. To work properly, it needs the **exact height** of a single item in the list. This has to be passed via the `itemHeight` prop.
-
+To ensure great performance and scalability, the `CmdBarList` component uses [useVirtualList](https://vueuse.org/core/useVirtualList/#usevirtuallist) under the hood, to render a virtualized list of commands. 
+To work properly, it needs the **exact height** of a single item and the container. This has to be passed via the following props:
+- `itemHeight`: The height of a single item, in **Pixel**.
+- `containerHeight`: The height of the container, as a string with a unit of your choice. 
 
 ## Misc
 

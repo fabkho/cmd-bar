@@ -194,7 +194,12 @@ whenever(cmdK, () => {
         />
       </template>
       <template #content>
-        <CmdBar.List v-if="!loading" v-slot="{ item }" :item-height="48">
+        <CmdBar.List
+          v-if="!loading"
+          v-slot="{ item }"
+          :item-height-in-pixel="48"
+          :container-height="'21rem'"
+        >
           <div class="custom-item__leading">
             <img :src="item.leading" alt="icon" />
             {{ item.title }}
