@@ -190,7 +190,6 @@ whenever(cmdK, () => {
         />
       </template>
       <template #content>
-        <CmdBar.Empty> No results found </CmdBar.Empty>
         <CmdBar.List
           v-if="!loading"
           v-slot="{ item }"
@@ -206,6 +205,7 @@ whenever(cmdK, () => {
           </div>
         </CmdBar.List>
         <CmdBar.Loading :count="6" v-else />
+        <CmdBar.Empty> No results found </CmdBar.Empty>
       </template>
       <template #footer>
         <span class="custom-footer__trigger">
