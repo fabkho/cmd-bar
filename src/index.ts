@@ -1,6 +1,6 @@
 import CmdBar from './components/CmdBar.vue'
 import CmdBarInput from './components/CmdBarInput.vue'
-import CmdBarGroupedList from '@/components/CmdBarGroupedList.vue'
+import CmdBarList from '@/components/CmdBarList.vue'
 import CmdBarFilter from './components/CmdBarFilter.vue'
 import CmdBarDialog from './components/CmdBarDialog.vue'
 import { computed, defineComponent, h } from 'vue'
@@ -85,7 +85,7 @@ const Loading = defineComponent({
 
 const components = Object.assign(CmdBar, {
   Input: CmdBarInput,
-  List: CmdBarGroupedList,
+  List: CmdBarList,
   Filter: CmdBarFilter,
   Dialog: CmdBarDialog,
   Loading,

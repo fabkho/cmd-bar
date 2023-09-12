@@ -1,30 +1,21 @@
 <script setup lang="ts">
-import { computed, type ComputedRef, nextTick, watch } from 'vue'
 import { useCmdBarState } from '@/useCmdBarState'
+import { computed, watch, type ComputedRef } from 'vue'
+import CmdBarGroup from '@/components/CmdBarGroup.vue'
 import { useVirtualList } from '@vueuse/core'
-import type { Command } from '@/types'
+import type { Group } from '@/types'
 
 const props = defineProps<{
   itemHeightInPixel: number
   containerHeight: string
 }>()
 
-defineSlots<{
-  default?: (props: { item: Command }) => any
-}>()
-
-const emit = defineEmits<{
-  execute: [command: Command]
-}>()
-
-const isSelectedItem = computed(() => {
-  return (id: string) => {
-    return useCmdBarState?.state.selectedCommandId === id
-  }
+const groupedCommands = computed(() => {
+  return useCmdBarState.state.filteredGroupedCommands as Group[]
 })
 
 const visibleItems = computed(() => {
-  return useCmdBarState?.state.filteredCommands
+  return useCmdBarState?.state.commands
 })
 
 const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(
@@ -33,6 +24,7 @@ const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(
     itemHeight: props.itemHeightInPixel
   }
 )
+
 // set fixed height for container
 watch(
   () => props.containerHeight,
@@ -43,51 +35,23 @@ watch(
   },
   { immediate: true }
 )
-
-const scrollSelectedIntoView = () => {
-  const item = getSelectedItem()
-  item?.scrollIntoView({ block: 'nearest' })
-}
-
-const getSelectedItem = () => {
-  const containerRef = containerProps.ref
-  const selectedId = useCmdBarState?.state.selectedCommandId
-  return containerRef.value?.querySelector(`[data-id="${selectedId}"]`) as HTMLElement
-}
-
-function handleClick(clickedItem: Command) {
-  emit('execute', clickedItem)
-  useCmdBarState?.executeCommand()
-}
-
-/**
- * handle scroll into view
- */
-watch(
-  () => useCmdBarState?.state.selectedCommandId,
-  (newVal) => {
-    if (newVal) {
-      nextTick(scrollSelectedIntoView)
-    }
-  }
-)
 </script>
 
 <template>
-  <div class="list-container" v-bind="containerProps">
+  <div class="grouped-list" v-bind="containerProps">
     <ul data-cmd-bar-items class="list-items" v-bind="wrapperProps">
-      <li
-        data-cmd-bar-item
-        :data-id="item.data.id"
-        v-for="item in list"
-        class="list-item"
-        role="option"
-        :aria-selected="isSelectedItem(item.data.id)"
-        @mousemove="useCmdBarState?.selectCommand(item.data.id)"
-        @click="handleClick(item.data)"
-      >
-        <slot :item="item.data" />
+      <li v-for="group in groupedCommands" :key="group.key" class="group">
+        <h2 v-if="group.label" class="group__label">
+          {{ group.label }}
+        </h2>
+        <CmdBarGroup :group="group">
+          <template v-for="(_, name) in $slots" #[name]="slotData">
+            <slot :name="name" v-bind="slotData" />
+          </template>
+        </CmdBarGroup>
       </li>
     </ul>
   </div>
 </template>
+
+<style scoped lang="scss"></style>
