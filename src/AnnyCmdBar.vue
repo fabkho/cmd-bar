@@ -129,7 +129,6 @@ const defaultFilterOption = computed(() => filterOptions.value[0])
 
 whenever(cmdK, () => {
   visibility.value = !visibility.value
-  console.log('visibility', visibility.value)
 })
 
 onMounted(() => {

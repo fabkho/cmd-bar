@@ -1,10 +1,18 @@
 <script setup lang="ts">
-import type { Group } from '@/types'
+import type { Command, Group } from '@/types'
 import { useCmdBarState } from '@/useCmdBarState'
 import { nextTick, ref, watch, computed } from 'vue'
 
 const props = defineProps<{
   group: Group
+}>()
+
+defineSlots<{
+  default?: (props: { command: Command }) => any
+}>()
+
+const emit = defineEmits<{
+  execute: [command: Command]
 }>()
 
 const containerRef = ref<HTMLDivElement | null>(null)
@@ -23,6 +31,11 @@ const scrollSelectedIntoView = () => {
 const getSelectedItem = () => {
   const selectedId = useCmdBarState?.state.selectedCommandId
   return containerRef.value?.querySelector(`[data-id="${selectedId}"]`) as HTMLElement
+}
+
+function handleClick(clickedItem: Command) {
+  emit('execute', clickedItem)
+  useCmdBarState?.executeCommand()
 }
 
 /**
@@ -50,6 +63,7 @@ watch(
         class="item"
         :aria-selected="isSelectedItem(command.id)"
         @mousemove="useCmdBarState?.selectCommand(command.id)"
+        @click="handleClick(command)"
       >
         <slot :command="command" />
       </li>

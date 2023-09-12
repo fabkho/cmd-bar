@@ -29,8 +29,6 @@ function toggleCmdBar(): void {
     }
   }
 }
-// provide toggle function to store
-useCmdBarState.registerToggle(toggleCmdBar)
 
 /**
  * second option: toggle commandbar on prop change
@@ -60,39 +58,11 @@ const vClickOutside = {
     document.body.removeEventListener('click', el.__ClickOutsideHandler__)
   }
 }
-
-function handleKeyDown(event: KeyboardEvent): void {
-  switch (event.key) {
-    case 'ArrowUp':
-      useCmdBarState?.nextCommand(props.loop)
-      break
-    case 'ArrowDown':
-      useCmdBarState?.prevCommand(props.loop)
-      break
-    case 'ArrowLeft':
-      // Insert your custom logic here
-      break
-    case 'ArrowRight':
-      // Insert your custom logic here
-      break
-    case 'Enter':
-      useCmdBarState?.executeCommand()
-      break
-    default:
-      // Insert your custom logic here
-      break
-  }
-}
 </script>
 
 <template>
   <dialog ref="dialogRef" data-cmd-bar class="cmd-bar">
-    <div
-      v-click-outside="handleClickOutside"
-      data-cmd-bar-wrapper
-      class="cmd-bar__wrapper"
-      @keydown="handleKeyDown"
-    >
+    <div v-click-outside="handleClickOutside" data-cmd-bar-wrapper class="cmd-bar__wrapper">
       <div data-cmd-bar-header class="cmd-bar__header">
         <slot name="header" />
       </div>
