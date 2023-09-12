@@ -30,6 +30,25 @@ const users: Command[] = [
     label: 'smarroufin',
     leading: './src/assets/icons/user.svg',
     shortcuts: ['↵']
+  },
+  {
+    //TODO: add href for links with target="_blank"
+    id: 'benjamincanac1',
+    label: 'benjamincanac1',
+    leading: './src/assets/icons/user.svg',
+    shortcuts: ['↵']
+  },
+  {
+    id: 'Atinux1',
+    label: 'Atinux1',
+    leading: './src/assets/icons/user.svg',
+    shortcuts: ['↵']
+  },
+  {
+    id: 'smarroufin1',
+    label: 'smarroufin1',
+    leading: './src/assets/icons/user.svg',
+    shortcuts: ['↵']
   }
 ]
 const actions = [

@@ -5,8 +5,6 @@ import { nextTick, ref, watch, computed } from 'vue'
 
 const props = defineProps<{
   group: Group
-  itemHeightInPixel: number
-  containerHeight: string
 }>()
 
 const containerRef = ref<HTMLDivElement | null>(null)
@@ -47,6 +45,8 @@ watch(
       <li
         v-for="(command, index) of group.commands"
         :key="`${group.key}-${index}`"
+        :data-id="command.id"
+        role="option"
         class="item"
         :aria-selected="isSelectedItem(command.id)"
         @mousemove="useCmdBarState?.selectCommand(command.id)"
