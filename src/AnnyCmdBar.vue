@@ -137,7 +137,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <CmdBar :commands="groups">
+  <CmdBar :commands="groups" loop>
     <CmdBar.Dialog :visible="visibility">
       <template #header>
         <div>

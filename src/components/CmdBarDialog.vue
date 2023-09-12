@@ -6,10 +6,6 @@ const props = defineProps({
   visible: {
     type: Boolean as PropType<boolean>,
     default: false
-  },
-  loop: {
-    type: Boolean as PropType<boolean>,
-    default: false
   }
 })
 
