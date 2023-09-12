@@ -124,6 +124,11 @@ function applySearchFilter(): void {
   if (state.query.length > 0) {
     const lowerCaseQuery = state.query.toLowerCase()
     state.filteredGroupedCommands = state.groupedCommands.map((group) => {
+      // only search through selected groups
+      if (state.selectedGroups.size > 0 && !state.selectedGroups.has(group.key)) {
+        // return empty group
+        return { ...group, commands: [] }
+      }
       const filteredCommands = group.commands.filter((command) => {
         return command.label.toLowerCase().includes(lowerCaseQuery)
       })

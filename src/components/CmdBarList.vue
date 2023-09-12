@@ -41,7 +41,7 @@ watch(
   <div class="grouped-list" v-bind="containerProps">
     <ul data-cmd-bar-items class="list-items" v-bind="wrapperProps">
       <li v-for="group in groupedCommands" :key="group.key" class="group">
-        <h2 v-if="group.label" class="group__label">
+        <h2 v-if="group.label && group.commands.length > 0" class="group__label">
           {{ group.label }}
         </h2>
         <CmdBarGroup :group="group">
