@@ -1,6 +1,5 @@
 import CmdBar from './components/CmdBar.vue'
 import CmdBarInput from './components/CmdBarInput.vue'
-import CmdBarList from './components/CmdBarList.vue'
 import CmdBarGroupedList from '@/components/CmdBarGroupedList.vue'
 import CmdBarFilter from './components/CmdBarFilter.vue'
 import CmdBarDialog from './components/CmdBarDialog.vue'
@@ -13,7 +12,7 @@ import { useCmdBarState } from '@/useCmdBarState'
 const Empty = defineComponent({
   name: 'Command.Empty',
   setup(props, { attrs, slots }) {
-    const hasResults = computed(() => useCmdBarState.state.filteredCommands.length === 0)
+    const hasResults = computed(() => useCmdBarState.state.filteredGroupedCommands.length === 0)
     return () =>
       hasResults.value
         ? h(
@@ -86,8 +85,7 @@ const Loading = defineComponent({
 
 const components = Object.assign(CmdBar, {
   Input: CmdBarInput,
-  List: CmdBarList,
-  GroupedList: CmdBarGroupedList,
+  List: CmdBarGroupedList,
   Filter: CmdBarFilter,
   Dialog: CmdBarDialog,
   Loading,

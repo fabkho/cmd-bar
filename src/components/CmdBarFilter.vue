@@ -3,12 +3,8 @@ import type { PropType } from 'vue'
 import { useCmdBarState } from '@/useCmdBarState'
 
 const props = defineProps({
-  filterOptions: {
-    type: Array as PropType<Array<string>>,
-    required: true
-  },
   defaultFilterOption: {
-    type: String as PropType<string | null>,
+    type: String as PropType<Lowercase<string> | null>,
     default: null
   },
   autoFilter: {
@@ -26,7 +22,10 @@ const emit = defineEmits<{
 }>()
 
 const selectedGroups = useCmdBarState?.state.selectedGroups
-const groupSet = new Set(props.filterOptions)
+const groups = useCmdBarState?.state.groupedCommands.map((group) => group.key)
+const groupSet = new Set(
+  props.defaultFilterOption ? [props.defaultFilterOption, ...groups] : groups
+)
 
 function isSelected(group: string) {
   if (group === props.defaultFilterOption && selectedGroups.size === 0) {
@@ -51,6 +50,7 @@ function toggleGroup(group: string) {
       useCmdBarState?.resetGroups()
     }
   } else {
+    useCmdBarState?.toggleGroup(group, props.asCheckbox, props.autoFilter)
     // remove selected class from all groups
     filterChips.forEach((chip) => {
       chip.classList.remove('filter-chip--selected')

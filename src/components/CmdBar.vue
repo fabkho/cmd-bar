@@ -1,26 +1,16 @@
 <script setup lang="ts">
-import type { Commands, Group } from '@/types'
+import type { Group } from '@/types'
 import type { PropType } from 'vue'
 import { useCmdBarState } from '@/useCmdBarState'
 
 const props = defineProps({
   commands: {
-    type: Array as PropType<Commands | null>,
-    required: false,
-    default: null
-  },
-  groupedCommands: {
-    type: Array as PropType<Group[] | null>,
-    required: false,
-    default: null
+    type: Array as PropType<Group[]>,
+    required: true
   }
 })
 
-if (props.commands) {
-  useCmdBarState?.registerCommands(props.commands, false)
-} else if (props.groupedCommands) {
-  useCmdBarState?.registerGroups(props.groupedCommands)
-}
+useCmdBarState?.registerGroups(props.commands)
 
 //TODO:
 // - provide store

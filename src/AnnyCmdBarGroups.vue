@@ -109,7 +109,7 @@ whenever(cmdK, () => {
         <CmdBar.Input :placeholder="'search fo anything'" :icon="'../assets/icons/search.svg'" />
       </template>
       <template #content>
-        <CmdBar.GroupedList
+        <CmdBar.List
           v-if="!loading"
           v-slot="{ command }"
           :item-height-in-pixel="48"
@@ -122,7 +122,7 @@ whenever(cmdK, () => {
           <span v-if="command.shortcuts?.length" class="custom-item__actions">
             <kbd v-for="shortcut of command.shortcuts" :key="shortcut">{{ shortcut }}</kbd>
           </span>
-        </CmdBar.GroupedList>
+        </CmdBar.List>
       </template>
       <template #footer>
         <span class="custom-footer__trigger">

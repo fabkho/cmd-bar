@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useCmdBarState } from '@/useCmdBarState'
-import { computed, watch } from 'vue'
+import { computed, watch, type ComputedRef } from 'vue'
 import CmdBarGroup from '@/components/CmdBarGroup.vue'
 import { useVirtualList } from '@vueuse/core'
-import { ComputedRef } from 'vue/dist/vue'
+import type { Group } from '@/types'
 
 const props = defineProps<{
   itemHeightInPixel: number
@@ -11,7 +11,7 @@ const props = defineProps<{
 }>()
 
 const groupedCommands = computed(() => {
-  return useCmdBarState.state.groupedCommands
+  return useCmdBarState.state.filteredGroupedCommands as Group[]
 })
 
 const visibleItems = computed(() => {

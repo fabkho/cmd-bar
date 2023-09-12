@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, type ComputedRef, nextTick, ref, watch } from 'vue'
+import { computed, type ComputedRef, nextTick, watch } from 'vue'
 import { useCmdBarState } from '@/useCmdBarState'
 import { useVirtualList } from '@vueuse/core'
 import type { Command } from '@/types'
@@ -16,9 +16,6 @@ defineSlots<{
 const emit = defineEmits<{
   execute: [command: Command]
 }>()
-
-const index = ref<number>(0)
-const containerRef = ref<HTMLDivElement | null>(null)
 
 const isSelectedItem = computed(() => {
   return (id: string) => {
@@ -72,8 +69,7 @@ watch(
     if (newVal) {
       nextTick(scrollSelectedIntoView)
     }
-  },
-  { deep: true }
+  }
 )
 </script>
 

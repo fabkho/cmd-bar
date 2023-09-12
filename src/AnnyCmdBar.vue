@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { CmdBar } from './index'
 import type { Command, Commands } from '@/types'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
 import { useDefineCommand } from '@/useDefineCommand'
-import { useRegisterCommands } from '@/useRegisterCommands'
-import { useUnregisterCommands } from '@/useUnregisterCommands'
 
 const cmdBar = ref<typeof CmdBar | null>(null)
 const asyncItems = ref<Commands>([])
@@ -15,8 +13,6 @@ const keys = useMagicKeys()
 const cmdK = keys['Meta+k']
 const searchTerm = ref('')
 
-//TODO:
-// - fetch commands from faker API
 async function fetchCommands() {
   const { data } = await useFetch('https://jsonplaceholder.typicode.com/users', {
     beforeFetch(ctx) {
@@ -24,169 +20,112 @@ async function fetchCommands() {
       return ctx
     }
   }).json()
-  console.log('data', data.value)
-  setTimeout(() => {
-    asyncItems.value = transformUserDataToCommand(data.value)
-    useRegisterCommands(asyncItems.value, true)
-    loading.value = false
-  }, 2000)
-}
-
-function transformUserDataToCommand(userData: Record<string, any>[]): Command[] {
-  return userData.map((user: Record<string, any>) =>
+  asyncItems.value = data.value.map((user: Record<string, any>) =>
     useDefineCommand({
       id: user.id.toString(),
       leading: './src/assets/icons/user.svg',
-      title: user.name,
-      groups: [], // You can set this as needed.
-      description: user.email, // You can choose a relevant property for 'description'.
+      label: user.name,
       action: () => {
         // Define your action here.
-      },
-      actionClosesCmdBar: false // You can set this as needed.
+      }
     })
   )
+  loading.value = false
 }
 
-const defaultItems: Commands = [
+const users: Command[] = [
   {
-    id: '1',
+    //TODO: add href for links with target="_blank"
+    id: 'benjamincanac',
+    label: 'benjamincanac',
     leading: './src/assets/icons/user.svg',
-    title: 'Thomas Shelby',
-    action: () => {
-      alert('I need a cigarette')
-    },
-    actionClosesCmdBar: true,
-    groups: ['ALL', 'User'],
-    description: 'File operations'
+    shortcuts: ['↵']
   },
   {
-    id: '2',
+    id: 'Atinux',
+    label: 'Atinux',
     leading: './src/assets/icons/user.svg',
-    title: 'Arthur Shelby',
-    action: () => {
-      alert('Arthur will kill you!')
-    },
-    actionClosesCmdBar: false,
-    groups: ['ALL', 'User'],
-    description: 'Edit operations'
+    shortcuts: ['↵']
   },
   {
-    id: '3',
-    leading: './src/assets/icons/create.svg',
-    title: 'Booking',
-    action: () => {
-      alert('create Booking!')
-    },
-    actionClosesCmdBar: false,
-    groups: ['ALL', 'Create'],
-    description: 'View operations'
-  },
-  {
-    id: '4',
-    leading: './src/assets/icons/create.svg',
-    title: 'Resource',
-    action: () => {
-      alert('create Resource')
-    },
-    actionClosesCmdBar: false,
-    groups: ['ALL', 'Create'],
-    description: 'Help operations'
-  },
-  {
-    id: '5',
-    leading: './src/assets/icons/settings.svg',
-    title: 'Settings',
-    action: () => {
-      alert('Settings action triggered!')
-    },
-    actionClosesCmdBar: false,
-    groups: ['ALL', 'Setting'],
-    description: 'Settings operations'
-  },
-  {
-    id: '1',
+    id: 'smarroufin',
+    label: 'smarroufin',
     leading: './src/assets/icons/user.svg',
-    title: 'Thomas Shelby',
-    action: () => {
-      alert('I need a cigarette')
-    },
-    actionClosesCmdBar: true,
-    groups: ['ALL', 'User'],
-    description: 'File operations'
-  },
+    shortcuts: ['↵']
+  }
+]
+const actions = [
   {
-    id: '2',
-    leading: './src/assets/icons/user.svg',
-    title: 'Arthur Shelby',
-    action: () => {
-      alert('Arthur will kill you!')
-    },
-    actionClosesCmdBar: false,
-    groups: ['ALL', 'User'],
-    description: 'Edit operations'
-  },
-  {
-    id: '3',
+    id: 'new-file',
+    label: 'Add new file',
     leading: './src/assets/icons/create.svg',
-    title: 'Booking',
-    action: () => {
-      alert('create Booking!')
-    },
-    actionClosesCmdBar: false,
-    groups: ['ALL', 'Create'],
-    description: 'View operations'
+    action: () => alert('New file added'),
+    shortcuts: ['⌘', 'N']
   },
   {
-    id: '4',
+    id: 'new-folder',
+    label: 'Add new folder',
     leading: './src/assets/icons/create.svg',
-    title: 'Resource',
-    action: () => {
-      alert('create Resource')
-    },
-    actionClosesCmdBar: false,
-    groups: ['ALL', 'Create'],
-    description: 'Help operations'
+    action: () => alert('New folder added!'),
+    shortcuts: ['⌘', 'F']
   },
   {
-    id: '5',
-    leading: './src/assets/icons/settings.svg',
-    title: 'Settings',
-    action: () => {
-      alert('Settings action triggered!')
-    },
-    actionClosesCmdBar: false,
-    groups: ['ALL', 'Setting'],
-    description: 'Settings operations'
+    id: 'hashtag',
+    label: 'Add hashtag',
+    leading: './src/assets/icons/create.svg',
+    action: () => alert('Hashtag added!'),
+    shortcuts: ['⌘', 'H']
+  },
+  {
+    id: 'label',
+    label: 'Add label',
+    leading: './src/assets/icons/create.svg',
+    action: () => alert('Label added!'),
+    shortcuts: ['⌘', 'L']
   }
 ]
 
-const groups = defaultItems.flatMap((item) => item.groups)
-const defaultFilterOption = 'ALL'
-
-async function handleSearch(search: string) {
-  searchTerm.value = search
-
-  const { data } = await useFetch(
-    `https://jsonplaceholder.typicode.com/users?name=${searchTerm.value}`,
+const groups = computed(() =>
+  [
     {
-      beforeFetch(ctx) {
-        loading.value = true
-        useUnregisterCommands(asyncItems.value.map((item) => item.id))
-        return ctx
-      }
+      key: 'users',
+      label: 'Users',
+      commands: users
+    },
+    {
+      key: 'actions',
+      label: 'Actions',
+      commands: actions
     }
-  ).json()
+  ].filter(Boolean)
+)
 
-  if (data.value.length === 0) {
-    loading.value = false
-    return
-  }
+const filterOptions = computed(() => groups.value.map((group) => group.label))
+const defaultFilterOption = computed(() => filterOptions.value[0])
 
-  asyncItems.value = transformUserDataToCommand(data.value)
-  useRegisterCommands(asyncItems.value, true)
-  loading.value = false
-}
+// async function handleSearch(search: string) {
+//   searchTerm.value = search
+//
+//   const { data } = await useFetch(
+//     `https://jsonplaceholder.typicode.com/users?name=${searchTerm.value}`,
+//     {
+//       beforeFetch(ctx) {
+//         loading.value = true
+//         useUnregisterCommands(asyncItems.value.map((item) => item.id))
+//         return ctx
+//       }
+//     }
+//   ).json()
+//
+//   if (data.value.length === 0) {
+//     loading.value = false
+//     return
+//   }
+//
+//   asyncItems.value = transformUserDataToCommand(data.value)
+//   useRegisterCommands(asyncItems.value, true)
+//   loading.value = false
+// }
 
 whenever(cmdK, () => {
   visibility.value = !visibility.value
@@ -196,45 +135,32 @@ whenever(cmdK, () => {
 onMounted(() => {
   fetchCommands()
 })
-
-onUnmounted(() => {
-  useUnregisterCommands(asyncItems.value.map((item) => item.id))
-})
 </script>
 
 <template>
-  <CmdBar :commands="defaultItems">
+  <CmdBar :commands="groups">
     <CmdBar.Dialog :visible="visibility">
       <template #header>
-        <CmdBar.Input
-          :model-value="searchTerm"
-          @update:modelValue="handleSearch"
-          :placeholder="'search fo anything'"
-          :icon="'../assets/icons/search.svg'"
-        />
-        <CmdBar.Filter
-          :filter-options="groups"
-          :default-filter-option="defaultFilterOption"
-          :auto-filter="true"
-        />
+        <CmdBar.Input :placeholder="'search fo anything'" :icon="'../assets/icons/search.svg'" />
+        <CmdBar.Filter :default-filter-option="'all'" :auto-filter="true" />
       </template>
       <template #content>
         <CmdBar.List
           v-if="!loading"
-          v-slot="{ item }"
+          v-slot="{ command }"
           :item-height-in-pixel="48"
           :container-height="'21rem'"
         >
           <div class="custom-item__leading">
-            <img :src="item.leading" alt="icon" />
-            {{ item.title }}
+            <img :src="command.leading" alt="icon" />
+            {{ command.label }}
           </div>
-          <div class="custom-item__actions">
-            <kbd key="enter">↵</kbd>
-          </div>
+          <span v-if="command.shortcuts?.length" class="custom-item__actions">
+            <kbd v-for="shortcut of command.shortcuts" :key="shortcut">{{ shortcut }}</kbd>
+          </span>
         </CmdBar.List>
         <CmdBar.Loading :count="6" v-else />
-        <CmdBar.Empty> No results found </CmdBar.Empty>
+        <!--        <CmdBar.Empty> No results found </CmdBar.Empty>-->
       </template>
       <template #footer>
         <span class="custom-footer__trigger">
