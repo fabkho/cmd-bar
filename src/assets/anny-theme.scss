@@ -29,20 +29,57 @@
     border-bottom: 1px solid var(--gray6);
     padding:  $spacing  $spacing  0  $spacing;
 
-    .input {
-      font-family: var(--font-sans);
-      border: none;
-      width: 100%;
-      font-size: 18px;
-      padding: 0.5em 0.5em 1em 0.5em;
-      outline: none;
-      background: var(--bg);
-      color: var(--gray12);
+    .input-container{
+      display: flex;
+      align-items: center;
 
-      &::placeholder {
-        color: var(--gray11);
+      .input {
+        font-family: var(--font-sans);
+        border: none;
+        width: 100%;
+        font-size: 18px;
+        padding: 0.5em 0.5em 1em 0.5em;
+        outline: none;
+        background: var(--bg);
+        color: var(--gray12);
+
+        &::placeholder {
+          color: var(--gray11);
+        }
+
+        &__leading{
+          padding-left: 0.5rem;
+          img {
+            width: 20px;
+            height: 20px;
+            aspect-ratio: 16/9;
+            /* to white */
+            filter: brightness(0) invert(0.7);
+
+          }
+          font-weight: bold;
+        }
+
+        &__clear{
+          button{
+            background: transparent;
+            border: none;
+            padding: 0 1rem ;
+            margin: 0;
+            cursor: pointer;
+            color: var(--gray11);
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 150ms ease-in-out;
+
+            &:hover{
+              color: var(--gray12);
+            }
+          }
+        }
       }
     }
+
 
     .filter{
       display: flex;

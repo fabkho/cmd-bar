@@ -140,7 +140,14 @@ onMounted(() => {
   <CmdBar :commands="groups">
     <CmdBar.Dialog :visible="visibility">
       <template #header>
-        <CmdBar.Input :placeholder="'search fo anything'" :icon="'../assets/icons/search.svg'" />
+        <div>
+          <CmdBar.Input :placeholder="'search fo anything'" :icon="'../assets/icons/search.svg'">
+            <template #leading>
+              <img src="./assets/icons/search.svg" alt="search" />
+            </template>
+            <template #clear> x </template>
+          </CmdBar.Input>
+        </div>
         <CmdBar.Filter :default-filter-option="'all'" :auto-filter="true" />
       </template>
       <template #content>

@@ -102,9 +102,6 @@ const useCmdBarState = {
     if (filter) {
       applySearchFilter()
     }
-  },
-  resetSearchTerm(): void {
-    state.query = ''
   }
 }
 
