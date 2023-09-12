@@ -7,6 +7,7 @@ export type State = {
    * The full list of root-level commands
    */
   commands: Commands
+  groupedCommands: Group[]
   /**
    * The list of commands that are currently visible
    */
@@ -26,11 +27,12 @@ export interface CmdBarStore {
 export interface Command {
   id: string
   leading: string
-  title: string
-  groups: string[]
-  description: string
-  action: () => void
+  label: string
+  groups?: string[]
+  action?: () => void
+  shortcuts?: string[]
   actionClosesCmdBar: boolean
+  [key: string]: any
 }
 
 export type CommandNode = Command & {
@@ -39,8 +41,12 @@ export type CommandNode = Command & {
 
 export type Commands = CommandNode[]
 
-export interface GroupedCommands {
-  [groupName: string]: Command[]
+export interface Group {
+  key: string
+  active?: string
+  inactive?: string
+  commands: Command[]
+  [key: string]: any
 }
 
 //TODO

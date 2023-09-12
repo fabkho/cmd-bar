@@ -1,5 +1,5 @@
 import { reactive, readonly } from 'vue'
-import type { CommandNode, Commands, State } from '@/types'
+import type { CommandNode, Commands, Group, State } from '@/types'
 import { findNodeById } from '@/utils'
 import { nanoid } from 'nanoid'
 
@@ -9,6 +9,7 @@ const state = reactive<State>({
   parentCommandId: null,
   searchTerm: '',
   commands: [] as Commands,
+  groupedCommands: [] as Group[],
   filteredCommands: [] as Commands
 })
 
@@ -16,16 +17,24 @@ let closeCmdBarFunction = () => {}
 
 const useCmdBarState = {
   state: readonly(state),
-  registerCommands(newCommands: Commands, prepend: boolean, async: boolean): void {
+  registerCommands(newCommands: Commands, prepend: boolean): void {
     prepend ? state.commands.unshift(...newCommands) : state.commands.push(...newCommands)
     uniquifyIds()
 
     // init filtered commands
-    if (!async) this.filterCommands()
+    this.filterCommands()
   },
   unregisterCommands(commandIds: string[]): void {
     const commands = state.commands.filter((command) => commandIds.includes(command.id))
     state.commands = state.commands.filter((command) => !commandIds.includes(command.id))
+    this.filterCommands()
+  },
+  registerGroups(groups: Group[]): void {
+    console.log('registerGroups', groups)
+    state.groupedCommands = groups
+    state.commands = groups.flatMap((group) => group.commands)
+
+    // init filtered commands
     this.filterCommands()
   },
   filterCommands(children = false): void {
