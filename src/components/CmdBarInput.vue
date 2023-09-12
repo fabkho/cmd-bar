@@ -36,22 +36,23 @@ function clearQuery(): void {
 
 <template>
   <div class="input-container">
-    <label class="input__leading" for="input">
+    <span class="input__leading" aria-hidden="true">
       <slot name="leading" />
-    </label>
+    </span>
     <input
       data-cmd-bar-input
       class="input"
       autofocus
+      autocomplete="off"
       aria-autocomplete="list"
       role="combobox"
-      :aria-expanded="true"
       :value="query"
       :placeholder="placeholder"
+      :aria-label="placeholder"
       @input="handleInput"
     />
     <div class="input__clear">
-      <button @click="clearQuery">
+      <button @click="clearQuery" aria-label="Close">
         <slot name="clear" />
       </button>
     </div>
