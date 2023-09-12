@@ -2,6 +2,7 @@ import { reactive, readonly } from 'vue'
 import type { Commands, Group, State } from '@/types'
 import { findNodeById } from '@/utils'
 import { nanoid } from 'nanoid'
+import { useDebounceFn } from '@vueuse/core'
 
 const state = reactive<State>({
   selectedCommandId: null,
@@ -23,6 +24,7 @@ const useCmdBarState = {
     this.filterGroupedCommands()
 
     state.commands = groups.flatMap((group) => group.commands)
+    console.log('registerGroups', state.commands)
     this.filterCommands()
   },
   filterCommands(children = false): void {
@@ -97,13 +99,45 @@ const useCmdBarState = {
     command?.action?.()
   },
 
-  updateQuery(query: string, filter: boolean): void {
+  async updateQuery(query: string, filter: boolean): Promise<void> {
     state.query = query
+
+    await debouncedSearch()
+
     if (filter) {
       applySearchFilter()
     }
   }
 }
+
+const debouncedSearch = useDebounceFn(async () => {
+  const searchableGroups = state.filteredGroupedCommands.filter((group) => !!group.search)
+  if (!searchableGroups.length) {
+    return
+  }
+
+  const searchResults = await Promise.all(
+    searchableGroups.map(async (group) => {
+      console.log('search', state.query)
+      const results = await group.search(state.query)
+      return {
+        group,
+        results
+      }
+    })
+  )
+  console.log('searchResults', searchResults)
+  state.filteredGroupedCommands = state.filteredGroupedCommands.map((group) => {
+    const searchResult = searchResults.find((searchResult) => searchResult.group === group)
+    if (!searchResult) {
+      return group
+    }
+    return {
+      ...group,
+      commands: searchResult.results
+    }
+  })
+}, 200)
 
 /**
  * helper function to apply the child filter
@@ -136,17 +170,6 @@ function applySearchFilter(): void {
   }
   selectCommand(state.filteredCommands[0]?.id)
 }
-
-/**
- *
- */
-// function applyGroupFilter(): void {
-//   state.filteredCommands = state.commands.filter((item: CommandNode) =>
-//     item.groups.some((group) => state.selectedGroups.has(group))
-//   )
-//
-//   selectCommand(state.filteredCommands[0]?.id)
-// }
 
 /**
  * helper function to apply the default filter

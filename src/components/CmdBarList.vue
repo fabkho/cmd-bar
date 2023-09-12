@@ -18,12 +18,9 @@ const visibleItems = computed(() => {
   return useCmdBarState?.state.commands
 })
 
-const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(
-  visibleItems as ComputedRef,
-  {
-    itemHeight: props.itemHeightInPixel
-  }
-)
+const { list, containerProps, wrapperProps } = useVirtualList(visibleItems as ComputedRef, {
+  itemHeight: props.itemHeightInPixel
+})
 
 // set fixed height for container
 watch(
@@ -44,6 +41,7 @@ watch(
         <h2 v-if="group.label && group.commands.length > 0" class="group__label">
           {{ group.label }}
         </h2>
+        <pre>{{ list }}</pre>
         <CmdBarGroup :group="group">
           <template v-for="(_, name) in $slots" #[name]="slotData">
             <slot :name="name" v-bind="slotData" />

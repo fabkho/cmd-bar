@@ -1,59 +1,41 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
 import { CmdBar } from './index'
-import type { Command, Commands } from '@/types'
+import type { Commands } from '@/types'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
 import { useDefineCommand } from '@/useDefineCommand'
 
 const cmdBar = ref<typeof CmdBar | null>(null)
-const asyncItems = ref<Commands>([])
+const users = ref<Commands>([])
 let loading = ref(false)
 const visibility = ref(false)
 const keys = useMagicKeys()
 const cmdK = keys['Meta+k']
 const searchTerm = ref('')
 
-async function fetchCommands() {
-  const { data } = await useFetch('https://jsonplaceholder.typicode.com/users', {
-    beforeFetch(ctx) {
-      loading.value = true
-      return ctx
+async function fetchUsers() {
+  const { data } = await useFetch(
+    'https://dummyjson.com/users?limit=10&select=id,firstName,lastName',
+    {
+      beforeFetch(ctx) {
+        loading.value = true
+        return ctx
+      }
     }
-  }).json()
-  asyncItems.value = data.value.map((user: Record<string, any>) =>
-    useDefineCommand({
+  ).json()
+  users.value = data.value.users.map((user: Record<string, any>) => {
+    return useDefineCommand({
       id: user.id.toString(),
       leading: './src/assets/icons/user.svg',
-      label: user.name,
+      label: `${user.firstName} ${user.lastName}`,
       action: () => {
         // Define your action here.
       }
     })
-  )
+  })
   loading.value = false
 }
 
-const users: Command[] = [
-  {
-    //TODO: add href for links with target="_blank"
-    id: 'benjamincanac',
-    label: 'benjamincanac',
-    leading: './src/assets/icons/user.svg',
-    shortcuts: ['↵']
-  },
-  {
-    id: 'Atinux',
-    label: 'Atinux',
-    leading: './src/assets/icons/user.svg',
-    shortcuts: ['↵']
-  },
-  {
-    id: 'smarroufin',
-    label: 'smarroufin',
-    leading: './src/assets/icons/user.svg',
-    shortcuts: ['↵']
-  }
-]
 const actions = [
   {
     id: 'new-file',
@@ -88,20 +70,39 @@ const actions = [
 const groups = computed(() =>
   [
     {
-      key: 'users',
-      label: 'Users',
-      commands: users
-    },
-    {
       key: 'actions',
       label: 'Actions',
       commands: actions
+    },
+    {
+      key: 'users',
+      label: 'Users',
+      commands: users.value,
+      search: async (q) => {
+        if (!q) {
+          return []
+        }
+        const { data } = await useFetch(`https://jsonplaceholder.typicode.com/users?q=${q}`, {
+          beforeFetch(ctx) {
+            loading.value = true
+            return ctx
+          }
+        }).json()
+        loading.value = false
+        return data.value.map((user: Record<string, any>) =>
+          useDefineCommand({
+            id: user.id.toString(),
+            leading: './src/assets/icons/user.svg',
+            label: user.name,
+            action: () => {
+              // Define your action here.
+            }
+          })
+        )
+      }
     }
   ].filter(Boolean)
 )
-
-const filterOptions = computed(() => groups.value.map((group) => group.label))
-const defaultFilterOption = computed(() => filterOptions.value[0])
 
 // async function handleSearch(search: string) {
 //   searchTerm.value = search
@@ -132,12 +133,12 @@ whenever(cmdK, () => {
 })
 
 onMounted(() => {
-  fetchCommands()
+  fetchUsers()
 })
 </script>
 
 <template>
-  <CmdBar :commands="groups" loop>
+  <CmdBar :commands="groups">
     <CmdBar.Dialog :visible="visibility">
       <template #header>
         <div>

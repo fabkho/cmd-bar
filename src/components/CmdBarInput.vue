@@ -23,7 +23,7 @@ function handleInput(e: Event): void {
   const event = e as InputEvent
   const input = e.target as HTMLInputElement
 
-  useCmdBarState?.updateQuery(input?.value, !props.modelValue)
+  useCmdBarState?.updateQuery(input?.value, false)
 
   emit('input', event)
   emit('update:modelValue', input?.value)

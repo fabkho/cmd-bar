@@ -2,6 +2,7 @@
 import type { Group } from '@/types'
 import type { PropType } from 'vue'
 import { useCmdBarState } from '@/useCmdBarState'
+import { watch } from 'vue'
 
 const props = defineProps({
   commands: {
@@ -14,7 +15,13 @@ const props = defineProps({
   }
 })
 
-useCmdBarState?.registerGroups(props.commands)
+watch(
+  () => props.commands,
+  () => {
+    useCmdBarState?.registerGroups(props.commands)
+  },
+  { deep: true, immediate: true }
+)
 
 function handleKeyDown(event: KeyboardEvent): void {
   switch (event.key) {
