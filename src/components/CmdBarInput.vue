@@ -12,17 +12,18 @@ const emit = defineEmits<{
   'update:modelValue': [val: any]
 }>()
 
-const localSearchTerm = computed(() => useCmdBarState?.state.searchTerm)
+const query = computed(() => useCmdBarState?.state.query)
 
 /**
  * handle input event
  * emit input event and store value in store
  */
 function handleInput(e: Event): void {
+  console.log('handleInput')
   const event = e as InputEvent
   const input = e.target as HTMLInputElement
 
-  useCmdBarState?.setSearchTerm(input?.value, !props.modelValue)
+  useCmdBarState?.updateQuery(input?.value, !props.modelValue)
 
   emit('input', event)
   emit('update:modelValue', input?.value)
@@ -37,7 +38,7 @@ function handleInput(e: Event): void {
     aria-autocomplete="list"
     role="combobox"
     :aria-expanded="true"
-    :value="localSearchTerm"
+    :value="query"
     :placeholder="placeholder"
     @input="handleInput"
   />

@@ -1,5 +1,5 @@
 import { reactive, readonly } from 'vue'
-import type { CommandNode, Commands, Group, State } from '@/types'
+import type { Commands, Group, State } from '@/types'
 import { findNodeById } from '@/utils'
 import { nanoid } from 'nanoid'
 
@@ -7,7 +7,7 @@ const state = reactive<State>({
   selectedCommandId: null,
   selectedGroups: new Set<string>(),
   parentCommandId: null,
-  searchTerm: '',
+  query: '',
   commands: [] as Commands,
   groupedCommands: [] as Group[],
   filteredGroupedCommands: [] as Group[],
@@ -20,7 +20,7 @@ const useCmdBarState = {
   state: readonly(state),
   registerGroups(groups: Group[]): void {
     state.groupedCommands = groups
-    this.filterByGroup()
+    this.filterGroupedCommands()
 
     state.commands = groups.flatMap((group) => group.commands)
     this.filterCommands()
@@ -28,14 +28,14 @@ const useCmdBarState = {
   filterCommands(children = false): void {
     if (children) {
       applyChildFilter()
-    } else if (state.searchTerm) {
+    } else if (state.query) {
       applySearchFilter()
     } else if (state.selectedGroups.size > 0) {
     } else {
       applyDefaultFilter()
     }
   },
-  filterByGroup(): void {
+  filterGroupedCommands(): void {
     if (state.selectedGroups.size === 0) {
       state.filteredGroupedCommands = state.groupedCommands
       return
@@ -48,7 +48,7 @@ const useCmdBarState = {
   },
   resetState(): void {
     state.selectedCommandId = null
-    state.searchTerm = ''
+    state.query = ''
     this.filterCommands()
   },
 
@@ -64,7 +64,7 @@ const useCmdBarState = {
       }
       state.selectedGroups.add(groupKeys)
     }
-    if (filter) this.filterByGroup()
+    if (filter) this.filterGroupedCommands()
   },
   resetGroups(): void {
     state.selectedGroups.clear()
@@ -97,15 +97,14 @@ const useCmdBarState = {
     command?.action?.()
   },
 
-  setSearchTerm(term: string, filter: boolean): void {
-    state.searchTerm = term
+  updateQuery(query: string, filter: boolean): void {
+    state.query = query
     if (filter) {
-      this.filterCommands()
+      applySearchFilter()
     }
   },
-
   resetSearchTerm(): void {
-    state.searchTerm = ''
+    state.query = ''
   }
 }
 
@@ -121,11 +120,17 @@ function applyChildFilter(): void {
  * helper function to cache the visible commands and apply the search filter
  */
 function applySearchFilter(): void {
-  if (state.searchTerm.length > 1) {
-    const lowerCaseSearchTerm = state.searchTerm.toLowerCase()
-    state.filteredCommands = state.filteredCommands.filter((item: CommandNode) =>
-      item.title.toLowerCase().includes(lowerCaseSearchTerm)
-    )
+  console.log('applySearchFilter', state.query)
+  if (state.query.length > 0) {
+    const lowerCaseQuery = state.query.toLowerCase()
+    state.filteredGroupedCommands = state.groupedCommands.map((group) => {
+      const filteredCommands = group.commands.filter((command) => {
+        return command.label.toLowerCase().includes(lowerCaseQuery)
+      })
+      return { ...group, commands: filteredCommands }
+    })
+  } else {
+    state.filteredGroupedCommands = state.groupedCommands
   }
   selectCommand(state.filteredCommands[0]?.id)
 }

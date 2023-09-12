@@ -2,7 +2,7 @@ export type State = {
   selectedCommandId: string | null
   selectedGroups: Set<string>
   parentCommandId: string | null
-  searchTerm: string
+  query: string
   commands: Commands
   groupedCommands: Group[]
   filteredGroupedCommands: Group[]
