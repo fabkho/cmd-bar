@@ -19,11 +19,10 @@ const query = computed(() => useCmdBarState?.state.query)
  * emit input event and store value in store
  */
 function handleInput(e: Event): void {
-  console.log('handleInput')
   const event = e as InputEvent
   const input = e.target as HTMLInputElement
 
-  useCmdBarState?.updateQuery(input?.value, false)
+  useCmdBarState?.updateQuery(input?.value, !props.modelValue)
 
   emit('input', event)
   emit('update:modelValue', input?.value)

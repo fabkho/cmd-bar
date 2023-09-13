@@ -102,11 +102,10 @@ const useCmdBarState = {
   async updateQuery(query: string, filter: boolean): Promise<void> {
     state.query = query
 
-    await debouncedSearch()
-
     if (filter) {
       applySearchFilter()
     }
+    await debouncedSearch()
   }
 }
 
@@ -126,7 +125,6 @@ const debouncedSearch = useDebounceFn(async () => {
       }
     })
   )
-  console.log('searchResults', searchResults)
   state.filteredGroupedCommands = state.filteredGroupedCommands.map((group) => {
     const searchResult = searchResults.find((searchResult) => searchResult.group === group)
     if (!searchResult) {
@@ -151,13 +149,14 @@ function applyChildFilter(): void {
  * helper function to cache the visible commands and apply the search filter
  */
 function applySearchFilter(): void {
-  console.log('applySearchFilter', state.query)
   if (state.query.length > 0) {
     const lowerCaseQuery = state.query.toLowerCase()
     state.filteredGroupedCommands = state.groupedCommands.map((group) => {
-      // only search through selected groups
-      if (state.selectedGroups.size > 0 && !state.selectedGroups.has(group.key)) {
-        // return empty group
+      // only search through selected groups and groups without a search function
+      if (
+        !!group.search ||
+        (state.selectedGroups.size > 0 && !state.selectedGroups.has(group.key))
+      ) {
         return { ...group, commands: [] }
       }
       const filteredCommands = group.commands.filter((command) => {
