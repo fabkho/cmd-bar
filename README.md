@@ -101,9 +101,18 @@ In this case (See [Commands](#commands)) I declared a group called "ALL" to all 
 
 ### CmdBarList
 To ensure great performance and scalability, the `CmdBarList` component uses [useVirtualList](https://vueuse.org/core/useVirtualList/#usevirtuallist) under the hood, to render a virtualized list of commands. 
-To work properly, it needs the **exact height** of a single item and the container. This has to be passed via the following props:
-- `itemHeight`: The height of a single item, in **Pixel**.
-- `containerHeight`: The height of the container, as a string with a unit of your choice. This is internally applied to the container, so you don't have to worry about that.
+To work properly, it needs the **exact height** of a single item, the group-label (optional) and the container . This has to be passed via a config prop:
+``` js
+const listConfig = {
+// The height of a single item, in Pixel!
+  itemHeightInPixel: 48,
+  // The height of the container, as a string with a unit of your choice. This is internally applied to the container, so you don't have to worry about that.
+  containerHeight: '21rem',
+  // The height of the group label, in Pixel. (Optional)
+  groupLabelHeightInPixel: 20
+}
+```
+**It is very important that these values are correct, otherwise the list will not work properly.**
 
 ## Misc
 

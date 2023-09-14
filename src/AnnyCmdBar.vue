@@ -13,6 +13,12 @@ const keys = useMagicKeys()
 const cmdK = keys['Meta+k']
 const searchTerm = ref('')
 
+const listConfig = {
+  itemHeightInPixel: 48,
+  containerHeight: '21rem',
+  groupLabelHeightInPixel: 20
+}
+
 async function fetchUsers() {
   const { data } = await useFetch(
     'https://dummyjson.com/users?limit=10&select=id,firstName,lastName',
@@ -67,11 +73,75 @@ const actions = [
   }
 ]
 
+const actions2 = [
+  {
+    id: 'new-file1',
+    label: 'Add new file',
+    leading: './src/assets/icons/create.svg',
+    action: () => alert('New file added'),
+    shortcuts: ['⌘', 'N']
+  },
+  {
+    id: 'new-folder1',
+    label: 'Add new folder',
+    leading: './src/assets/icons/create.svg',
+    action: () => alert('New folder added!'),
+    shortcuts: ['⌘', 'F']
+  },
+  {
+    id: 'hashtag1',
+    label: 'Add hashtag',
+    leading: './src/assets/icons/create.svg',
+    action: () => alert('Hashtag added!'),
+    shortcuts: ['⌘', 'H']
+  },
+  {
+    id: 'label1',
+    label: 'Add label',
+    leading: './src/assets/icons/create.svg',
+    action: () => alert('Label added!'),
+    shortcuts: ['⌘', 'L']
+  },
+  {
+    id: 'new-file2',
+    label: 'Add new file',
+    leading: './src/assets/icons/create.svg',
+    action: () => alert('New file added'),
+    shortcuts: ['⌘', 'N']
+  },
+  {
+    id: 'new-folder2',
+    label: 'Add new folder',
+    leading: './src/assets/icons/create.svg',
+    action: () => alert('New folder added!'),
+    shortcuts: ['⌘', 'F']
+  },
+  {
+    id: 'hashtag2',
+    label: 'Add hashtag',
+    leading: './src/assets/icons/create.svg',
+    action: () => alert('Hashtag added!'),
+    shortcuts: ['⌘', 'H']
+  },
+  {
+    id: 'label2',
+    label: 'Add label',
+    leading: './src/assets/icons/create.svg',
+    action: () => alert('Label added!'),
+    shortcuts: ['⌘', 'L']
+  }
+]
+
 const groups = computed(() =>
   [
     {
-      key: 'actions',
+      key: 'actions2',
       label: 'Actions',
+      commands: actions2
+    },
+    {
+      key: 'actions',
+      label: 'Actions2',
       commands: actions
     },
     {
@@ -152,12 +222,7 @@ onMounted(() => {
         <CmdBar.Filter :default-filter-option="'all'" :auto-filter="true" />
       </template>
       <template #content>
-        <CmdBar.List
-          v-if="!loading"
-          v-slot="{ command }"
-          :item-height-in-pixel="48"
-          :container-height="'21rem'"
-        >
+        <CmdBar.List v-if="!loading" v-slot="{ command }" :config="listConfig">
           <div class="custom-item__leading">
             <img :src="command.leading" alt="icon" />
             {{ command.label }}
