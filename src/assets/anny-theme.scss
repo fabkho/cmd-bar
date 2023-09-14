@@ -197,66 +197,33 @@
             transition-property: background;
             background: var(--gray4);
           }
-        }
-      }
-    }
 
-    .list-items{}
+          /* slotted */
+          .leading {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
 
-    .list-item {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      height: $item-height;
-      padding: 0 calc($spacing * 2);
-      margin-left: calc($scrollbar-width/2);
-      border-radius: calc($border-radius/2);
-      font-size: 14px;
-      color: var(--gray11);
-      will-change: background, color;
-      user-select: none;
-      transition: all 150ms ease;
-      transition-property: none;
+            img {
+              width: 24px;
+              height: 24px;
+              aspect-ratio: 16/9;
 
-      &[aria-selected='true'] {
-        background: var(--grayA3);
-        color: var(--gray12);
-      }
+              /* to white */
+              filter: brightness(0) invert(1);
 
-      &[aria-disabled='true'] {
-        color: var(--gray8);
-        cursor: not-allowed;
-      }
+            }
 
-      &:active {
-        transition-property: background;
-        background: var(--gray4);
-      }
-    }
+            font-weight: bold;
+          }
+          .actions{
+            display: flex;
+            margin-left: auto;
+            gap: 8px;
 
-    /* Styles for slotted element */
-    .custom-item {
-      &__leading {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        img {
-          width: 24px;
-          height: 24px;
-          aspect-ratio: 16/9;
-
-          /* to white */
-          filter: brightness(0) invert(1);
+          }
 
         }
-        font-weight: bold;
-      }
-      &__actions{
-        display: flex;
-        margin-left: auto;
-        gap: 8px;
-
       }
     }
 
@@ -318,24 +285,21 @@
       margin: 0 4px 0 12px;
     }
 
-    /* Styles for slotted element */
-    .custom-footer {
-      &__trigger,
-      &__subTrigger {
-        display: flex;
-        align-items: center;
-        color: var(--gray11);
-        padding: 0 4px 0 8px;
-        font-weight: 500;
-        font-size: 12px;
-        height: 28px;
-        letter-spacing: -0.25px;
-      }
-      &__subTrigger{
-        gap: 6px;
-      }
+    /* slotted */
+    .trigger,
+    .subTrigger {
+      display: flex;
+      align-items: center;
+      color: var(--gray11);
+      padding: 0 4px 0 8px;
+      font-weight: 500;
+      font-size: 12px;
+      height: 28px;
+      letter-spacing: -0.25px;
     }
-
+    .subTrigger{
+      gap: 6px;
+    }
   }
 
   kbd {

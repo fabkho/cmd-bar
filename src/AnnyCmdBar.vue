@@ -174,30 +174,6 @@ const groups = computed(() =>
   ].filter(Boolean)
 )
 
-// async function handleSearch(search: string) {
-//   searchTerm.value = search
-//
-//   const { data } = await useFetch(
-//     `https://jsonplaceholder.typicode.com/users?name=${searchTerm.value}`,
-//     {
-//       beforeFetch(ctx) {
-//         loading.value = true
-//         useUnregisterCommands(asyncItems.value.map((item) => item.id))
-//         return ctx
-//       }
-//     }
-//   ).json()
-//
-//   if (data.value.length === 0) {
-//     loading.value = false
-//     return
-//   }
-//
-//   asyncItems.value = transformUserDataToCommand(data.value)
-//   useRegisterCommands(asyncItems.value, true)
-//   loading.value = false
-// }
-
 whenever(cmdK, () => {
   visibility.value = !visibility.value
 })
@@ -223,11 +199,11 @@ onMounted(() => {
       </template>
       <template #content>
         <CmdBar.List v-if="!loading" v-slot="{ command }" :config="listConfig">
-          <div class="custom-item__leading">
+          <div class="leading">
             <img :src="command.leading" alt="icon" />
             {{ command.label }}
           </div>
-          <span v-if="command.shortcuts?.length" class="custom-item__actions">
+          <span v-if="command.shortcuts?.length" class="actions">
             <kbd v-for="shortcut of command.shortcuts" :key="shortcut">{{ shortcut }}</kbd>
           </span>
         </CmdBar.List>
@@ -235,13 +211,13 @@ onMounted(() => {
         <!--        <CmdBar.Empty> No results found </CmdBar.Empty>-->
       </template>
       <template #footer>
-        <span class="custom-footer__trigger">
+        <span class="trigger">
           Execute Command
           <kbd>↵</kbd>
         </span>
 
         <hr />
-        <span class="custom-footer__subTrigger">
+        <span class="subTrigger">
           Navigate
           <kbd>↑</kbd>
           <kbd>↓</kbd>
