@@ -2,6 +2,7 @@
 import type { PropType } from 'vue'
 import { useCmdBarState } from '@/useCmdBarState'
 
+//test
 const props = defineProps({
   defaultFilterOption: {
     type: String as PropType<Lowercase<string> | null>,
