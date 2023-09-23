@@ -13,9 +13,9 @@ export default defineConfig({
       name: 'CmdBar',
       fileName: 'cmd-bar'
     },
-    // outDir: 'lib',
-    // emptyOutDir: true,
-    // sourcemap: false,
+    outDir: 'lib',
+    emptyOutDir: true,
+    sourcemap: false,
     rollupOptions: {
       external: ['vue'],
       output: {
