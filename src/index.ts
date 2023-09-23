@@ -5,6 +5,7 @@ import CmdBarFilter from './components/CmdBarFilter.vue'
 import CmdBarDialog from './components/CmdBarDialog.vue'
 import { computed, defineComponent, h } from 'vue'
 import { useCmdBarState } from '@/useCmdBarState'
+import { useDefineCommand } from '@/useDefineCommand'
 
 /**
  * Command Empty Node
@@ -90,9 +91,10 @@ const components = Object.assign(CmdBar, {
   Dialog: CmdBarDialog,
   Loading,
   Empty,
-  // Loading,
   // Separator,
   Root: CmdBar
 })
 
+export { useDefineCommand }
+export * from './types'
 export { components as CmdBar }

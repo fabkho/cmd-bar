@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import AnnyCmdBar from '@/AnnyCmdBar.vue'
+import AnnyCmdBar from '@/components/AnnyCmdBar.vue'
 </script>
 
 <style scoped></style>

@@ -1,6 +1,6 @@
 # CmdBarVue WIP
 
-![screenshot of commandbar](./screenshot.png)
+![screenshot of commandbar](./public/screenshot.png)
 
 ## Features
 

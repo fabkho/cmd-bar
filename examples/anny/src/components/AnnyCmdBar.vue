@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
-import { CmdBar } from './index'
-import type { Commands } from '@/types'
+import { CmdBar, useDefineCommand, type Commands } from 'cmd-bar'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
-import { useDefineCommand } from '@/useDefineCommand'
 
 const cmdBar = ref<typeof CmdBar | null>(null)
 const users = ref<Commands>([])
@@ -148,7 +146,7 @@ const groups = computed(() =>
       key: 'users',
       label: 'Users',
       commands: users.value,
-      search: async (q) => {
+      search: async (q: string) => {
         if (!q) {
           return []
         }
@@ -190,7 +188,7 @@ onMounted(() => {
         <div>
           <CmdBar.Input :placeholder="'search fo anything'" :icon="'../assets/icons/search.svg'">
             <template #leading>
-              <img src="./assets/icons/search.svg" alt="search" />
+              <img src="../assets/icons/search.svg" alt="search" />
             </template>
             <template #clear> x </template>
           </CmdBar.Input>
