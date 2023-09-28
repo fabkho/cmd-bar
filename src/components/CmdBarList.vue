@@ -1,97 +1,95 @@
 <script setup lang="ts">
-import { computed, type ComputedRef, nextTick, ref, watch } from 'vue'
-import { useCmdBarState } from '@/useCmdBarState'
+import CmdBarGroup from './CmdBarGroup.vue'
+import type { Command, Group } from '../types'
+import { useCmdBarState } from '../useCmdBarState'
 import { useVirtualList } from '@vueuse/core'
-import type { Command } from '@/types'
+import { computed, type ComputedRef, nextTick, ref, watch, watchEffect } from 'vue'
 
 const props = defineProps<{
-  itemHeightInPixel: number
-  containerHeight: string
+  config: {
+    itemHeightInPixel: number
+    containerHeight: string
+    groupLabelHeightInPixel?: number
+  }
 }>()
 
 defineSlots<{
-  default?: (props: { item: Command }) => any
+  default(props: { command: Command }): any
 }>()
 
-const emit = defineEmits<{
-  execute: [command: Command]
-}>()
+const labelRef = ref<HTMLElement[] | null>(null) // Create a ref for the label element
 
-const index = ref<number>(0)
-const containerRef = ref<HTMLDivElement | null>(null)
-
-const isSelectedItem = computed(() => {
-  return (id: string) => {
-    return useCmdBarState?.state.selectedCommandId === id
-  }
+const groupedCommands = computed(() => {
+  return useCmdBarState.state.filteredGroupedCommands as Group[]
 })
 
+/* flatten grouped commands, to use with virtual list */
 const visibleItems = computed(() => {
-  return useCmdBarState?.state.filteredCommands
+  return useCmdBarState.state.filteredGroupedCommands.flatMap((group) => {
+    return [group.label, group.commands]
+  })
 })
 
-const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(
-  visibleItems as ComputedRef,
-  {
-    itemHeight: props.itemHeightInPixel
-  }
-)
-// set fixed height for container
-watch(
-  () => props.containerHeight,
-  () => {
-    containerProps.style = {
-      height: props.containerHeight
+const { containerProps, wrapperProps } = useVirtualList(visibleItems as ComputedRef, {
+  itemHeight: (index: number) => {
+    // handle dynamic height for label
+    if (typeof visibleItems.value[index] === 'string') {
+      return props.config.groupLabelHeightInPixel ?? 0
     }
-  },
-  { immediate: true }
-)
+    return props.config.itemHeightInPixel
+  }
+})
+
+/* set fixed height for container */
+watchEffect(() => {
+  containerProps.style = {
+    height: props.config.containerHeight
+  }
+})
+
+/* set fixed height for label */
+watchEffect(() => {
+  labelRef.value?.forEach((label) => {
+    label.style.height = `${props.config.groupLabelHeightInPixel}px`
+  })
+})
+
+/* handle scroll to selected item */
+const getSelectedItem = () => {
+  const selectedId = useCmdBarState?.state.selectedCommandId
+  return containerProps.ref.value?.querySelector(`[data-id="${selectedId}"]`) as HTMLElement
+}
 
 const scrollSelectedIntoView = () => {
   const item = getSelectedItem()
   item?.scrollIntoView({ block: 'nearest' })
 }
 
-const getSelectedItem = () => {
-  const containerRef = containerProps.ref
-  const selectedId = useCmdBarState?.state.selectedCommandId
-  return containerRef.value?.querySelector(`[data-id="${selectedId}"]`) as HTMLElement
-}
-
-function handleClick(clickedItem: Command) {
-  emit('execute', clickedItem)
-  useCmdBarState?.executeCommand()
-}
-
-/**
- * handle scroll into view
- */
 watch(
   () => useCmdBarState?.state.selectedCommandId,
   (newVal) => {
     if (newVal) {
       nextTick(scrollSelectedIntoView)
     }
-  },
-  { deep: true }
+  }
 )
 </script>
 
 <template>
-  <div class="list-container" v-bind="containerProps">
+  <div class="grouped-list" v-bind="containerProps">
     <ul data-cmd-bar-items class="list-items" v-bind="wrapperProps">
-      <li
-        data-cmd-bar-item
-        :data-id="item.data.id"
-        v-for="item in list"
-        class="list-item"
-        role="option"
-        :aria-selected="isSelectedItem(item.data.id)"
-        @mousemove="useCmdBarState?.selectCommand(item.data.id)"
-        @click="handleClick(item.data)"
-      >
-        <slot :item="item.data" />
+      <li v-for="group in groupedCommands" :key="group.key" class="group">
+        <h2 v-if="group.label && group.commands.length > 0" ref="labelRef" class="group__label">
+          {{ group.label }}
+        </h2>
+        <CmdBarGroup :group="group">
+          <template v-for="(_, name) in $slots" :key="name" #[name]="slotData">
+            <slot :name="name" v-bind="slotData" />
+          </template>
+        </CmdBarGroup>
       </li>
     </ul>
   </div>
 </template>
+
+<style scoped lang="scss"></style>

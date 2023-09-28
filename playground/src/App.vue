@@ -2,12 +2,12 @@
   <header></header>
 
   <main>
-    <AnnyCmdBarGroups />
+    <AnnyCmdBar />
   </main>
 </template>
 
 <script setup lang="ts">
-import AnnyCmdBarGroups from '@/AnnyCmdBarGroups.vue'
+import AnnyCmdBar from '@play/components/AnnyCmdBar.vue'
 </script>
 
 <style scoped></style>

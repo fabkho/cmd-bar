@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useCmdBarState } from '@/useCmdBarState'
+import { useCmdBarState } from '../useCmdBarState'
 import { computed } from 'vue'
 
 const props = defineProps<{
@@ -12,7 +12,7 @@ const emit = defineEmits<{
   'update:modelValue': [val: any]
 }>()
 
-const localSearchTerm = computed(() => useCmdBarState?.state.searchTerm)
+const query = computed(() => useCmdBarState?.state.query)
 
 /**
  * handle input event
@@ -22,23 +22,38 @@ function handleInput(e: Event): void {
   const event = e as InputEvent
   const input = e.target as HTMLInputElement
 
-  useCmdBarState?.setSearchTerm(input?.value, !props.modelValue)
+  useCmdBarState?.updateQuery(input?.value, !props.modelValue)
 
   emit('input', event)
   emit('update:modelValue', input?.value)
 }
+
+function clearQuery(): void {
+  useCmdBarState?.updateQuery('', !props.modelValue)
+}
 </script>
 
 <template>
-  <input
-    data-cmd-bar-input
-    class="input"
-    autofocus
-    aria-autocomplete="list"
-    role="combobox"
-    :aria-expanded="true"
-    :value="localSearchTerm"
-    :placeholder="placeholder"
-    @input="handleInput"
-  />
+  <div class="input-container">
+    <span class="input__leading" aria-hidden="true">
+      <slot name="leading" />
+    </span>
+    <input
+      data-cmd-bar-input
+      class="input"
+      autofocus
+      autocomplete="off"
+      aria-autocomplete="list"
+      role="combobox"
+      :value="query"
+      :placeholder="placeholder"
+      :aria-label="placeholder"
+      @input="handleInput"
+    />
+    <div class="input__clear">
+      <button aria-label="Close" @click="clearQuery">
+        <slot name="clear" />
+      </button>
+    </div>
+  </div>
 </template>
