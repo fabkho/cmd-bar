@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
-import { CmdBar, type Commands, useDefineCommand } from '../../../src/index'
+import { CmdBar, type Commands, useDefineCommand } from '../../../../src/index'
 
 const cmdBar = ref<typeof CmdBar | null>(null)
 const users = ref<Commands>([])
