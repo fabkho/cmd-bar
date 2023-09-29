@@ -4,6 +4,8 @@
 
 ## Features
 
+test
+
 ## Usage
 
 ### Define your commands

@@ -1,6 +1,6 @@
 {
   "name": "cmd-bar",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A Vue 3 component for a command-bar",
   "keywords": [
     "vue plugin",
@@ -32,6 +32,8 @@
   "scripts": {
     "play": "pnpm run -r play",
     "anny-dev": "pnpm run -r anny-dev",
+    "play:vue": "pnpm clean:dts && pnpm --filter=vue3 p:dev",
+    "play:nuxt": "pnpm clean:dts && pnpm --filter=nuxt3 p:dev",
     "build": "vue-tsc --noEmit && vite build --mode lib",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "lintfix": "eslint . --fix --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
