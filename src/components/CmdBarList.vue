@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import CmdBarGroup from './CmdBarGroup.vue'
-import type { Command, Group } from '../types'
+import type { Group } from '../types'
 import { useCmdBarState } from '../useCmdBarState'
 import { useVirtualList } from '@vueuse/core'
 import { computed, type ComputedRef, nextTick, ref, watch, watchEffect } from 'vue'
@@ -13,9 +13,9 @@ const props = defineProps<{
   }
 }>()
 
-defineSlots<{
-  default(props: { command: Command }): any
-}>()
+// defineSlots<{
+//   default(props: { command: Command }): any
+// }>()
 
 const labelRef = ref<HTMLElement[] | null>(null) // Create a ref for the label element
 
