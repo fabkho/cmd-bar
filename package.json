@@ -4,7 +4,7 @@
   "license": "MIT",
   "packageManager": "pnpm@8.6.12",
   "repository": "fabkho/cmd-bar",
-  "description": "A Vue 3 component for a command-bar",
+  "description": "Versatile Vue 3 command-bar component",
   "engines": {
     "node": ">=18"
   },
