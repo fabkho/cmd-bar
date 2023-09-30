@@ -69,21 +69,6 @@ const Loading = defineComponent({
     }
   }
 })
-//
-// /**
-//  * Command Separator Node
-//  */
-// const Separator = defineComponent({
-//   name: 'Command.Separator',
-//   setup(props, { attrs, slots }) {
-//     return () =>
-//       h('div', {
-//         'command-separator': '',
-//         role: 'separator',
-//         ...attrs
-//       })
-//   }
-// })
 
 const components = Object.assign(CmdBar, {
   Input: CmdBarInput,
