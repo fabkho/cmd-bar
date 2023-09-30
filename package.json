@@ -1,7 +1,13 @@
 {
   "name": "cmd-bar",
   "version": "0.0.7",
+  "license": "MIT",
+  "packageManager": "pnpm@8.6.12",
+  "repository": "fabkho/cmd-bar",
   "description": "A Vue 3 component for a command-bar",
+  "engines": {
+    "node": ">=18"
+  },
   "keywords": [
     "vue plugin",
     "vue",
@@ -35,6 +41,7 @@
     "play:vue": "pnpm clean:dts && pnpm --filter=vue3 p:dev",
     "play:nuxt": "pnpm clean:dts && pnpm --filter=nuxt3 p:dev",
     "build": "vue-tsc --noEmit && vite build --mode lib",
+    "ci": "pnpm run lint && pnpm run build",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "lintfix": "eslint . --fix --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
