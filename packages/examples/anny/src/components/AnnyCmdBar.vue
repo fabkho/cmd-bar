@@ -3,13 +3,13 @@ import { onMounted, ref, computed } from 'vue'
 import { CmdBar, useDefineCommand, type Commands } from 'cmd-bar'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
 
-const cmdBar = ref<typeof CmdBar | null>(null)
+// const cmdBar = ref<typeof CmdBar | null>(null)
 const users = ref<Commands>([])
 let loading = ref(false)
 const visibility = ref(false)
 const keys = useMagicKeys()
 const cmdK = keys['Meta+k']
-const searchTerm = ref('')
+// const searchTerm = ref('')
 
 const listConfig = {
   itemHeightInPixel: 48,

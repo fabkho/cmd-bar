@@ -9,7 +9,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   input: [ie: InputEvent]
-  'update:modelValue': [val: any]
+  'update:modelValue': [val: string]
 }>()
 
 const query = computed(() => useCmdBarState?.state.query)

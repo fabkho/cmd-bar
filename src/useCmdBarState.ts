@@ -107,9 +107,9 @@ const useCmdBarState = {
 
     // const { results } = useFuse(query, state.filteredCommands)
 
-    // if (filter) {
-    //   applySearchFilter()
-    // }
+    if (filter) {
+      // applySearchFilter()
+    }
     // await debouncedSearch()
   }
 }
