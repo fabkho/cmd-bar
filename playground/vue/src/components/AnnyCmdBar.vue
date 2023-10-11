@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import LoadingSpinner from '@cmd-bar/playground/vue/src/components/Spinner.vue'
 import { onMounted, ref, computed } from 'vue'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
 import { CmdBar, type Commands, useDefineCommand } from '@cmd-bar/src'
@@ -146,7 +147,7 @@ onMounted(() => {
             </span>
           </template>
           <template #loading>
-            <!--            <Spinner :size="30" color="grey" />-->
+            <LoadingSpinner :size="30" color="grey" />
           </template>
         </CmdBar.List>
       </template>
