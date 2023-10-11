@@ -12,6 +12,9 @@
     "esModuleInterop": true,
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
+    "paths": {
+        "@cmd-bar/*": ["../../*"]
+    }
   },
   "include": [
     "src/**/*.ts",
