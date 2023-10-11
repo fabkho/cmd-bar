@@ -1,5 +1,11 @@
 # cmd-bar
 
+## 0.2.1
+
+### Patch Changes
+
+- problem with lockfile
+
 ## 0.2.0
 
 ### Minor Changes
