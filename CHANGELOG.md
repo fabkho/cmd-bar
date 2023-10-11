@@ -1,5 +1,11 @@
 # cmd-bar
 
+## 0.2.4
+
+### Patch Changes
+
+- added node-linker=hoisted
+
 ## 0.2.3
 
 ### Patch Changes
