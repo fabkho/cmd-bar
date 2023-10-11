@@ -9,6 +9,8 @@
   "updateInternalDependencies": "patch",
   "ignore": [
     "@cmd-bar/docs",
-    "@cmd-bar/anny"
+    "@cmd-bar/anny",
+    "vue",
+    "nuxt"
   ]
 }

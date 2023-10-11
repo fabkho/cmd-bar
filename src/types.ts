@@ -14,8 +14,12 @@ export interface Command {
   leading: string
   label: string
   groups?: string[]
+  loading?: boolean
   action?: () => void
   shortcuts?: string[]
+  group?: string
+  score?: number
+  // matches?: (FuseSortFunctionMatch | FuseSortFunctionMatchList)[]
   [key: string]: any
 }
 export interface Group {

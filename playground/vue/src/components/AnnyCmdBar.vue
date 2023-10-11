@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
-import { CmdBar, type Commands, useDefineCommand } from '../../../../src/index'
-
+import { CmdBar, type Commands, useDefineCommand } from '@cmd-bar/src'
 const cmdBar = ref<typeof CmdBar | null>(null)
 const users = ref<Commands>([])
 let loading = ref(false)
@@ -71,75 +70,11 @@ const actions = [
   }
 ]
 
-const actions2 = [
-  {
-    id: 'new-file1',
-    label: 'Add new file',
-    leading: './src/assets/icons/create.svg',
-    action: () => alert('New file added'),
-    shortcuts: ['⌘', 'N']
-  },
-  {
-    id: 'new-folder1',
-    label: 'Add new folder',
-    leading: './src/assets/icons/create.svg',
-    action: () => alert('New folder added!'),
-    shortcuts: ['⌘', 'F']
-  },
-  {
-    id: 'hashtag1',
-    label: 'Add hashtag',
-    leading: './src/assets/icons/create.svg',
-    action: () => alert('Hashtag added!'),
-    shortcuts: ['⌘', 'H']
-  },
-  {
-    id: 'label1',
-    label: 'Add label',
-    leading: './src/assets/icons/create.svg',
-    action: () => alert('Label added!'),
-    shortcuts: ['⌘', 'L']
-  },
-  {
-    id: 'new-file2',
-    label: 'Add new file',
-    leading: './src/assets/icons/create.svg',
-    action: () => alert('New file added'),
-    shortcuts: ['⌘', 'N']
-  },
-  {
-    id: 'new-folder2',
-    label: 'Add new folder',
-    leading: './src/assets/icons/create.svg',
-    action: () => alert('New folder added!'),
-    shortcuts: ['⌘', 'F']
-  },
-  {
-    id: 'hashtag2',
-    label: 'Add hashtag',
-    leading: './src/assets/icons/create.svg',
-    action: () => alert('Hashtag added!'),
-    shortcuts: ['⌘', 'H']
-  },
-  {
-    id: 'label2',
-    label: 'Add label',
-    leading: './src/assets/icons/create.svg',
-    action: () => alert('Label added!'),
-    shortcuts: ['⌘', 'L']
-  }
-]
-
 const groups = computed(() =>
   [
     {
-      key: 'actions2',
-      label: 'Actions',
-      commands: actions2
-    },
-    {
       key: 'actions',
-      label: 'Actions2',
+      label: 'Actions',
       commands: actions
     },
     {
@@ -150,18 +85,18 @@ const groups = computed(() =>
         if (!q) {
           return []
         }
-        const { data } = await useFetch(`https://jsonplaceholder.typicode.com/users?q=${q}`, {
+        const { data } = await useFetch(`https://dummyjson.com/users/search?q=${q}`, {
           beforeFetch(ctx) {
             loading.value = true
             return ctx
           }
         }).json()
         loading.value = false
-        return data.value.map((user: Record<string, any>) =>
+        return data.value.users.map((user: Record<string, any>) =>
           useDefineCommand({
             id: user.id.toString(),
             leading: './src/assets/icons/user.svg',
-            label: user.name,
+            label: `${user.firstName} ${user.lastName}`,
             action: () => {
               // Define your action here.
             }
@@ -171,6 +106,12 @@ const groups = computed(() =>
     }
   ].filter(Boolean)
 )
+
+const fuseOptions = {
+  fuseOptions: {
+    keys: ['commands.label']
+  }
+}
 
 whenever(cmdK, () => {
   visibility.value = !visibility.value
@@ -186,7 +127,11 @@ onMounted(() => {
     <CmdBar.Dialog :visible="visibility">
       <template #header>
         <div>
-          <CmdBar.Input :placeholder="'search fo anything'" :icon="'../assets/icons/search.svg'">
+          <CmdBar.Input
+            :placeholder="'search fo anything'"
+            :fuse="fuseOptions"
+            :icon="'../assets/icons/search.svg'"
+          >
             <template #leading>
               <img src="../assets/icons/search.svg" alt="search" />
             </template>

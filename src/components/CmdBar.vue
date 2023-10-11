@@ -18,7 +18,7 @@ const props = defineProps({
 watch(
   () => props.commands,
   () => {
-    useCmdBarState?.registerGroups(props.commands)
+    useCmdBarState?.registerState(props.commands)
   },
   { deep: true, immediate: true }
 )

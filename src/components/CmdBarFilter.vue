@@ -61,6 +61,7 @@ function toggleGroup(group: string) {
     )
     defaultChip?.classList.add('filter-chip--selected')
 
+    console.log('reset groups')
     useCmdBarState?.resetGroups()
   }
 }

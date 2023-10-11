@@ -23,7 +23,11 @@ const groupedCommands = computed(() => {
   return useCmdBarState.state.filteredGroupedCommands as Group[]
 })
 
-/* flatten grouped commands, to use with virtual list */
+/**
+ * problem: the group header has to be included in the list to calculate the correct height
+ * solution: flatten grouped commands, to use with virtual list
+ *
+ */
 const visibleItems = computed(() => {
   return useCmdBarState.state.filteredGroupedCommands.flatMap((group) => {
     return [group.label, group.commands]

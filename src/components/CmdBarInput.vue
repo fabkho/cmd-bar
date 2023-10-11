@@ -1,11 +1,24 @@
 <script setup lang="ts">
+import { Group } from '@/lib'
+import { ComputedRef } from 'vue/dist/vue'
 import { useCmdBarState } from '../useCmdBarState'
-import { computed } from 'vue'
+import type { UseFuseOptions } from '@vueuse/integrations/useFuse'
+import { computed, PropType } from 'vue'
 
-const props = defineProps<{
-  placeholder: string
-  modelValue?: string
-}>()
+const props = defineProps({
+  placeholder: {
+    type: String,
+    default: 'Search'
+  },
+  modelValue: {
+    type: String,
+    default: ''
+  },
+  fuse: {
+    type: Object as PropType<UseFuseOptions<Group>>,
+    default: () => ({})
+  }
+})
 
 const emit = defineEmits<{
   input: [ie: InputEvent]
@@ -14,22 +27,35 @@ const emit = defineEmits<{
 
 const query = computed(() => useCmdBarState?.state.query)
 
+const options: ComputedRef<Partial<UseFuseOptions<Group>>> = computed(() => {
+  return {
+    fuseOptions: {
+      ...props.fuse?.fuseOptions,
+      keys: props.fuse?.fuseOptions?.keys ?? ['commands.label'],
+      includeMatches: true
+    },
+    resultLimit: 12,
+    matchAllWhenSearchEmpty: true
+  }
+})
+
 /**
  * handle input event
  * emit input event and store value in store
  */
 function handleInput(e: Event): void {
+  console.log('test', useCmdBarState?.state.groupedCommands)
   const event = e as InputEvent
   const input = e.target as HTMLInputElement
 
-  useCmdBarState?.updateQuery(input?.value, !props.modelValue)
+  useCmdBarState?.updateQuery(input?.value, options)
 
   emit('input', event)
   emit('update:modelValue', input?.value)
 }
 
 function clearQuery(): void {
-  useCmdBarState?.updateQuery('', !props.modelValue)
+  useCmdBarState?.clearQuery()
 }
 </script>
 

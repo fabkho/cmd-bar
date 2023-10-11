@@ -33,13 +33,14 @@
   "types": "./lib/index.d.ts",
   "workspaces": [
     "packages/**",
+    "playground/**",
     "./"
   ],
   "scripts": {
     "play": "pnpm run -r play",
     "anny-dev": "pnpm run -r anny-dev",
-    "play:vue": "pnpm clean:dts && pnpm --filter=vue3 p:dev",
-    "play:nuxt": "pnpm clean:dts && pnpm --filter=nuxt3 p:dev",
+    "play:vue": "pnpm --filter=vue p:dev",
+    "play:nuxt": "pnpm --filter=nuxt p:dev",
     "build": "vue-tsc --noEmit && vite build --mode lib",
     "release": "pnpm run lint && pnpm run build && changeset publish",
     "ci": "pnpm run lint && pnpm run build",
@@ -49,6 +50,7 @@
   },
   "dependencies": {
     "@vueuse/core": "^10.3.0",
+    "fuse.js": "^6.6.2",
     "mitt": "^3.0.1",
     "nanoid": "^4.0.2",
     "vue": "^3.3.4"
