@@ -36,46 +36,45 @@ const Empty = defineComponent({
   }
 })
 
-/**
- * Command Loading Node
- */
-const Loading = defineComponent({
-  name: 'Command.Loading',
-  props: {
-    count: {
-      type: Number,
-      default: 1
-    }
-  },
-  setup(props, { slots }) {
-    return () => {
-      const loadingComponents = []
-      const count = props.count ?? 1
-
-      for (let i = 0; i < count; i++) {
-        loadingComponents.push(
-          h(
-            'div',
-            {
-              class: 'skeleton',
-              role: 'progressbar'
-            },
-            slots
-          )
-        )
-      }
-
-      return loadingComponents
-    }
-  }
-})
+// /**
+//  * Command Loading Node
+//  */
+// const Loading = defineComponent({
+//   name: 'Command.Loading',
+//   props: {
+//     count: {
+//       type: Number,
+//       default: 1
+//     }
+//   },
+//   setup(props, { slots }) {
+//     return () => {
+//       const loadingComponents = []
+//       const count = props.count ?? 1
+//
+//       for (let i = 0; i < count; i++) {
+//         loadingComponents.push(
+//           h(
+//             'div',
+//             {
+//               class: 'skeleton',
+//               role: 'progressbar'
+//             },
+//             slots
+//           )
+//         )
+//       }
+//
+//       return loadingComponents
+//     }
+//   }
+// })
 
 const components = Object.assign(CmdBar, {
   Input: CmdBarInput,
   List: CmdBarList,
   Filter: CmdBarFilter,
   Dialog: CmdBarDialog,
-  Loading,
   Empty,
   // Separator,
   Root: CmdBar

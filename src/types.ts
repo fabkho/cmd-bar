@@ -7,6 +7,7 @@ export type State = {
   groupedCommands: Group[]
   filteredGroupedCommands: Group[]
   filteredCommands: Commands
+  groupLoadingStates: Record<string, boolean>
 }
 
 export interface Command {
@@ -14,7 +15,6 @@ export interface Command {
   leading: string
   label: string
   groups?: string[]
-  loading?: boolean
   action?: () => void
   shortcuts?: string[]
   group?: string

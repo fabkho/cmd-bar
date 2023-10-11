@@ -1,4 +1,4 @@
-@import "global";
+@import 'global';
 
 .cmd-bar {
   //TODO: css custom properties
@@ -10,6 +10,7 @@
   $item-height: 48px;
   width: 100%;
   max-width: 640px;
+  min-height: 300px;
   padding: 0;
   background: rgba(22, 22, 22, 0.7);
   border-radius: $border-radius;
@@ -27,9 +28,9 @@
 
   &__header {
     border-bottom: 1px solid var(--gray6);
-    padding:  $spacing  $spacing  0  $spacing;
+    padding: $spacing $spacing 0 $spacing;
 
-    .input-container{
+    .input-container {
       display: flex;
       align-items: center;
 
@@ -47,7 +48,7 @@
           color: var(--gray11);
         }
 
-        &__leading{
+        &__leading {
           padding-left: 0.5rem;
           img {
             width: 20px;
@@ -55,16 +56,15 @@
             aspect-ratio: 16/9;
             /* to white */
             filter: brightness(0) invert(0.7);
-
           }
           font-weight: bold;
         }
 
-        &__clear{
-          button{
+        &__clear {
+          button {
             background: transparent;
             border: none;
-            padding: 0 1rem ;
+            padding: 0 1rem;
             margin: 0;
             cursor: pointer;
             color: var(--gray11);
@@ -72,7 +72,7 @@
             font-weight: 600;
             transition: all 150ms ease-in-out;
 
-            &:hover{
+            &:hover {
               color: var(--gray12);
             }
           }
@@ -80,8 +80,7 @@
       }
     }
 
-
-    .filter{
+    .filter {
       display: flex;
       align-items: center;
       margin-left: 0.25em;
@@ -99,7 +98,7 @@
         }
 
         &--selected::after {
-          content: "";
+          content: '';
           background-color: var(--blue8);
           display: block;
           position: absolute;
@@ -110,14 +109,13 @@
         }
       }
     }
-
   }
 
-  &__body{
+  &__body {
     position: relative;
     margin-top: $spacing;
     margin-bottom: calc($footer-height + $spacing);
-    .list-container{
+    .list-container {
       overflow: hidden scroll;
       overscroll-behavior: contain;
       content-visibility: auto;
@@ -136,7 +134,7 @@
       }
     }
 
-    .grouped-list{
+    .grouped-list {
       overflow: hidden scroll;
       overscroll-behavior: contain;
       content-visibility: auto;
@@ -153,8 +151,8 @@
         border-radius: 20px;
         border: 3px solid var(--gray2);
       }
-      .group{
-        &__label{
+      .group {
+        &__label {
           padding: 0 0 0 0.5em;
           height: 20px;
           margin: 0.5em 0;
@@ -165,8 +163,8 @@
       }
     }
 
-    .group-container{
-      .items{
+    .group-container {
+      .items {
         .item {
           cursor: pointer;
           display: flex;
@@ -211,56 +209,53 @@
 
               /* to white */
               filter: brightness(0) invert(1);
-
             }
 
             font-weight: bold;
           }
-          .actions{
+          .actions {
             display: flex;
             margin-left: auto;
             gap: 8px;
-
           }
-
         }
+      }
+      .loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        //height: $item-height;
+        //margin: $spacing;
+        //border-radius: calc($border-radius/2);
+        //will-change: background;
+        //user-select: none;
+        //transition: all 150ms ease;
+        //background: var(--gray4);
+        //animation: pulse 1.5s ease-in-out infinite;
+        //@keyframes pulse {
+        //  0% {
+        //    opacity: 0.5;
+        //  }
+        //  50% {
+        //    opacity: 1;
+        //  }
+        //  100% {
+        //    opacity: 0.5;
+        //  }
+        //}
       }
     }
 
     .empty {
       position: absolute;
-      top: 5%;  /* position the top  edge of the element at the middle of the parent */
+      top: 5%; /* position the top  edge of the element at the middle of the parent */
       left: 50%; /* position the left edge of the element at the middle of the parent */
 
       transform: translate(-50%, -50%);
       white-space: pre-wrap;
       color: var(--gray11);
     }
-
-    .skeleton {
-      height: $item-height;
-      margin: $spacing;
-      border-radius: calc($border-radius/2);
-      will-change: background;
-      user-select: none;
-      transition: all 150ms ease;
-      background: var(--grayA3);
-      animation: pulse 1.5s ease-in-out infinite;
-      @keyframes pulse {
-        0% {
-          opacity: 0.5;
-        }
-        50% {
-          opacity: 1;
-        }
-        100% {
-          opacity: 0.5;
-        }
-      }
-    }
-
   }
-
 
   &__footer {
     position: absolute;
@@ -297,7 +292,7 @@
       height: 28px;
       letter-spacing: -0.25px;
     }
-    .subTrigger{
+    .subTrigger {
       gap: 6px;
     }
   }
@@ -332,4 +327,3 @@
     }
   }
 }
-

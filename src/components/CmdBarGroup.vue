@@ -3,12 +3,13 @@ import type { Command, Group } from '../types'
 import { useCmdBarState } from '../useCmdBarState'
 import { computed } from 'vue'
 
-defineProps<{
+const props = defineProps<{
   group: Group
 }>()
 
 defineSlots<{
   default(props: { command: Command }): any
+  loading(props: { group: Group }): any
 }>()
 
 const emit = defineEmits<{
@@ -21,6 +22,10 @@ const isSelectedItem = computed(() => {
   }
 })
 
+const groupIsLoading = computed(() => {
+  return useCmdBarState?.state.groupLoadingStates[props.group.key]
+})
+
 function handleClick(clickedItem: Command) {
   emit('execute', clickedItem)
   useCmdBarState?.executeCommand()
@@ -29,7 +34,7 @@ function handleClick(clickedItem: Command) {
 
 <template>
   <div class="group-container">
-    <ul data-cmd-bar-items class="items">
+    <ul v-if="!groupIsLoading" data-cmd-bar-items class="items">
       <li
         v-for="(command, index) of group.commands"
         :key="`${group.key}-${index}`"
@@ -43,6 +48,9 @@ function handleClick(clickedItem: Command) {
         <slot :command="command" />
       </li>
     </ul>
+    <div v-else class="loading">
+      <slot name="loading" :group="group" />
+    </div>
   </div>
 </template>
 

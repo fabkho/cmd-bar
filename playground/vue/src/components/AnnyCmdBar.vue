@@ -2,13 +2,10 @@
 import { onMounted, ref, computed } from 'vue'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
 import { CmdBar, type Commands, useDefineCommand } from '@cmd-bar/src'
-const cmdBar = ref<typeof CmdBar | null>(null)
 const users = ref<Commands>([])
-let loading = ref(false)
 const visibility = ref(false)
 const keys = useMagicKeys()
 const cmdK = keys['Meta+k']
-const searchTerm = ref('')
 
 const listConfig = {
   itemHeightInPixel: 48,
@@ -21,7 +18,6 @@ async function fetchUsers() {
     'https://dummyjson.com/users?limit=10&select=id,firstName,lastName',
     {
       beforeFetch(ctx) {
-        loading.value = true
         return ctx
       }
     }
@@ -29,6 +25,7 @@ async function fetchUsers() {
   users.value = data.value.users.map((user: Record<string, any>) => {
     return useDefineCommand({
       id: user.id.toString(),
+      //
       leading: './src/assets/icons/user.svg',
       label: `${user.firstName} ${user.lastName}`,
       action: () => {
@@ -36,7 +33,6 @@ async function fetchUsers() {
       }
     })
   })
-  loading.value = false
 }
 
 const actions = [
@@ -87,11 +83,9 @@ const groups = computed(() =>
         }
         const { data } = await useFetch(`https://dummyjson.com/users/search?q=${q}`, {
           beforeFetch(ctx) {
-            loading.value = true
             return ctx
           }
         }).json()
-        loading.value = false
         return data.value.users.map((user: Record<string, any>) =>
           useDefineCommand({
             id: user.id.toString(),
@@ -141,17 +135,20 @@ onMounted(() => {
         <CmdBar.Filter :default-filter-option="'all'" :auto-filter="true" />
       </template>
       <template #content>
-        <CmdBar.List v-if="!loading" v-slot="{ command }" :config="listConfig">
-          <div class="leading">
-            <img :src="command.leading" alt="icon" />
-            {{ command.label }}
-          </div>
-          <span v-if="command.shortcuts?.length" class="actions">
-            <kbd v-for="shortcut of command.shortcuts" :key="shortcut">{{ shortcut }}</kbd>
-          </span>
+        <CmdBar.List :config="listConfig">
+          <template #default="{ command }">
+            <div class="leading">
+              <img :src="command.leading" alt="icon" />
+              {{ command.label }}
+            </div>
+            <span v-if="command.shortcuts?.length" class="actions">
+              <kbd v-for="shortcut of command.shortcuts" :key="shortcut">{{ shortcut }}</kbd>
+            </span>
+          </template>
+          <template #loading>
+            <!--            <Spinner :size="30" color="grey" />-->
+          </template>
         </CmdBar.List>
-        <CmdBar.Loading :count="6" v-else />
-        <!--        <CmdBar.Empty> No results found </CmdBar.Empty>-->
       </template>
       <template #footer>
         <span class="trigger">

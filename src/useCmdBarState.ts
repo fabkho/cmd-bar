@@ -15,7 +15,8 @@ const state = reactive<State>({
   commands: [] as Commands,
   groupedCommands: [] as Group[],
   filteredGroupedCommands: [] as Group[],
-  filteredCommands: [] as Commands
+  filteredCommands: [] as Commands,
+  groupLoadingStates: {} as Record<string, boolean>
 })
 const useCmdBarState = {
   state: readonly(state),
@@ -111,7 +112,6 @@ const useCmdBarState = {
         await debouncedSearch(query, asyncSearchableGroups)
       }
     } else if (state.selectedGroups.size === 1) {
-      console.log('selectedGroups has only one group', state.selectedGroups)
       // else if selectedGroups has only one group, search that group and push results to filteredGroupedCommands
       const group = state.groupedCommands.find((group) => state.selectedGroups.has(group.key))
       if (group && group.search) {
@@ -122,7 +122,6 @@ const useCmdBarState = {
         console.warn(`Group ${state.selectedGroups.values().next().value} not found`)
       }
     } else {
-      console.log('selectedGroups has multiple groups', state.selectedGroups)
       // else if selectedGroups has multiple groups, search all selected groups and push results to filteredGroupedCommands
       const fuzzySearchableGroups = state.groupedCommands.filter(
         (group) => !group.search && state.selectedGroups.has(group.key)
@@ -147,9 +146,6 @@ const fuzzySearch = (
   groups: Group[],
   fuseOptions?: ComputedRef<Partial<UseFuseOptions<Group>>>
 ) => {
-  // set loading to true for every group
-  groups.map((group) => (group.loading = true))
-
   const { results } = useFuse(query, ref(groups), fuseOptions)
 
   groups.forEach((group, index) => {
@@ -161,22 +157,28 @@ const fuzzySearch = (
 
     state.filteredGroupedCommands[index].commands = (commands as Commands) ?? []
   })
-
-  groups.map((group) => (group.loading = false))
 }
 
 const debouncedSearch = useDebounceFn(async (query, groups) => {
   if (!groups.length) {
     return
   }
+
   await Promise.all(
     groups.map(async (group: Group) => {
+      state.groupLoadingStates[group.key] = true
+
+      // set timpout to simulate async search 5 sec
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+
       const commands = await group.search(query)
       const groupIndex = state.filteredGroupedCommands.findIndex(
         (filteredGroup) => filteredGroup.key === group.key
       )
 
       state.filteredGroupedCommands[groupIndex].commands = commands
+
+      state.groupLoadingStates[group.key] = false
     })
   )
 }, 200)

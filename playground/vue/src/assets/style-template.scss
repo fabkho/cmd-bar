@@ -1,31 +1,38 @@
-.cmd-bar{
+.cmd-bar {
   &__header {
     .input {
-        &::placeholder{}
-
+      &::placeholder {
+      }
     }
-    .filter{
-      &-chip{}
-      &-chip--selected{}
+    .filter {
+      &-chip {
+      }
+      &-chip--selected {
+      }
     }
   }
   &__body {
-    .list{
-      &__container{}
-      &__items{}
-      &__item{}
+    .list {
+      &__container {
+      }
+      &__items {
+      }
+      &__item {
+      }
     }
     /* loading element*/
-    .skeleton{}
+    .skeleton {
+    }
     /* empty list | Tip: position absolute to prevent jumping of container  */
-    .empty{}
+    .empty {
+    }
   }
-  &__footer {}
+  &__footer {
+  }
 
   /* keyboard shortcut */
-  .kbd {}
+  .kbd {
+  }
 
   /* Animations */
-
 }
-

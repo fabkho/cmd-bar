@@ -37,7 +37,6 @@
     "./"
   ],
   "scripts": {
-    "play": "pnpm run -r play",
     "anny-dev": "pnpm run -r anny-dev",
     "play:vue": "pnpm --filter=vue p:dev",
     "play:nuxt": "pnpm --filter=nuxt p:dev",
