@@ -6,9 +6,7 @@
     "composite": true,
     "baseUrl": ".",
     "paths": {
-      "@play/*": ["./src/*"],
-      "@cmd-bar": ["../src"],
-
+      "@cmd-bar/*": ["../../*"]
     }
   }
 }

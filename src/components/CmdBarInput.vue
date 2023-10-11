@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { Group } from '@/lib'
-import { ComputedRef } from 'vue/dist/vue'
 import { useCmdBarState } from '../useCmdBarState'
+import type { Group } from '../types'
 import type { UseFuseOptions } from '@vueuse/integrations/useFuse'
-import { computed, PropType } from 'vue'
+import { computed, PropType, ComputedRef } from 'vue'
 
 const props = defineProps({
   placeholder: {
