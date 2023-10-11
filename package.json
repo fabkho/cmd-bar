@@ -50,6 +50,7 @@
   },
   "dependencies": {
     "@vueuse/core": "^10.3.0",
+    "@vueuse/integrations": "^10.5.0",
     "fuse.js": "^6.6.2",
     "mitt": "^3.0.1",
     "nanoid": "^4.0.2",

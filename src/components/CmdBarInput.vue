@@ -43,7 +43,6 @@ const options: ComputedRef<Partial<UseFuseOptions<Group>>> = computed(() => {
  * emit input event and store value in store
  */
 function handleInput(e: Event): void {
-  console.log('test', useCmdBarState?.state.groupedCommands)
   const event = e as InputEvent
   const input = e.target as HTMLInputElement
 
