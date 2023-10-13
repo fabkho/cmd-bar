@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useKeymap } from '../useKeymap'
 import type { Group } from '../types'
 import type { PropType } from 'vue'
 import { useCmdBarState } from '../useCmdBarState'
@@ -15,6 +16,18 @@ const props = defineProps({
   }
 })
 
+useKeymap({
+  ArrowUp: {
+    action: () => useCmdBarState?.nextCommand(props.loop)
+  },
+  ArrowDown: {
+    action: () => useCmdBarState?.prevCommand(props.loop)
+  },
+  Enter: {
+    action: () => useCmdBarState?.executeCommand()
+  }
+})
+
 watch(
   () => props.commands,
   () => {
@@ -22,34 +35,10 @@ watch(
   },
   { deep: true, immediate: true }
 )
-
-function handleKeyDown(event: KeyboardEvent): void {
-  switch (event.key) {
-    case 'ArrowUp':
-      console.log('ArrowUp')
-      useCmdBarState?.nextCommand(props.loop)
-      break
-    case 'ArrowDown':
-      useCmdBarState?.prevCommand(props.loop)
-      break
-    case 'ArrowLeft':
-      // Insert your custom logic here
-      break
-    case 'ArrowRight':
-      // Insert your custom logic here
-      break
-    case 'Enter':
-      useCmdBarState?.executeCommand()
-      break
-    default:
-      // Insert your custom logic here
-      break
-  }
-}
 </script>
 
 <template>
-  <div @keydown="handleKeyDown">
+  <div>
     <slot />
   </div>
 </template>

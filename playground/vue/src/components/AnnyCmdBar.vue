@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import LoadingSpinner from '@cmd-bar/playground/vue/src/components/Spinner.vue'
+import { useKeymap } from '@cmd-bar/src/useKeymap'
 import { onMounted, ref, computed } from 'vue'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
 import { CmdBar, type Commands, useDefineCommand } from '@cmd-bar/src'
@@ -13,6 +14,20 @@ const listConfig = {
   containerHeight: '21rem',
   groupLabelHeightInPixel: 20
 }
+
+useKeymap({
+  ArrowUp: {
+    action: () => console.log('ArrowUp'),
+    override: false // Explicitly set override to false
+  },
+  ArrowDown: {
+    action: () => console.log('ArrowDown'),
+    override: false // Explicitly set override to false
+  },
+  Enter: {
+    action: () => console.log('Enter')
+  }
+})
 
 async function fetchUsers() {
   const { data } = await useFetch(
