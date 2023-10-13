@@ -1,9 +1,6 @@
-// import { useFuse } from '@vueuse/integrations/useFuse'
-// import type { UseFuseOptions } from '@vueuse/integrations/useFuse'
-// import { nanoid } from 'nanoid'
 import { useDebounceFn } from '@vueuse/core'
 import { useFuse, UseFuseOptions } from '@vueuse/integrations/useFuse'
-import { ComputedRef, reactive, readonly, ref } from 'vue'
+import { ComputedRef, reactive, readonly, ref, watch } from 'vue'
 import type { Commands, Group, State } from './types'
 import { findNodeById } from './utils'
 
@@ -20,14 +17,19 @@ const state = reactive<State>({
 })
 const useCmdBarState = {
   state: readonly(state),
-  registerState(initialGroups: Group[]): void {
-    state.groupedCommands = initialGroups
-    // deep copy of initialGroups, to ensure that the original groups are not modified
-    state.filteredGroupedCommands = JSON.parse(JSON.stringify(initialGroups))
-
-    state.commands = initialGroups.flatMap((group) =>
+  initState(initialGroups: Group[]): void {
+    const flattenedCommands = initialGroups.flatMap((group) =>
       group.commands.map((command) => ({ ...command, group: group.key }))
     )
+
+    state.groupedCommands = initialGroups
+    state.commands = flattenedCommands
+
+    // deep copy of initialGroups, to ensure that the original groups are not modified
+    state.filteredGroupedCommands = JSON.parse(JSON.stringify(initialGroups))
+    state.filteredCommands = flattenedCommands
+
+    selectFirstCommand()
   },
   filterGroupedCommands(): void {
     if (state.selectedGroups.size === 0) {
@@ -38,7 +40,7 @@ const useCmdBarState = {
       )
     }
 
-    state.selectedCommandId = state.filteredGroupedCommands[0]?.commands[0].id
+    selectFirstCommand()
   },
 
   resetState(): void {
@@ -118,6 +120,7 @@ const useCmdBarState = {
         await debouncedSearch(query, [group])
       } else if (group) {
         fuzzySearch(query, [group], fuseOptions)
+        selectFirstCommand()
       } else {
         console.warn(`Group ${state.selectedGroups.values().next().value} not found`)
       }
@@ -180,7 +183,9 @@ const debouncedSearch = useDebounceFn(async (query, groups) => {
 
       state.groupLoadingStates[group.key] = false
     })
-  )
+  ).then(() => {
+    selectFirstCommand()
+  })
 }, 200)
 
 /**
@@ -189,5 +194,28 @@ const debouncedSearch = useDebounceFn(async (query, groups) => {
 function getSelectedIndex(): number {
   return state.filteredCommands.findIndex((command) => command.id === state.selectedCommandId)
 }
+
+/**
+ * helper to select the first command in the first group
+ */
+function selectFirstCommand(): void {
+  state.selectedCommandId = state.filteredGroupedCommands[0]?.commands[0]?.id ?? null
+}
+
+/**
+ * watcher to assign new flatMap to filteredCommands when filteredGroupedCommands changes
+ * and select the first command
+ */
+watch(
+  () => state.filteredGroupedCommands,
+  () => {
+    state.filteredCommands = state.filteredGroupedCommands.flatMap((group) =>
+      group.commands.map((command) => ({ ...command, group: group.key }))
+    )
+
+    selectFirstCommand()
+  },
+  { deep: true }
+)
 
 export { useCmdBarState }

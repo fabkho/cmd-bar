@@ -18,7 +18,7 @@ const props = defineProps({
 watch(
   () => props.commands,
   () => {
-    useCmdBarState?.registerState(props.commands)
+    useCmdBarState?.initState(props.commands)
   },
   { deep: true, immediate: true }
 )
@@ -26,6 +26,7 @@ watch(
 function handleKeyDown(event: KeyboardEvent): void {
   switch (event.key) {
     case 'ArrowUp':
+      console.log('ArrowUp')
       useCmdBarState?.nextCommand(props.loop)
       break
     case 'ArrowDown':
