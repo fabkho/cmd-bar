@@ -66,6 +66,11 @@ const getSelectedItem = () => {
 
 const scrollSelectedIntoView = () => {
   const item = getSelectedItem()
+  // if item is first element of group, make sure header/label is in view
+  if (item?.parentElement?.firstElementChild === item) {
+    item?.closest('.group')?.querySelector('.group__label')?.scrollIntoView({ block: 'nearest' })
+    return
+  }
   item?.scrollIntoView({ block: 'nearest' })
 }
 
