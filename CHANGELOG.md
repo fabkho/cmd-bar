@@ -1,5 +1,11 @@
 # cmd-bar
 
+## 0.3.0
+
+### Minor Changes
+
+- Improved accessibility of Filter component
+
 ## 0.2.5
 
 ### Patch Changes
