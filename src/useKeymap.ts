@@ -13,7 +13,7 @@ function createKeymap(initialKeymap: Keymap = {}) {
   const registerKeyBinding = (shortcut: string, action: KeyAction, override = true) => {
     if (shortcut.includes('+')) {
       const sh = keys[shortcut]
-      if (override || !keymap.value[sh] || keymap.value[sh].override) {
+      if (override || !keymap.value[shortcut] || keymap.value[shortcut].override) {
         whenever(sh, action)
       }
     } else {
