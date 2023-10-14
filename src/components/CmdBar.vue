@@ -26,7 +26,7 @@ useKeymap({
   Enter: {
     action: () => useCmdBarState?.executeCommand()
   }
-})
+}).addKeyBindingsFromCommands(props.commands)
 
 watch(
   () => props.commands,

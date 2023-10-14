@@ -16,7 +16,14 @@ export interface Command {
   label: string
   groups?: string[]
   action?: () => void
-  shortcuts?: string[]
+  /**
+   * Format is based on useMagicKeys.
+   * @example
+   * 'Enter'
+   * 'Ctrl+N'
+   * 'Ctrl+Shift+P'
+   */
+  shortcut?: string
   group?: string
   score?: number
   // matches?: (FuseSortFunctionMatch | FuseSortFunctionMatchList)[]

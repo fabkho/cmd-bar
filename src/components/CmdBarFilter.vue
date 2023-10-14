@@ -29,7 +29,7 @@ const groupSet = new Set(
 )
 
 // add space as shortcut to select currently focused group
-useKeymap().addKeyBinding('Space', () => {
+useKeymap().handleKeyBinding('Space', () => {
   const focusedElement = document.activeElement as HTMLElement
   if (focusedElement && focusedElement.classList.contains('filter-chip')) {
     const group = focusedElement.dataset.id

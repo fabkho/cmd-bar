@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import LoadingSpinner from '@cmd-bar/playground/vue/src/components/Spinner.vue'
+import { type Commands, useDefineCommand, CmdBar } from '@cmd-bar/src'
 import { useKeymap } from '@cmd-bar/src/useKeymap'
-import { onMounted, ref, computed } from 'vue'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
-import { CmdBar, type Commands, useDefineCommand } from '@cmd-bar/src'
+import { computed, onMounted, ref } from 'vue'
+import LoadingSpinner from './Spinner.vue'
+
 const users = ref<Commands>([])
 const visibility = ref(false)
 const keys = useMagicKeys()
@@ -28,6 +29,29 @@ useKeymap({
     action: () => console.log('Enter')
   }
 })
+
+const formattedShortcuts = (shortcutString: string) => {
+  // Split the string into an array based on the '+' character
+  const parts = shortcutString.split('+')
+  // Check which Os the user is on with useAgent
+  const isMac = navigator.userAgent.includes('Mac OS')
+  // Map over the parts array and replace the keys with the correct representation
+  return parts.map((part) => {
+    let key = part
+    if (isMac) {
+      key = key.replace('Ctrl', '⌃')
+      key = key.replace('Alt', '⌥')
+      key = key.replace('Shift', '⇧')
+      key = key.replace('Meta', '⌘')
+      key = key.replace('Cmd', '⌘')
+    } else {
+      // is Windows or Linux
+      key = key.replace('Meta', 'Win')
+      key = key.replace('Cmd', 'Win')
+    }
+    return key
+  })
+}
 
 async function fetchUsers() {
   const { data } = await useFetch(
@@ -57,28 +81,26 @@ const actions = [
     label: 'Add new file',
     leading: './src/assets/icons/create.svg',
     action: () => alert('New file added'),
-    shortcuts: ['⌘', 'N']
+    shortcut: 'Ctrl+N'
   },
   {
     id: 'new-folder',
     label: 'Add new folder',
     leading: './src/assets/icons/create.svg',
     action: () => alert('New folder added!'),
-    shortcuts: ['⌘', 'F']
+    shortcut: 'Ctrl+F'
   },
   {
     id: 'hashtag',
     label: 'Add hashtag',
     leading: './src/assets/icons/create.svg',
-    action: () => alert('Hashtag added!'),
-    shortcuts: ['⌘', 'H']
+    action: () => alert('Hashtag added!')
   },
   {
     id: 'label',
     label: 'Add label',
     leading: './src/assets/icons/create.svg',
-    action: () => alert('Label added!'),
-    shortcuts: ['⌘', 'L']
+    action: () => alert('Label added!')
   }
 ]
 
@@ -133,7 +155,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <CmdBar :commands="groups">
+  <CmdBar :commands="groups" loop>
     <CmdBar.Dialog :visible="visibility">
       <template #header>
         <div>
@@ -157,8 +179,10 @@ onMounted(() => {
               <img :src="command.leading" alt="icon" />
               {{ command.label }}
             </div>
-            <span v-if="command.shortcuts?.length" class="actions">
-              <kbd v-for="shortcut of command.shortcuts" :key="shortcut">{{ shortcut }}</kbd>
+            <span v-if="command.shortcut" class="actions">
+              <kbd v-for="shortcut of formattedShortcuts(command.shortcut)" :key="shortcut">{{
+                shortcut
+              }}</kbd>
             </span>
           </template>
           <template #loading>
