@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useKeymap } from '../useKeymap'
 import type { PropType } from 'vue'
 import { useCmdBarState } from '../useCmdBarState'
 
@@ -27,6 +28,17 @@ const groupSet = new Set(
   props.defaultFilterOption ? [props.defaultFilterOption, ...groups] : groups
 )
 
+// add space as shortcut to select currently focused group
+useKeymap().addKeyBinding('Space', () => {
+  const focusedElement = document.activeElement as HTMLElement
+  if (focusedElement && focusedElement.classList.contains('filter-chip')) {
+    const group = focusedElement.dataset.id
+    if (group !== undefined) {
+      toggleGroup(group)
+    }
+  }
+})
+
 function isSelected(group: string) {
   if (group === props.defaultFilterOption && selectedGroups.size === 0) {
     return true
@@ -47,7 +59,7 @@ function toggleGroup(group: string) {
     if (selectedGroups.size > 0) {
       defaultChip?.classList.remove('filter-chip--selected')
     } else {
-      useCmdBarState?.resetGroups()
+      useCmdBarState?.resetFilter()
     }
   } else {
     useCmdBarState?.toggleGroup(group, props.asCheckbox, props.autoFilter)
@@ -62,23 +74,25 @@ function toggleGroup(group: string) {
     defaultChip?.classList.add('filter-chip--selected')
 
     console.log('reset groups')
-    useCmdBarState?.resetGroups()
+    useCmdBarState?.resetFilter()
   }
 }
 </script>
 
 <template>
-  <div class="filter">
-    <div
+  <div class="filter" role="tablist">
+    <button
       v-for="group in groupSet"
       :key="group"
       :data-id="group"
       class="filter-chip"
-      :class="{ 'filter-chip--selected': isSelected(group) }"
+      :aria-selected="isSelected(group)"
+      role="tab"
       @click="toggleGroup(group)"
+      tabindex="0"
     >
       {{ group }}
-    </div>
+    </button>
   </div>
 </template>
 
