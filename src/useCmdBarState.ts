@@ -65,7 +65,7 @@ const useCmdBarState = {
     if (filter) this.filterGroupedCommands()
   },
 
-  resetGroups(): void {
+  resetFilter(): void {
     state.selectedGroups.clear()
     this.filterGroupedCommands()
   },
