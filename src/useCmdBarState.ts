@@ -104,43 +104,44 @@ const useCmdBarState = {
       return
     }
 
-    // if selectedGroups is empty, search all groups and push results to filteredGroupedCommands
     if (state.selectedGroups.size === 0) {
-      const fuzzySearchableGroups = state.groupedCommands.filter((group) => !group.search)
-      if (fuzzySearchableGroups.length > 0) fuzzySearch(query, fuzzySearchableGroups, fuseOptions)
-
-      const asyncSearchableGroups = state.groupedCommands.filter((group) => !!group.search)
-      if (asyncSearchableGroups.length > 0) {
-        await debouncedSearch(query, asyncSearchableGroups)
-      }
+      // Search all groups
+      await searchGroups(query, state.groupedCommands, fuseOptions)
     } else if (state.selectedGroups.size === 1) {
-      // else if selectedGroups has only one group, search that group and push results to filteredGroupedCommands
+      // Search a single selected group
       const group = state.groupedCommands.find((group) => state.selectedGroups.has(group.key))
-      if (group && group.search) {
-        await debouncedSearch(query, [group])
-      } else if (group) {
-        fuzzySearch(query, [group], fuseOptions)
-        selectFirstCommand()
+      if (group) {
+        await searchGroups(query, [group], fuseOptions)
       } else {
-        console.warn(`Group ${state.selectedGroups.values().next().value} not found`)
+        console.warn(`Group ${state.selectedGroups.values().next()} not found`)
       }
     } else {
-      // else if selectedGroups has multiple groups, search all selected groups and push results to filteredGroupedCommands
-      const fuzzySearchableGroups = state.groupedCommands.filter(
-        (group) => !group.search && state.selectedGroups.has(group.key)
-      )
-      const asyncSearchableGroups = state.groupedCommands.filter(
-        (group) => !!group.search && state.selectedGroups.has(group.key)
-      )
-
-      if (fuzzySearchableGroups.length > 0) fuzzySearch(query, fuzzySearchableGroups, fuseOptions)
-      if (asyncSearchableGroups.length > 0) await debouncedSearch(query, asyncSearchableGroups)
+      // Search multiple selected groups
+      const groups = state.groupedCommands.filter((group) => state.selectedGroups.has(group.key))
+      await searchGroups(query, groups, fuseOptions)
     }
   },
 
   clearQuery(): void {
     state.query = ''
     this.filterGroupedCommands()
+  }
+}
+
+const searchGroups = async (
+  query: string,
+  groups: Group[],
+  fuseOptions?: ComputedRef<Partial<UseFuseOptions<Group>>>
+) => {
+  const fuzzySearchableGroups = groups.filter((group) => !group.search)
+  const asyncSearchableGroups = groups.filter((group) => !!group.search)
+
+  if (fuzzySearchableGroups.length > 0) {
+    fuzzySearch(query, fuzzySearchableGroups, fuseOptions)
+  }
+
+  if (asyncSearchableGroups.length > 0) {
+    await debouncedSearch(query, asyncSearchableGroups)
   }
 }
 
