@@ -1,12 +1,44 @@
 # CmdBarVue WIP
 
+[![npm version][npm-version-src]][npm-version-href]
+[![npm downloads][npm-downloads-src]][npm-downloads-href]
+[![License][license-src]][license-href]
+[![Vue][vue-src]][vue-href]
+
 ![screenshot of commandbar](./screenshot.png)
+
 
 ## Features
 
-test
+- ⛰ &nbsp;Foo
+- 🚠 &nbsp;Bar
+- 🌲 &nbsp;Baz
 
-## Usage
+
+## Setup
+
+1. Add `cmd-bar` dependency to your project
+
+```bash
+# Using pnpm
+pnpm add -D cmd-bar
+
+# Using yarn
+yarn add --dev cmd-bar
+
+# Using npm
+npm install --save-dev cmd-bar
+```
+
+2. Import `cmd-bar` in your vue component to use it. You can find a full example in the [packages/examples](./packages/examples) folder.
+```js
+import { CmdBar } from 'cmd-bar'
+```
+
+That's it! ✨
+
+
+## Documentation
 
 ### Define your commands
 To define your commands, you can use the `useDefineCommand` composable. Which is basically just a wrapper to provide type safety. Here is an example:
@@ -118,4 +150,19 @@ You can pass a keybinding object to the component to add keybindings to the comm
 <CmdBarVue :keybindings="{ arrowUp: 'arrowup', arrowDown: 'arrowdown', enter: 'enter' }" />
 ```
 **Tip**: You can use the `Keybindings` type to get autocompletion for the keybindings object.
+
+
+
+<!-- Badges -->
+[npm-version-src]: https://img.shields.io/npm/v/cmd-bar/latest.svg?style=flat&colorA=18181B&colorB=28CF8D
+[npm-version-href]: https://npmjs.com/package/cmd-bar
+
+[npm-downloads-src]: https://img.shields.io/npm/dm/cmd-bar.svg?style=flat&colorA=18181B&colorB=28CF8D
+[npm-downloads-href]: https://npmjs.com/package/cmd-bar
+
+[license-src]: https://img.shields.io/npm/l/cmd-bar.svg?style=flat&colorA=18181B&colorB=28CF8D
+[license-href]: https://npmjs.com/package/cmd-bar
+
+[vue-src]: https://img.shields.io/badge/vue-3.x-4fc08d.svg?style=flat&colorA=18181B&colorB=28CF8D
+[vue-href]: https://vuejs.org
 
