@@ -1,5 +1,5 @@
 export default defineNuxtConfig({
   modules: ['../src/module'],
-  myModule: {},
+  cmdBar: {},
   devtools: { enabled: true }
 })

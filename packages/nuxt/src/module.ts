@@ -1,4 +1,4 @@
-import { defineNuxtModule, isNuxt2, addImportsDir, addPlugin, createResolver } from '@nuxt/kit'
+import { defineNuxtModule, isNuxt2, addComponent } from '@nuxt/kit'
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {}
@@ -14,19 +14,21 @@ export default defineNuxtModule<ModuleOptions>({
   // Default configuration options of the Nuxt module
   defaults: {},
   setup(options, nuxt) {
-    const resolver = createResolver(import.meta.url)
-
-    addImportsDir(resolver.resolve('./runtime/composables'))
+    console.log('Setup module')
+    // const resolver = createResolver(import.meta.url)
+    //
+    // addImportsDir(resolver.resolve('./runtime/composables'))
 
     nuxt.hook('modules:done', () => {
       if (isNuxt2()) {
         throw new Error('CmdBar module is not compatible with Nuxt 2')
       } else {
-        addPlugin(resolver.resolve('./runtime/plugin'))
-        // addComponent({
-        //   name: 'NuxtSnackbar',
-        //   filePath: resolver.resolve('./runtime/components/NuxtSnackbar')
-        // })
+        console.log('CmdBar module is compatible with Nuxt 3')
+        addComponent({
+          name: 'CmdBar',
+          export: 'CmdBar',
+          filePath: 'cmd-bar'
+        })
       }
     })
   }
