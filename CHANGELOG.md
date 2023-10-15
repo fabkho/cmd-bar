@@ -1,5 +1,11 @@
 # cmd-bar
 
+## 0.3.1
+
+### Patch Changes
+
+- export useKeymap composable
+
 ## 0.3.0
 
 ### Minor Changes
