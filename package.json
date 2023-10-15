@@ -39,8 +39,8 @@
   "scripts": {
     "anny-dev": "pnpm run -r anny-dev",
     "docs": "pnpm run -r --filter=docs dev",
-    "play:vue": "pnpm --filter=vue p:dev",
-    "play:nuxt": "pnpm --filter=nuxt p:dev",
+    "play:vue": "pnpm --filter=vue3 p:dev",
+    "play:nuxt": "pnpm --filter=nuxt3 p:dev",
     "build": "vue-tsc --noEmit && vite build --mode lib",
     "release": "pnpm run lint && pnpm run build && changeset publish",
     "ci": "pnpm run lint && pnpm run build",
