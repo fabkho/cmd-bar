@@ -169,6 +169,9 @@ importers:
       '@nuxt/kit':
         specifier: ^3.7.4
         version: 3.7.4(rollup@3.29.4)
+      cmd-bar:
+        specifier: workspace:^
+        version: link:../..
     devDependencies:
       '@nuxt/devtools':
         specifier: latest
