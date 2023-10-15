@@ -8,8 +8,9 @@
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
   "ignore": [
+    "@cmd-bar/docs",
     "@cmd-bar/anny",
-    "vue",
-    "nuxt"
+    "vue3",
+    "nuxt3"
   ]
 }
