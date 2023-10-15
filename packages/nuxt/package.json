@@ -1,7 +1,7 @@
 {
   "name": "nuxt",
   "version": "1.0.0",
-  "description": "My new Nuxt module",
+  "description": "Nuxt-module wrapper for cmd-bar",
   "repository": "fabkho/cmd-bar/packages/nuxt",
   "license": "MIT",
   "type": "module",
