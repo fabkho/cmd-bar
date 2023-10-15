@@ -18,19 +18,25 @@ const state = reactive<State>({
 const useCmdBarState = {
   state: readonly(state),
   initState(initialGroups: Group[]): void {
-    const flattenedCommands = initialGroups.flatMap((group) =>
-      group.commands.map((command) => ({ ...command, group: group.key }))
-    )
+    const flattenedCommands = []
+    const groupedCommands = []
 
-    state.groupedCommands = initialGroups
+    for (const group of initialGroups) {
+      const commandsWithGroup = group.commands.map((command) => ({ ...command, group: group.key }))
+      flattenedCommands.push(...commandsWithGroup)
+      groupedCommands.push({ ...group, commands: commandsWithGroup })
+    }
+
+    state.groupedCommands = groupedCommands
     state.commands = flattenedCommands
 
     // deep copy of initialGroups, to ensure that the original groups are not modified
-    state.filteredGroupedCommands = JSON.parse(JSON.stringify(initialGroups))
+    state.filteredGroupedCommands = JSON.parse(JSON.stringify(groupedCommands))
     state.filteredCommands = flattenedCommands
 
     selectFirstCommand()
   },
+
   filterGroupedCommands(): void {
     if (state.selectedGroups.size === 0) {
       state.filteredGroupedCommands = JSON.parse(JSON.stringify(state.groupedCommands))
@@ -70,21 +76,17 @@ const useCmdBarState = {
     this.filterGroupedCommands()
   },
 
-  nextCommand(loop: boolean): void {
+  nextCommand(): void {
     const selectedIndex = getSelectedIndex()
     if (selectedIndex > 0) {
       state.selectedCommandId = state.filteredCommands[selectedIndex - 1].id
-    } else if (loop) {
-      state.selectedCommandId = state.filteredCommands[state.filteredCommands.length - 1].id
     }
   },
 
-  prevCommand(loop: boolean): void {
+  prevCommand(): void {
     const selectedIndex = getSelectedIndex()
     if (selectedIndex < state.filteredCommands.length - 1) {
       state.selectedCommandId = state.filteredCommands[selectedIndex + 1].id
-    } else if (loop) {
-      state.selectedCommandId = state.filteredCommands[0].id
     }
   },
 
