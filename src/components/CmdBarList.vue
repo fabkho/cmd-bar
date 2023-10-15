@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import CmdBarGroup from './CmdBarGroup.vue'
-import type { Group } from '../types'
-import { useCmdBarState } from '../useCmdBarState'
 import { useVirtualList } from '@vueuse/core'
 import { computed, type ComputedRef, nextTick, ref, watch, watchEffect } from 'vue'
+import type { Group } from '../types'
+import { useCmdBarState } from '../useCmdBarState'
+import CmdBarGroup from './CmdBarGroup.vue'
 
 const props = defineProps<{
   config: {
@@ -19,10 +19,6 @@ const props = defineProps<{
 
 const labelRef = ref<HTMLElement[] | null>(null) // Create a ref for the label element
 
-const groupedCommands = computed(() => {
-  return useCmdBarState.state.filteredGroupedCommands as Group[]
-})
-
 /**
  * problem: the group header has to be included in the list to calculate the correct height
  * solution: flatten grouped commands, to use with virtual list
@@ -30,11 +26,12 @@ const groupedCommands = computed(() => {
  */
 const visibleItems = computed(() => {
   return useCmdBarState.state.filteredGroupedCommands.flatMap((group) => {
-    return [group.label, group.commands]
+    const groupWithoutCommands = { key: group.key, label: group.label }
+    return [groupWithoutCommands, ...group.commands]
   })
 })
 
-const { containerProps, wrapperProps } = useVirtualList(visibleItems as ComputedRef, {
+const { containerProps, wrapperProps, list } = useVirtualList(visibleItems as ComputedRef, {
   itemHeight: (index: number) => {
     // handle dynamic height for label
     if (typeof visibleItems.value[index] === 'string') {
@@ -42,6 +39,30 @@ const { containerProps, wrapperProps } = useVirtualList(visibleItems as Computed
     }
     return props.config.itemHeightInPixel
   }
+})
+
+/**
+ * remove label from list
+ */
+const groupedCommands = computed(() => {
+  return list.value.reduce((result: Group[], item) => {
+    const groupKey = item.data.key || item.data.group
+
+    // Find an existing group object or create a new one if it doesn't exist
+    const group = result.find((g: Group) => g.key === groupKey)
+    if (!group) {
+      const newGroup = {
+        key: groupKey,
+        label: item.data.label,
+        commands: []
+      } as Group
+      result.push(newGroup)
+    } else if (item.data.id) {
+      group?.commands.push(item.data)
+    }
+
+    return result
+  }, [])
 })
 
 /* set fixed height for container */

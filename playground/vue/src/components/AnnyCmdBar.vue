@@ -55,7 +55,7 @@ const formattedShortcuts = (shortcutString: string) => {
 
 async function fetchUsers() {
   const { data } = await useFetch(
-    'https://dummyjson.com/users?limit=10&select=id,firstName,lastName',
+    'https://dummyjson.com/users?limit=50&select=id,firstName,lastName',
     {
       beforeFetch(ctx) {
         return ctx
@@ -155,7 +155,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <CmdBar :commands="groups" loop>
+  <CmdBar :commands="groups">
     <CmdBar.Dialog :visible="visibility">
       <template #header>
         <div>

@@ -9,19 +9,15 @@ const props = defineProps({
   commands: {
     type: Array as PropType<Group[]>,
     required: true
-  },
-  loop: {
-    type: Boolean as PropType<boolean>,
-    default: false
   }
 })
 
 useKeymap({
   ArrowUp: {
-    action: () => useCmdBarState?.nextCommand(props.loop)
+    action: () => useCmdBarState?.nextCommand()
   },
   ArrowDown: {
-    action: () => useCmdBarState?.prevCommand(props.loop)
+    action: () => useCmdBarState?.prevCommand()
   },
   Enter: {
     action: () => useCmdBarState?.executeCommand()

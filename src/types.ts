@@ -31,8 +31,6 @@ export interface Command {
 }
 export interface Group {
   key: string
-  active?: string
-  inactive?: string
   commands: Command[]
   [key: string]: any
 }
