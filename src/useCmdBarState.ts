@@ -59,7 +59,7 @@ const useCmdBarState = {
     state.selectedCommandId = commandId
   },
 
-  toggleGroup(groupKeys: string, multiSelect: boolean, filter: boolean): void {
+  toggleGroup(groupKeys: string, multiSelect: boolean): void {
     if (state.selectedGroups.has(groupKeys)) {
       state.selectedGroups.delete(groupKeys)
     } else {
@@ -68,7 +68,8 @@ const useCmdBarState = {
       }
       state.selectedGroups.add(groupKeys)
     }
-    if (filter) this.filterGroupedCommands()
+
+    this.filterGroupedCommands()
   },
 
   resetFilter(): void {

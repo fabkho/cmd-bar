@@ -8,10 +8,6 @@ const props = defineProps({
     type: String as PropType<Lowercase<string> | null>,
     default: null
   },
-  autoFilter: {
-    type: Boolean as PropType<boolean>,
-    default: false
-  },
   asCheckbox: {
     type: Boolean as PropType<boolean>,
     default: false
@@ -52,7 +48,7 @@ function toggleGroup(group: string) {
   const defaultChip = document.querySelector(`.filter-chip[data-id="${props.defaultFilterOption}"]`)
 
   if (group !== props.defaultFilterOption) {
-    useCmdBarState?.toggleGroup(group, props.asCheckbox, props.autoFilter)
+    useCmdBarState?.toggleGroup(group, props.asCheckbox)
     emit('filterChange', Array.from(selectedGroups))
 
     // remove selected class from default group
@@ -62,7 +58,7 @@ function toggleGroup(group: string) {
       useCmdBarState?.resetFilter()
     }
   } else {
-    useCmdBarState?.toggleGroup(group, props.asCheckbox, props.autoFilter)
+    useCmdBarState?.toggleGroup(group, props.asCheckbox)
     // remove selected class from all groups
     filterChips.forEach((chip) => {
       chip.classList.remove('filter-chip--selected')

@@ -14,11 +14,6 @@ export default defineNuxtModule<ModuleOptions>({
   // Default configuration options of the Nuxt module
   defaults: {},
   setup(options, nuxt) {
-    console.log('Setup module')
-    // const resolver = createResolver(import.meta.url)
-    //
-    // addImportsDir(resolver.resolve('./runtime/composables'))
-
     nuxt.hook('modules:done', () => {
       if (isNuxt2()) {
         throw new Error('CmdBar module is not compatible with Nuxt 2')
