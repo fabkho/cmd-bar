@@ -66,7 +66,7 @@ async function fetchUsers() {
     return useDefineCommand({
       id: user.id.toString(),
       //
-      leading: './src/assets/icons/user.svg',
+      leading: './src/assets/icons/user_new.svg',
       label: `${user.firstName} ${user.lastName}`,
       action: () => {
         // Define your action here.
@@ -77,30 +77,32 @@ async function fetchUsers() {
 
 const actions = [
   {
-    id: 'new-file',
-    label: 'Add new file',
+    id: 'new-resource',
+    label: 'Create new Resource',
     leading: './src/assets/icons/create.svg',
-    action: () => alert('New file added'),
-    shortcut: 'Ctrl+N'
+    action: () => alert('New Resource created'),
+    shortcut: 'Ctrl+R'
   },
   {
-    id: 'new-folder',
-    label: 'Add new folder',
-    leading: './src/assets/icons/create.svg',
-    action: () => alert('New folder added!'),
-    shortcut: 'Ctrl+F'
+    id: 'new-service',
+    label: 'Add new Service',
+    leading: './src/assets/icons/service_1.svg',
+    action: () => alert('New Service added'),
+    shortcut: 'Ctrl+S'
   },
   {
-    id: 'hashtag',
-    label: 'Add hashtag',
-    leading: './src/assets/icons/create.svg',
-    action: () => alert('Hashtag added!')
+    id: 'open-settings',
+    label: 'Open settings',
+    leading: './src/assets/icons/settings.svg',
+    action: () => alert('Settings opened'),
+    shortcut: 'Ctrl+,'
   },
   {
-    id: 'label',
-    label: 'Add label',
-    leading: './src/assets/icons/create.svg',
-    action: () => alert('Label added!')
+    id: 'open-calendar',
+    label: 'Open calendar',
+    leading: './src/assets/icons/calendar.svg',
+    action: () => alert('Calendar opened'),
+    shortcut: 'Ctrl+C'
   }
 ]
 
@@ -127,7 +129,7 @@ const groups = computed(() =>
         return data.value.users.map((user: Record<string, any>) =>
           useDefineCommand({
             id: user.id.toString(),
-            leading: './src/assets/icons/user.svg',
+            leading: './src/assets/icons/user_new.svg',
             label: `${user.firstName} ${user.lastName}`,
             action: () => {
               // Define your action here.

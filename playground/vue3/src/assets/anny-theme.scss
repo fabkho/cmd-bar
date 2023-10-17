@@ -238,8 +238,8 @@
               height: 24px;
               aspect-ratio: 16/9;
 
-              /* to white */
-              filter: brightness(0) invert(1);
+              /* to grey */
+              filter: brightness(0) invert(0.75);
             }
 
             font-weight: bold;
