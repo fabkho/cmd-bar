@@ -14,8 +14,9 @@ export interface Command {
   id: string
   leading?: string
   label: string
-  groups?: string[]
   action?: () => void
+  group?: string
+  score?: number
   /**
    * Format is based on useMagicKeys.
    * @example
@@ -24,8 +25,6 @@ export interface Command {
    * 'Ctrl+Shift+P'
    */
   shortcut?: string
-  group?: string
-  score?: number
   // matches?: (FuseSortFunctionMatch | FuseSortFunctionMatchList)[]
   [key: string]: any
 }

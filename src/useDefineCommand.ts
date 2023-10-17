@@ -1,5 +1,5 @@
 import type { Command } from './types'
 
-export function useDefineCommand(params: Command): Command {
+export function defineCommand(params: Command): Command {
   return params as Command
 }

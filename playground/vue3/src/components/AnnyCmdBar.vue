@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type Commands, useDefineCommand, CmdBar } from '@cmd-bar/src'
+import { type Commands, defineCommand, CmdBar } from '@cmd-bar/src'
 import { useKeymap } from '@cmd-bar/src/useKeymap'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
 import { computed, onMounted, ref } from 'vue'
@@ -66,7 +66,7 @@ async function fetchUsers() {
     }
   ).json()
   users.value = data.value.users.map((user: Record<string, any>) => {
-    return useDefineCommand({
+    return defineCommand({
       id: user.id.toString(),
       //
       leading: './src/assets/icons/user_new.svg',
@@ -127,7 +127,7 @@ const groups = computed(() =>
         const { data } = await useFetch(`https://dummyjson.com/users/search?q=${q}`, {}).json()
         return data.value.users.map((user: Record<string, any>) =>
           // TODO: change to defineCommand
-          useDefineCommand({
+          defineCommand({
             id: user.id.toString(),
             leading: './src/assets/icons/user_new.svg',
             label: `${user.firstName} ${user.lastName}`,
