@@ -13,7 +13,7 @@ defineSlots<{
 }>()
 
 const emit = defineEmits<{
-  execute: [command: Command]
+  selected: [command: Command]
 }>()
 
 const isSelectedItem = computed(() => {
@@ -27,7 +27,7 @@ const groupIsLoading = computed(() => {
 })
 
 function handleClick(clickedItem: Command) {
-  emit('execute', clickedItem)
+  emit('selected', clickedItem)
   useCmdBarState?.executeCommand()
 }
 </script>

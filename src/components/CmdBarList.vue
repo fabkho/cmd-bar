@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useVirtualList } from '@vueuse/core'
 import { computed, type ComputedRef, nextTick, ref, watch, watchEffect } from 'vue'
+import { Command } from '../types'
 import type { Group } from '../types'
 import { useCmdBarState } from '../useCmdBarState'
 import CmdBarGroup from './CmdBarGroup.vue'
@@ -16,6 +17,10 @@ const props = defineProps<{
 // defineSlots<{
 //   default(props: { command: Command }): any
 // }>()
+
+const emit = defineEmits<{
+  selected: [command: Command]
+}>()
 
 const labelRef = ref<HTMLElement[] | null>(null) // Create a ref for the label element
 
@@ -112,7 +117,7 @@ watch(
         <h2 v-if="group.label && group.commands.length > 0" ref="labelRef" class="group__label">
           {{ group.label }}
         </h2>
-        <CmdBarGroup :group="group">
+        <CmdBarGroup :group="group" @selected="emit('selected', $event)">
           <template v-for="(_, name) in $slots" :key="name" #[name]="slotData">
             <slot :name="name" v-bind="slotData" />
           </template>
