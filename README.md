@@ -30,9 +30,32 @@ yarn add --dev cmd-bar
 npm install --save-dev cmd-bar
 ```
 
-2. Import `cmd-bar` in your vue component to use it. You can find a full example in the [packages/examples](./packages/examples) folder.
+2. Then you can import the `CmdBar` Compound Component in your project.
 ```js
 import { CmdBar } from 'cmd-bar'
+
+<CmdBar :groups="groupedCommands" />
+  <CmdBar.Dialog>
+    <template #header>
+      <CmdBar.Input placeholder="search fo anything />
+    </template>
+    <template #content>
+      <CmdBar.List :config="listConfig">
+          <template #default="{ command }">
+            <div class="leading">
+              <img :src="command.leading" alt="icon" />
+              {{ command.label }}
+            </div>
+            <span v-if="command.shortcut" class="actions">
+              <kbd v-for="shortcut of formattedShortcuts(command.shortcut)" :key="shortcut">
+                {{ shortcut }}
+              </kbd>
+            </span>
+          </template>
+      </CmdBar.List>
+    </template>
+  </CmdBar.Dialog>
+</CmdBar>
 ```
 
 That's it! ✨

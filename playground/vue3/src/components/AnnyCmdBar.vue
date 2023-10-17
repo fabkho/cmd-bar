@@ -161,11 +161,7 @@ onMounted(() => {
     <CmdBar.Dialog :visible="visibility">
       <template #header>
         <div>
-          <CmdBar.Input
-            :placeholder="'search fo anything'"
-            :fuse="fuseOptions"
-            :icon="'../assets/icons/search.svg'"
-          >
+          <CmdBar.Input :placeholder="'search fo anything'" :fuse="fuseOptions">
             <template #leading>
               <img src="../assets/icons/search.svg" alt="search" />
             </template>
