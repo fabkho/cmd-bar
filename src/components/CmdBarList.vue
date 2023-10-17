@@ -8,7 +8,7 @@ import CmdBarGroup from './CmdBarGroup.vue'
 
 const props = defineProps<{
   config: {
-    itemHeightInPixel: number
+    itemHeightInPixel: number | Record<string, number>
     containerHeight: string
     groupLabelHeightInPixel?: number
   }
@@ -38,11 +38,32 @@ const visibleItems = computed(() => {
 
 const { containerProps, wrapperProps, list } = useVirtualList(visibleItems as ComputedRef, {
   itemHeight: (index: number) => {
-    // handle dynamic height for label
-    if (typeof visibleItems.value[index] === 'string') {
+    const command = visibleItems.value[index] as Command | string
+
+    // set height for group header
+    if (typeof command === 'string') {
       return props.config.groupLabelHeightInPixel ?? 0
     }
-    return props.config.itemHeightInPixel
+
+    // set fixed height for item
+    if (typeof props.config.itemHeightInPixel === 'number') {
+      return props.config.itemHeightInPixel
+    }
+
+    // set height for item based on group
+    const group = command?.group
+    if (!group) {
+      // command.group is not set yet (e.g. on initial load)
+      return 0
+    }
+
+    if (!props.config.itemHeightInPixel[group]) {
+      console.error(
+        `No height defined for group "${group}". Please define a height for this group in the config for the list component.`
+      )
+    }
+
+    return props.config.itemHeightInPixel[group]
   }
 })
 

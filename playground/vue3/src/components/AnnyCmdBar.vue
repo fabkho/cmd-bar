@@ -11,7 +11,10 @@ const keys = useMagicKeys()
 const cmdK = keys['Meta+k']
 
 const listConfig = {
-  itemHeightInPixel: 48,
+  itemHeightInPixel: {
+    actions: 48,
+    users: 48
+  },
   containerHeight: '21rem',
   groupLabelHeightInPixel: 20
 }
@@ -121,12 +124,9 @@ const groups = computed(() =>
         if (!q) {
           return []
         }
-        const { data } = await useFetch(`https://dummyjson.com/users/search?q=${q}`, {
-          beforeFetch(ctx) {
-            return ctx
-          }
-        }).json()
+        const { data } = await useFetch(`https://dummyjson.com/users/search?q=${q}`, {}).json()
         return data.value.users.map((user: Record<string, any>) =>
+          // TODO: change to defineCommand
           useDefineCommand({
             id: user.id.toString(),
             leading: './src/assets/icons/user_new.svg',
