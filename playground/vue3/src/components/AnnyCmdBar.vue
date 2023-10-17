@@ -126,7 +126,6 @@ const groups = computed(() =>
         }
         const { data } = await useFetch(`https://dummyjson.com/users/search?q=${q}`, {}).json()
         return data.value.users.map((user: Record<string, any>) =>
-          // TODO: change to defineCommand
           defineCommand({
             id: user.id.toString(),
             leading: './src/assets/icons/user_new.svg',
