@@ -10,6 +10,7 @@
   "ignore": [
     "@cmd-bar/docs",
     "@cmd-bar/anny",
+    "nuxt",
     "vue3",
     "nuxt3"
   ]
