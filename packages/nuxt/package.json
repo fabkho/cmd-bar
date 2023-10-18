@@ -1,6 +1,6 @@
 {
-  "name": "nuxt",
-  "version": "1.0.0",
+  "name": "@cmd-bar/nuxt",
+  "version": "1.0.1",
   "description": "Nuxt-module wrapper for cmd-bar",
   "repository": "fabkho/cmd-bar/packages/nuxt",
   "license": "MIT",
@@ -28,6 +28,7 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
+    "@changesets/cli": "^2.26.2",
     "@nuxt/kit": "^3.7.4",
     "cmd-bar": "workspace:^"
   },
@@ -40,7 +41,7 @@
     "@types/node": "^18.18.1",
     "changelogen": "^0.5.5",
     "eslint": "^8.50.0",
-    "nuxt": "^1.0.0",
+    "nuxt": "^3.7.4",
     "vitest": "^0.33.0"
   }
 }
