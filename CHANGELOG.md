@@ -1,5 +1,25 @@
 # cmd-bar
 
+## 0.5.0
+
+### Minor Changes
+
+- ### CmdBarList
+
+  - emit selected event up to parent
+  - allow different item heights per group
+
+  ## nuxt module
+
+  - cleanup
+
+  ## misc
+
+  - renamed useDefineCommand to defineCommand
+  - cleanup
+  - style improvements
+  - type improvements
+
 ## 0.4.0
 
 ### Minor Changes
