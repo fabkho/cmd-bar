@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type Commands, useDefineCommand, CmdBar, useKeymap } from 'cmd-bar'
+import { type Commands, defineCommand, CmdBar, useKeymap } from 'cmd-bar'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
 import { computed, onMounted, ref } from 'vue'
 import LoadingSpinner from './Spinner.vue'
@@ -62,7 +62,7 @@ async function fetchUsers() {
     }
   ).json()
   users.value = data.value.users.map((user: Record<string, any>) => {
-    return useDefineCommand({
+    return defineCommand({
       id: user.id.toString(),
       //
       leading: '../assets/icons/user.svg',
@@ -124,7 +124,7 @@ const groups = computed(() =>
           }
         }).json()
         return data.value.users.map((user: Record<string, any>) =>
-          useDefineCommand({
+          defineCommand({
             id: user.id.toString(),
             leading: '../assets/icons/user.svg',
             label: `${user.firstName} ${user.lastName}`,

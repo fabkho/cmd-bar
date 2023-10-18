@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
-import { CmdBar, useDefineCommand, type Commands } from 'cmd-bar'
+import { CmdBar, defineCommand, type Commands } from 'cmd-bar'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
 
 // const cmdBar = ref<typeof CmdBar | null>(null)
@@ -28,7 +28,7 @@ async function fetchUsers() {
     }
   ).json()
   users.value = data.value.users.map((user: Record<string, any>) => {
-    return useDefineCommand({
+    return defineCommand({
       id: user.id.toString(),
       leading: './src/assets/icons/user.svg',
       label: `${user.firstName} ${user.lastName}`,
@@ -158,7 +158,7 @@ const groups = computed(() =>
         }).json()
         loading.value = false
         return data.value.map((user: Record<string, any>) =>
-          useDefineCommand({
+          defineCommand({
             id: user.id.toString(),
             leading: './src/assets/icons/user.svg',
             label: user.name,
