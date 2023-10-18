@@ -64,11 +64,11 @@ That's it! ✨
 ## Documentation
 
 ### Define your commands
-To define your commands, you can use the `useDefineCommand` composable. Which is basically just a wrapper to provide type safety. Here is an example:
+To define your commands, you can use the `defineCommand` composable. Which is basically just a wrapper to provide type safety. Here is an example:
 ``` ts
 function transformUserDataToCommand(userData: Record<string, any>[]): Command[] {
   return userData.map((user: Record<string, any>) =>
-    useDefineCommand({
+    defineCommand({
       id: user.id.toString(),
       leading: './src/assets/icons/user.svg',
       title: user.name,

@@ -1,6 +1,5 @@
 <template>
   <div>
-    Nuxt module playground!
     <AnnyCmdBar />
   </div>
 </template>
