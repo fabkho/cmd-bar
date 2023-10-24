@@ -10,12 +10,14 @@
 
 ## Features
 
-- **Unstyled** - You can style it as you want
-- **Extensible** - You can add your own components
-- **Accessible** - You can use it with your keyboard
-- **Virtualized** - It uses [useVirtualList](https://vueuse.org/core/useVirtualList/#usevirtuallist)
+- 🎨 **Unstyled** - You can style it as you want
+- 🧩 **Extensible** - You can add your own components
+- ⌨️ **Accessible** - You can use it with your keyboard
+- 🧙‍ **Virtualized** - It uses [useVirtualList](https://vueuse.org/core/useVirtualList/#usevirtuallist)
 
-## Setup
+[📖 &nbsp;Read more](https://cmd-bar.nuxt.space)
+
+## Quick Setup
 
 1. Add `cmd-bar` dependency to your project
 
@@ -71,6 +73,8 @@ That's it! ✨
 [license-src]: https://img.shields.io/npm/l/cmd-bar.svg?style=flat&colorA=18181B&colorB=28CF8D
 [license-href]: https://npmjs.com/package/cmd-bar
 
-[vue-src]: https://img.shields.io/badge/vue-3.x-4fc08d.svg?style=flat&colorA=18181B&colorB=28CF8D
+[vue-src]: https://img.shields.io/badge/Vue-18181B?&logo=vue.js
 [vue-href]: https://vuejs.org
+
+
 
