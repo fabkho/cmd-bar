@@ -1,19 +1,18 @@
 # CmdBarVue WIP
 
+![screenshot of commandbar](./screenshot.png)
+
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
 [![License][license-src]][license-href]
 [![Vue][vue-src]][vue-href]
 
-![screenshot of commandbar](./screenshot.png)
-
-
 ## Features
 
-- 🎨 **Unstyled** - You can style it as you want
-- 🧩 **Extensible** - You can add your own components
-- ⌨️ **Accessible** - You can use it with your keyboard
-- 🧙‍ **Virtualized** - It uses [useVirtualList](https://vueuse.org/core/useVirtualList/#usevirtuallist)
+- 🎨&nbsp; **Unstyled** - No styles included, you can style it as you want
+- 🧩&nbsp; **Extensible** - You can add your own Modal and components
+- ⌨️&nbsp; **Key bindings** - Usable with just a keyboard
+- 🧙‍&nbsp; **Virtualized** - It uses [useVirtualList](https://vueuse.org/core/useVirtualList/#usevirtuallist)
 
 [📖 &nbsp;Read more](https://cmd-bar.nuxt.space)
 
@@ -61,6 +60,8 @@ import { CmdBar } from 'cmd-bar'
 ```
 
 That's it! ✨
+
+[📖 &nbsp;Read more](https://cmd-bar.nuxt.space/introduction/getting-started)
 
 
 <!-- Badges -->

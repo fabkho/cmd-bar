@@ -1,11 +1,16 @@
 export default defineAppConfig({
   docus: {
-    title: 'Docus',
-    description: 'The best place to start your documentation.',
-    image: 'https://user-images.githubusercontent.com/904724/185365452-87b7ca7b-6030-4813-a2db-5e65c785bf88.png',
+    title: 'cmd-bar',
+    description: 'A Command Bar for Vue.js',
+    image:
+      'https://user-images.githubusercontent.com/904724/185365452-87b7ca7b-6030-4813-a2db-5e65c785bf88.png',
     socials: {
-      twitter: 'nuxt_js',
-      github: 'nuxt-themes/docus',
+      github: 'fabkho/cmd-bar',
+      vue: {
+        label: 'Vue',
+        icon: 'simple-icons:vuedotjs',
+        href: 'https://vuejs.org'
+      },
       nuxt: {
         label: 'Nuxt',
         icon: 'simple-icons:nuxtdotjs',
@@ -15,8 +20,8 @@ export default defineAppConfig({
     github: {
       dir: '.starters/default/content',
       branch: 'main',
-      repo: 'docus',
-      owner: 'nuxt-themes',
+      repo: 'cmd-bar',
+      owner: 'fabkho',
       edit: true
     },
     aside: {
