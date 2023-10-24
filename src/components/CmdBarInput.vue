@@ -48,6 +48,7 @@ function handleInput(e: Event): void {
 
   useCmdBarState?.updateQuery(input?.value, options)
 
+  // TODO: not needed?
   emit('input', event)
   emit('update:modelValue', input?.value)
 }
