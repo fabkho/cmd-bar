@@ -3,10 +3,10 @@ export type State = {
   selectedGroups: Set<string>
   parentCommandId: string | null
   query: string
-  commands: Commands
+  commands: Command[]
   groupedCommands: Group[]
   filteredGroupedCommands: Group[]
-  filteredCommands: Commands
+  filteredCommands: Command[]
   groupLoadingStates: Record<string, boolean>
 }
 
@@ -34,8 +34,15 @@ export interface Group {
   [key: string]: any
 }
 
-export type CommandNode = Command & {
-  children?: CommandNode[]
+export interface NavOperations {
+  next: () => void
+  prev: () => void
+  execute: () => void
 }
 
-export type Commands = CommandNode[]
+export interface ShortcutOptions {
+  key: string
+  action?: () => void
+  autoRepeat?: boolean
+  override?: boolean
+}

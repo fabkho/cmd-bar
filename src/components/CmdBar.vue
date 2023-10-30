@@ -12,17 +12,23 @@ const props = defineProps({
   }
 })
 
-useKeymap({
-  ArrowUp: {
-    action: () => useCmdBarState?.nextCommand()
+useKeymap((nav) => [
+  {
+    key: 'ArrowUp',
+    action: () => nav.next(),
+    autoRepeat: true
   },
-  ArrowDown: {
-    action: () => useCmdBarState?.prevCommand()
+  {
+    key: 'ArrowDown',
+    action: () => nav.prev(),
+    autoRepeat: true
   },
-  Enter: {
-    action: () => useCmdBarState?.executeCommand()
+  {
+    key: 'Enter',
+    action: () => nav.execute(),
+    autoRepeat: true
   }
-}).addKeyBindingsFromCommands(props.commands)
+]).addKeyBindingsFromCommands(props.commands)
 
 watch(
   () => props.commands,

@@ -50,7 +50,7 @@ const vClickOutside = {
     }
     document.body.addEventListener('click', el.__ClickOutsideHandler__)
   },
-  unmount(el: any) {
+  unmounted(el: any) {
     document.body.removeEventListener('click', el.__ClickOutsideHandler__)
   }
 }

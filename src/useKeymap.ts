@@ -1,32 +1,36 @@
+import { useCmdBarState } from './useCmdBarState'
 import { ref, onBeforeUnmount, onMounted } from 'vue'
 import { useMagicKeys, whenever } from '@vueuse/core'
-import { Group } from './types'
+import { Group, NavOperations, ShortcutOptions } from './types'
 
-type KeyAction = () => void
+type ShortcutsSetup = (nav: NavOperations) => Array<ShortcutOptions>
 
-type Keymap = Record<string, { action: KeyAction; override?: boolean }>
-
-function createKeymap(initialKeymap: Keymap = {}) {
-  const keymap = ref<Keymap>(initialKeymap)
+function createKeymap() {
+  const keymap = ref<Record<string, ShortcutOptions>>({})
   const keys = useMagicKeys()
 
-  const registerKeyBinding = (shortcut: string, action: KeyAction, override = true) => {
-    if (shortcut.includes('+')) {
-      const sh = keys[shortcut]
-      if (override || !keymap.value[shortcut] || keymap.value[shortcut].override) {
+  const registerKeyBinding = (shortcut: ShortcutOptions) => {
+    const { key, action, override = true, autoRepeat = false } = shortcut
+
+    if (key.includes('+')) {
+      const sh = keys[key]
+      if (action && (override || !keymap.value[key] || keymap.value[key].override)) {
         whenever(sh, action)
       }
     } else {
-      if (override || !keymap.value[shortcut] || keymap.value[shortcut].override) {
-        keymap.value[shortcut] = { action, override }
+      if (action && (override || !keymap.value[key] || keymap.value[key].override)) {
+        keymap.value[key] = { key, action, autoRepeat, override }
       }
     }
   }
 
-  // Register key bindings from the provided initialKeymap
-  Object.entries(initialKeymap).forEach(([shortcut, action]) => {
-    registerKeyBinding(shortcut, action.action, action?.override)
-  })
+  // /* Register key bindings from the provided initialKeymap */
+  // initialKeymap.forEach((shortcut) => {
+  //   if (shortcut.key && shortcut.action) {
+  //     registerKeyBinding(shortcut)
+  //   }
+  // })
+
   const removeKeyBinding = (keys: string) => {
     delete keymap.value[keys]
   }
@@ -34,6 +38,10 @@ function createKeymap(initialKeymap: Keymap = {}) {
   const handleKeydown = (event: KeyboardEvent) => {
     const binding = keymap.value[event.key]
     if (binding && binding.action) {
+      if (!binding.autoRepeat && event.repeat) {
+        // If autoRepeat is false and the event is a repeat, do nothing.
+        return
+      }
       binding.action()
     }
   }
@@ -46,11 +54,24 @@ function createKeymap(initialKeymap: Keymap = {}) {
     window.removeEventListener('keydown', handleKeydown)
   })
 
-  return { handleKeyBinding: registerKeyBinding, removeKeyBinding, keymap }
+  return { registerKeyBinding, removeKeyBinding, keymap }
 }
 
-export function useKeymap(initialKeymap: Keymap = {}) {
-  const keymap = createKeymap(initialKeymap)
+export function useKeymap(fn: ShortcutsSetup) {
+  const nav = {
+    next: () => useCmdBarState.nextCommand(),
+    prev: () => useCmdBarState.prevCommand(),
+    execute: () => useCmdBarState.executeCommand()
+  }
+
+  const { registerKeyBinding } = createKeymap()
+  const shortcuts = fn(nav)
+
+  shortcuts.forEach((shortcut) => {
+    if (shortcut.key && shortcut.action) {
+      registerKeyBinding(shortcut)
+    }
+  })
 
   const addKeyBindingsFromCommands = (groups: Group[]) => {
     groups.forEach((group) => {
@@ -58,7 +79,11 @@ export function useKeymap(initialKeymap: Keymap = {}) {
         if (command.shortcut) {
           const action = command.action
           if (action) {
-            keymap.handleKeyBinding(command.shortcut, action)
+            const shortcut: ShortcutOptions = {
+              key: command.shortcut,
+              action
+            }
+            registerKeyBinding(shortcut)
           }
         }
       })
@@ -66,7 +91,6 @@ export function useKeymap(initialKeymap: Keymap = {}) {
   }
 
   return {
-    ...keymap,
     addKeyBindingsFromCommands
   }
 }

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { type Commands, defineCommand, CmdBar } from '@cmd-bar/src'
+import Skeleton from '@cmd-bar/playground/vue3/src/components/Skeleton.vue'
+import { type Command, defineCommand, CmdBar } from '@cmd-bar/src'
 import { useKeymap } from '@cmd-bar/src/useKeymap'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
 import { computed, onMounted, ref } from 'vue'
-import LoadingSpinner from './Spinner.vue'
 
-const users = ref<Commands>([])
+const users = ref<Command[]>([])
 const visibility = ref(false)
 const keys = useMagicKeys()
 const cmdK = keys['Meta+k']
@@ -19,18 +19,19 @@ const listConfig = {
   groupLabelHeightInPixel: 20
 }
 
-useKeymap({
-  ArrowUp: {
-    action: () => console.log('ArrowUp'),
-    override: false // Explicitly set override to false
-  },
-  ArrowDown: {
-    action: () => console.log('ArrowDown'),
-    override: false // Explicitly set override to false
-  },
-  Enter: {
-    action: () => console.log('Enter')
-  }
+useKeymap((nav) => {
+  return [
+    {
+      key: 'ArrowRight',
+      action: () => nav.prev(),
+      autoRepeat: false
+    },
+    {
+      key: 'ArrowLeft',
+      action: () => nav.next(),
+      autoRepeat: false
+    }
+  ]
 })
 
 const formattedShortcuts = (shortcutString: string) => {
@@ -106,6 +107,12 @@ const actions = [
     leading: './src/assets/icons/calendar.svg',
     action: () => alert('Calendar opened'),
     shortcut: 'Ctrl+C'
+  },
+  {
+    id: 'open-presentation',
+    label: 'Open presentation',
+    leading: './src/assets/icons/presentation.svg',
+    action: () => (window.location.href = 'http://localhost:3030/18')
   }
 ]
 
@@ -183,7 +190,7 @@ onMounted(() => {
             </span>
           </template>
           <template #loading>
-            <LoadingSpinner :size="30" color="grey" />
+            <Skeleton v-for="index in 5" :key="index" />
           </template>
         </CmdBar.List>
       </template>
