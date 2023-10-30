@@ -13,9 +13,6 @@
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
     "baseUrl": "./",
-    "paths": {
-      "@/*": ["./*"]
-    }
   },
   "include": [
     "src/**/*.ts",
