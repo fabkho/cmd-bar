@@ -1,7 +1,7 @@
 import { useDebounceFn } from '@vueuse/core'
 import { useFuse, UseFuseOptions } from '@vueuse/integrations/useFuse'
 import { ComputedRef, reactive, readonly, ref, watch } from 'vue'
-import type { Commands, Group, State } from './types'
+import type { Command, Group, State } from './types'
 import { findNodeById } from './utils'
 
 const state = reactive<State>({
@@ -9,10 +9,10 @@ const state = reactive<State>({
   selectedGroups: new Set<string>(),
   parentCommandId: null,
   query: '',
-  commands: [] as Commands,
+  commands: [] as Command[],
   groupedCommands: [] as Group[],
   filteredGroupedCommands: [] as Group[],
-  filteredCommands: [] as Commands,
+  filteredCommands: [] as Command[],
   groupLoadingStates: {} as Record<string, boolean>
 })
 const useCmdBarState = {
@@ -162,7 +162,7 @@ const fuzzySearch = (
         return result.matches?.map((match) => group.commands[match.refIndex as number])
       })
 
-    state.filteredGroupedCommands[index].commands = (commands as Commands) ?? []
+    state.filteredGroupedCommands[index].commands = (commands as Command[]) ?? []
   })
 }
 
