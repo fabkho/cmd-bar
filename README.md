@@ -1,7 +1,6 @@
 # CmdBarVue WIP
 
-<img src="/public/cmd-bar.gif" width="490" height="276"/>
-
+![Preview](./public/cmd-bar.jpg)
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
