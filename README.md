@@ -63,6 +63,7 @@ That's it! ✨
 
 [📖 &nbsp;Read more](https://cmd-bar.nuxt.space/introduction/getting-started)
 
+Props to [xiaoluoboding/vue-command-palette](https://github.com/xiaoluoboding/vue-command-palette)  and [CommandPalette - Nuxt UI](https://ui.nuxt.com/navigation/command-palette), for the inspiration.
 
 <!-- Badges -->
 [npm-version-src]: https://img.shields.io/npm/v/cmd-bar/latest.svg?style=flat&colorA=18181B&colorB=28CF8D
