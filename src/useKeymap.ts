@@ -6,7 +6,7 @@ import { Group, NavOperations, ShortcutOptions } from './types'
 type ShortcutsSetup = (nav: NavOperations) => Array<ShortcutOptions>
 
 function createKeymap() {
-  const keymap = ref<Record<string, ShortcutOptions>>({})
+  const keymap = ref<Array<ShortcutOptions>>([])
   const keys = useMagicKeys()
 
   const registerKeyBinding = (shortcut: ShortcutOptions) => {
@@ -14,34 +14,30 @@ function createKeymap() {
 
     if (key.includes('+')) {
       const sh = keys[key]
-      if (override || !keymap.value[key] || keymap.value[key].override) {
+      if (override || !keymap.value.some((binding) => binding.key === key)) {
         whenever(sh, action)
       }
     } else {
-      if (override || !keymap.value[key] || keymap.value[key].override) {
-        keymap.value[key] = { key, action, autoRepeat, override }
+      if (override || !keymap.value.some((binding) => binding.key === key)) {
+        keymap.value.push({ key, action, autoRepeat, override })
       }
     }
   }
 
-  // /* Register key bindings from the provided initialKeymap */
-  // initialKeymap.forEach((shortcut) => {
-  //   if (shortcut.key && shortcut.action) {
-  //     registerKeyBinding(shortcut)
-  //   }
-  // })
-
-  const removeKeyBinding = (keys: string) => {
-    delete keymap.value[keys]
+  const removeKeyBinding = (key: string) => {
+    const index = keymap.value.findIndex((binding) => binding.key === key)
+    if (index !== -1) {
+      keymap.value.splice(index, 1)
+    }
   }
 
   const handleKeydown = (event: KeyboardEvent) => {
-    const binding = keymap.value[event.key]
+    const binding = keymap.value.find((b) => b.key === event.key)
     if (binding && binding.action) {
       if (!binding.autoRepeat && event.repeat) {
-        // If autoRepeat is false and the event is a repeat, do nothing.
         return
       }
+      console.log('handleKeydown', keymap.value, binding.key)
       binding.action()
     }
   }
