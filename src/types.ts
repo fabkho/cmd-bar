@@ -42,7 +42,7 @@ export interface NavOperations {
 
 export interface ShortcutOptions {
   key: string
-  action?: () => void
+  action: () => void
   autoRepeat?: boolean
   override?: boolean
 }

@@ -10,15 +10,15 @@ function createKeymap() {
   const keys = useMagicKeys()
 
   const registerKeyBinding = (shortcut: ShortcutOptions) => {
-    const { key, action, override = true, autoRepeat = false } = shortcut
+    const { key, action, override = false, autoRepeat = false } = shortcut
 
     if (key.includes('+')) {
       const sh = keys[key]
-      if (action && (override || !keymap.value[key] || keymap.value[key].override)) {
+      if (override || !keymap.value[key] || keymap.value[key].override) {
         whenever(sh, action)
       }
     } else {
-      if (action && (override || !keymap.value[key] || keymap.value[key].override)) {
+      if (override || !keymap.value[key] || keymap.value[key].override) {
         keymap.value[key] = { key, action, autoRepeat, override }
       }
     }
@@ -68,7 +68,7 @@ export function useKeymap(fn: ShortcutsSetup) {
   const shortcuts = fn(nav)
 
   shortcuts.forEach((shortcut) => {
-    if (shortcut.key && shortcut.action) {
+    if (shortcut.key) {
       registerKeyBinding(shortcut)
     }
   })
@@ -78,13 +78,11 @@ export function useKeymap(fn: ShortcutsSetup) {
       group.commands.forEach((command) => {
         if (command.shortcut) {
           const action = command.action
-          if (action) {
-            const shortcut: ShortcutOptions = {
-              key: command.shortcut,
-              action
-            }
-            registerKeyBinding(shortcut)
+          const shortcut: ShortcutOptions = {
+            key: command.shortcut,
+            action
           }
+          registerKeyBinding(shortcut)
         }
       })
     })
