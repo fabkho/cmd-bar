@@ -1,6 +1,6 @@
 # CmdBarVue WIP
 
-![screenshot of commandbar](./screenshot.png)
+![Preview](public/preview.png)
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
