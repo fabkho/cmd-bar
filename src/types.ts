@@ -14,7 +14,7 @@ export interface Command {
   id: string
   leading?: string
   label: string
-  action?: () => void
+  action: () => void
   group?: string
   score?: number
   /**
