@@ -175,9 +175,6 @@ const debouncedSearch = useDebounceFn(async (query, groups) => {
     groups.map(async (group: Group) => {
       state.groupLoadingStates[group.key] = true
 
-      // set timpout to simulate async search 5 sec
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-
       const commands = await group.search(query)
       const groupIndex = state.filteredGroupedCommands.findIndex(
         (filteredGroup) => filteredGroup.key === group.key
