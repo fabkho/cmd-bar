@@ -107,12 +107,6 @@ const actions = [
     leading: './src/assets/icons/calendar.svg',
     action: () => alert('Calendar opened'),
     shortcut: 'Ctrl+C'
-  },
-  {
-    id: 'open-presentation',
-    label: 'Open presentation',
-    leading: './src/assets/icons/presentation.svg',
-    action: () => (window.location.href = 'http://localhost:3030/18')
   }
 ]
 

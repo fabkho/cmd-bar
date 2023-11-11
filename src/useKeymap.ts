@@ -12,6 +12,9 @@ function createKeymap() {
   const registerKeyBinding = (shortcut: ShortcutOptions) => {
     const { key, action, override = false, autoRepeat = false } = shortcut
 
+    //TODO: if binding is already registered, check is override is true
+    // if not, throw error
+    // rename to isOverwritable
     if (key.includes('+')) {
       const sh = keys[key]
       if (override || !keymap.value.some((binding) => binding.key === key)) {
@@ -37,7 +40,6 @@ function createKeymap() {
       if (!binding.autoRepeat && event.repeat) {
         return
       }
-      console.log('handleKeydown', keymap.value, binding.key)
       binding.action()
     }
   }
