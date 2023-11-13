@@ -76,6 +76,10 @@ onMounted(() => {
 
 // this is needed to update the line position when the cmd bar is opened
 watchEffect(() => {
+  // check if we are in browser for SSR
+  const isBrowser = typeof window !== 'undefined'
+  if (!isBrowser) return null
+
   const resizeObserver = new ResizeObserver(() => {
     setLineStyle()
   })
