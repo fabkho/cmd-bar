@@ -1,5 +1,12 @@
 # cmd-bar
 
+## 0.6.1
+
+### Patch Changes
+
+- 🧹 fix:
+  - ResizeObserver is not defined on SSR
+
 ## 0.6.0
 
 ### Minor Changes
