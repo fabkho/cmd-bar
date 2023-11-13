@@ -1,5 +1,17 @@
 # cmd-bar
 
+## 0.6.0
+
+### Minor Changes
+
+- ✨ feature:
+
+  - updated filter component with the possibility to use an indicator
+
+  🧹 bugs:
+
+  - useKeymap now uses the correct types
+
 ## 0.5.0
 
 ### Minor Changes
