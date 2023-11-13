@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useKeymap } from '../useKeymap'
-import type { PropType } from 'vue'
+import { type PropType, onMounted, nextTick, ref, watchEffect } from 'vue'
 import { useCmdBarState } from '../useCmdBarState'
 
 const props = defineProps({
@@ -23,6 +23,11 @@ const groups = useCmdBarState?.state.groupedCommands.map((group) => group.key)
 const groupSet = new Set(
   props.defaultFilterOption ? [props.defaultFilterOption, ...groups] : groups
 )
+
+const lineStyle = ref({
+  transform: 'translateX(0)',
+  width: '0'
+})
 
 // add space as shortcut to select currently focused group
 useKeymap(() => [
@@ -50,50 +55,80 @@ function isSelected(group: string) {
 }
 
 function toggleGroup(group: string) {
-  const filterChips = document.querySelectorAll('.filter-chip')
-  const defaultChip = document.querySelector(`.filter-chip[data-id="${props.defaultFilterOption}"]`)
-
   if (group !== props.defaultFilterOption) {
     useCmdBarState?.toggleGroup(group, props.asCheckbox)
     emit('filterChange', Array.from(selectedGroups))
 
-    // remove selected class from default group
-    if (selectedGroups.size > 0) {
-      defaultChip?.classList.remove('filter-chip--selected')
-    } else {
+    if (selectedGroups.size === 0) {
       useCmdBarState?.resetFilter()
     }
+    setLineStyle()
   } else {
     useCmdBarState?.toggleGroup(group, props.asCheckbox)
-    // remove selected class from all groups
-    filterChips.forEach((chip) => {
-      chip.classList.remove('filter-chip--selected')
-    })
-    // add selected class to default "All" group
-    const defaultChip = document.querySelector(
-      `.filter-chip[data-id="${props.defaultFilterOption}"]`
-    )
-    defaultChip?.classList.add('filter-chip--selected')
-
+    setLineStyle()
     useCmdBarState?.resetFilter()
   }
+}
+
+onMounted(() => {
+  toggleGroup(props?.defaultFilterOption as string)
+})
+
+// this is needed to update the line position when the cmd bar is opened
+watchEffect(() => {
+  const resizeObserver = new ResizeObserver(() => {
+    setLineStyle()
+  })
+  nextTick(() => {
+    const filter = document.querySelector('.filter')
+    console.log(filter)
+    if (filter) {
+      resizeObserver.observe(filter)
+    }
+  })
+})
+
+/**
+ * Update line position and size
+ */
+async function setLineStyle() {
+  console.log('setLineStyle')
+  /**
+   * Wait until next tick to make sure that refs are set
+   */
+  await nextTick(() => {
+    // get aria-selected element
+    const tabElement = document.querySelector('.filter-chip[aria-selected="true"]') as HTMLElement
+    if (!tabElement) return
+    const width = tabElement.clientWidth
+    const offsetLeft = tabElement.offsetLeft
+    console.log(width, offsetLeft)
+    lineStyle.value = {
+      transform: `translateX(${offsetLeft}px)`,
+      width: width + 'px'
+    }
+  })
 }
 </script>
 
 <template>
-  <div class="filter" role="tablist">
-    <button
-      v-for="group in groupSet"
-      :key="group"
-      :data-id="group"
-      class="filter-chip"
-      :aria-selected="isSelected(group)"
-      role="tab"
-      @click="toggleGroup(group)"
-      tabindex="0"
-    >
-      {{ group }}
-    </button>
+  <div class="filter">
+    <div class="filter-list" role="tablist">
+      <button
+        v-for="group in groupSet"
+        :key="group"
+        :data-id="group"
+        class="filter-chip"
+        :aria-selected="isSelected(group)"
+        role="tab"
+        @click="toggleGroup(group)"
+        tabindex="0"
+      >
+        {{ group }}
+      </button>
+    </div>
+    <!-- Bottom line -->
+    <div :style="lineStyle" class="filter-line" />
   </div>
 </template>
 
