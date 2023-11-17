@@ -12,7 +12,7 @@ export type State = {
 
 export interface Command {
   id: string
-  leading?: string
+  leading?: string | []
   label: string
   action: () => void
   group?: string
