@@ -1,4 +1,4 @@
-# CmdBarVue WIP
+# cmd-bar wip
 
 ![Preview](./public/cmd-bar.png)
 
