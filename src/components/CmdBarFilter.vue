@@ -85,7 +85,6 @@ watchEffect(() => {
   })
   nextTick(() => {
     const filter = document.querySelector('.filter')
-    console.log(filter)
     if (filter) {
       resizeObserver.observe(filter)
     }
@@ -96,7 +95,6 @@ watchEffect(() => {
  * Update line position and size
  */
 async function setLineStyle() {
-  console.log('setLineStyle')
   /**
    * Wait until next tick to make sure that refs are set
    */
@@ -106,7 +104,6 @@ async function setLineStyle() {
     if (!tabElement) return
     const width = tabElement.clientWidth
     const offsetLeft = tabElement.offsetLeft
-    console.log(width, offsetLeft)
     lineStyle.value = {
       transform: `translateX(${offsetLeft}px)`,
       width: width + 'px'
