@@ -15,6 +15,12 @@ const emit = defineEmits<{
   clicked: [command: Command]
 }>()
 
+// causes type error!?!?!?
+// defineSlots<{
+//   default(props: { command: Command }): any
+//   loading(props: { group: Group }): any
+// }>()
+
 const isSelectedItem = computed(() => {
   return (command: Command) => {
     const isSelected = useCmdBarState?.state.selectedCommandId === command.id

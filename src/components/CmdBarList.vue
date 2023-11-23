@@ -14,10 +14,11 @@ const props = defineProps<{
   }
 }>()
 
-defineSlots<{
-  default(props: { command: Command }): any
-  loading(props: { group: Group }): any
-}>()
+// causes type error!?!?!?
+// defineSlots<{
+//   default(props: { command: Command }): any
+//   loading(props: { group: Group }): any
+// }>()
 
 const labelRef = ref<HTMLElement[] | null>(null) // Create a ref for the label element
 
