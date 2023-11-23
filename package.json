@@ -1,6 +1,6 @@
 {
   "name": "cmd-bar",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "license": "MIT",
   "packageManager": "pnpm@8.6.12",
   "repository": "fabkho/cmd-bar",

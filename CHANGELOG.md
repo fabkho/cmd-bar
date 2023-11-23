@@ -1,5 +1,12 @@
 # cmd-bar
 
+## 0.7.3
+
+### Patch Changes
+
+- 🐞 Bug fixes
+  - initialize selected command event in store
+
 ## 0.7.2
 
 ### Patch Changes
