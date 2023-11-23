@@ -4,6 +4,7 @@ import CmdBarList from './components/CmdBarList.vue'
 import CmdBarFilter from './components/CmdBarFilter.vue'
 import CmdBarDialog from './components/CmdBarDialog.vue'
 import { defineCommand } from './useDefineCommand'
+import { useCmdBarEvent } from './useCmdBarEvent'
 import { useKeymap } from './useKeymap'
 
 const components = Object.assign(CmdBar, {
@@ -14,6 +15,6 @@ const components = Object.assign(CmdBar, {
   Root: CmdBar
 })
 
-export { defineCommand, useKeymap }
+export { defineCommand, useKeymap, useCmdBarEvent }
 export * from './types'
 export { components as CmdBar }
