@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useCmdBarEvent } from '../useCmdBarEvent'
 import type { Command, Group } from '../types'
 import { useCmdBarState } from '../useCmdBarState'
 import { computed } from 'vue'
@@ -7,18 +8,21 @@ const props = defineProps<{
   group: Group
 }>()
 
-defineSlots<{
-  default(props: { command: Command }): any
-  loading(props: { group: Group }): any
-}>()
+const { emitter } = useCmdBarEvent()
 
 const emit = defineEmits<{
   selected: [command: Command]
+  clicked: [command: Command]
 }>()
 
 const isSelectedItem = computed(() => {
-  return (id: string) => {
-    return useCmdBarState?.state.selectedCommandId === id
+  return (command: Command) => {
+    const isSelected = useCmdBarState?.state.selectedCommandId === command.id
+    if (isSelected) {
+      emitter.emit('selected', command as Command)
+      return true
+    }
+    return false
   }
 })
 
@@ -26,8 +30,8 @@ const groupIsLoading = computed(() => {
   return useCmdBarState?.state.groupLoadingStates[props.group.key]
 })
 
-function handleClick(clickedItem: Command) {
-  emit('selected', clickedItem)
+function handleClick(clickedCommand: Command) {
+  emitter.emit('clicked', clickedCommand as Command)
   useCmdBarState?.executeCommand()
 }
 </script>
@@ -41,7 +45,7 @@ function handleClick(clickedItem: Command) {
         :data-id="command.id"
         role="option"
         class="item"
-        :aria-selected="isSelectedItem(command.id)"
+        :aria-selected="isSelectedItem(command)"
         @mousemove="useCmdBarState?.selectCommand(command.id)"
         @click="handleClick(command)"
       >

@@ -14,12 +14,9 @@ const props = defineProps<{
   }
 }>()
 
-// defineSlots<{
-//   default(props: { command: Command }): any
-// }>()
-
-const emit = defineEmits<{
-  selected: [command: Command]
+defineSlots<{
+  default(props: { command: Command }): any
+  loading(props: { group: Group }): any
 }>()
 
 const labelRef = ref<HTMLElement[] | null>(null) // Create a ref for the label element
@@ -142,7 +139,7 @@ watch(
         >
           {{ group.label }}
         </h2>
-        <CmdBarGroup :group="group" @selected="emit('selected', $event)">
+        <CmdBarGroup :group="group">
           <template v-for="(_, name) in $slots" :key="name" #[name]="slotData">
             <slot :name="name" v-bind="slotData" />
           </template>

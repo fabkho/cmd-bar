@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Skeleton from '@cmd-bar/playground/vue3/src/components/Skeleton.vue'
 import { type Command, defineCommand, CmdBar } from '@cmd-bar/src'
+import { useCmdBarEvent } from '@cmd-bar/src/useCmdBarEvent'
 import { useKeymap } from '@cmd-bar/src/useKeymap'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
 import { computed, onMounted, ref } from 'vue'
@@ -140,6 +141,12 @@ const groups = computed(() =>
     }
   ].filter(Boolean)
 )
+
+const { emitter } = useCmdBarEvent()
+
+emitter.on('selected', (command) => {
+  console.log('selected', command)
+})
 
 const fuseOptions = {
   fuseOptions: {

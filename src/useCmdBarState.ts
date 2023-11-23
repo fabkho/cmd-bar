@@ -2,6 +2,7 @@ import { useDebounceFn } from '@vueuse/core'
 import { useFuse, UseFuseOptions } from '@vueuse/integrations/useFuse'
 import { ComputedRef, reactive, readonly, ref, watch } from 'vue'
 import type { Command, Group, State } from './types'
+import { useCmdBarEvent } from './useCmdBarEvent'
 import { findNodeById } from './utils'
 
 const state = reactive<State>({
@@ -92,8 +93,13 @@ const useCmdBarState = {
   },
 
   executeCommand(): void {
+    const { emitter } = useCmdBarEvent()
+
     const command = findNodeById(state.commands, state.selectedCommandId)
-    command?.action?.()
+    if (command) {
+      emitter.emit('clicked', command)
+      command.action?.()
+    }
   },
 
   async updateQuery(

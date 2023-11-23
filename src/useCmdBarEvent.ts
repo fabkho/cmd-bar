@@ -1,16 +1,17 @@
-import mitt, { type Emitter } from 'mitt'
+import mitt, { Emitter } from 'mitt'
+import { Command } from './types'
 
 type Events = {
-  foo: string
-  bar?: number
+  selected: Command
+  clicked: Command
 }
 
 const emitter: Emitter<Events> = mitt<Events>()
 
-const useCommandEvent = () => {
+const useCmdBarEvent = () => {
   return {
     emitter
   }
 }
 
-export { useCommandEvent }
+export { useCmdBarEvent }
