@@ -206,7 +206,15 @@ function getSelectedIndex(): number {
  * helper to select the first command in the first group
  */
 function selectFirstCommand(): void {
-  state.selectedCommandId = state.filteredGroupedCommands[0]?.commands?.[0]?.id ?? null
+  const { emitter } = useCmdBarEvent()
+
+  const firstCommand: Command | null = state.filteredGroupedCommands[0]?.commands?.[0] ?? null
+  if (firstCommand) {
+    state.selectedCommandId = firstCommand.id
+    emitter.emit('selected', firstCommand as Command)
+  } else {
+    console.warn('No command found, by trying to select the first command')
+  }
 }
 
 /**
