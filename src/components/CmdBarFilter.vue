@@ -122,8 +122,8 @@ async function setLineStyle() {
         class="filter-chip"
         :aria-selected="isSelected(group)"
         role="tab"
-        @click="toggleGroup(group)"
         tabindex="0"
+        @click="toggleGroup(group)"
       >
         {{ group }}
       </button>

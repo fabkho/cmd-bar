@@ -30,7 +30,8 @@ export interface Command {
 }
 export interface Group {
   key: string
-  commands: Command[]
+  commands?: Command[]
+  search?: (query: string) => Promise<Command[]>
   [key: string]: any
 }
 

@@ -34,7 +34,7 @@ function handleClick(clickedItem: Command) {
 
 <template>
   <div class="group-container">
-    <ul v-if="!groupIsLoading" data-cmd-bar-items class="items">
+    <ul v-if="!groupIsLoading && group.commands" data-cmd-bar-items class="items">
       <li
         v-for="(command, index) of group.commands"
         :key="`${group.key}-${index}`"

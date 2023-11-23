@@ -76,7 +76,7 @@ function clearQuery(): void {
       @input="handleInput"
     />
     <div class="input__clear">
-      <button aria-label="Close" @click="clearQuery" tabindex="-1">
+      <button aria-label="Close" tabindex="-1" @click="clearQuery">
         <slot name="clear" />
       </button>
     </div>

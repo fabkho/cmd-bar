@@ -32,7 +32,7 @@ const labelRef = ref<HTMLElement[] | null>(null) // Create a ref for the label e
 const visibleItems = computed(() => {
   return useCmdBarState.state.filteredGroupedCommands.flatMap((group) => {
     const groupWithoutCommands = { key: group.key, label: group.label }
-    return [groupWithoutCommands, ...group.commands]
+    return group.commands ? [groupWithoutCommands, ...group.commands] : [groupWithoutCommands]
   })
 })
 
@@ -68,7 +68,7 @@ const { containerProps, wrapperProps, list } = useVirtualList(visibleItems as Co
 })
 
 /**
- * remove label from list
+ * group commands by group key
  */
 const groupedCommands = computed(() => {
   return list.value.reduce((result: Group[], item) => {
@@ -84,7 +84,7 @@ const groupedCommands = computed(() => {
       } as Group
       result.push(newGroup)
     } else if (item.data.id) {
-      group?.commands.push(item.data)
+      group.commands?.push(item.data)
     }
 
     return result
@@ -135,7 +135,11 @@ watch(
   <div class="grouped-list" v-bind="containerProps">
     <ul data-cmd-bar-items class="list-items" v-bind="wrapperProps">
       <li v-for="group in groupedCommands" :key="group.key" class="group">
-        <h2 v-if="group.label && group.commands.length > 0" ref="labelRef" class="group__label">
+        <h2
+          v-if="group.label && group.commands && group.commands?.length > 0"
+          ref="labelRef"
+          class="group__label"
+        >
           {{ group.label }}
         </h2>
         <CmdBarGroup :group="group" @selected="emit('selected', $event)">

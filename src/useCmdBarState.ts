@@ -22,9 +22,9 @@ const useCmdBarState = {
     const groupedCommands = []
 
     for (const group of initialGroups) {
-      const commandsWithGroup = group.commands.map((command) => ({ ...command, group: group.key }))
-      flattenedCommands.push(...commandsWithGroup)
-      groupedCommands.push({ ...group, commands: commandsWithGroup })
+      const commandsWithGroup = group.commands?.map((command) => ({ ...command, group: group.key }))
+      flattenedCommands.push(...(commandsWithGroup ?? []))
+      groupedCommands.push({ ...group, commands: commandsWithGroup ?? [] })
     }
 
     state.groupedCommands = groupedCommands
@@ -159,7 +159,7 @@ const fuzzySearch = (
     const commands = results.value
       .filter((result) => result.item.key === group.key)
       .flatMap((result) => {
-        return result.matches?.map((match) => group.commands[match.refIndex as number])
+        return result.matches?.map((match) => group.commands?.[match.refIndex as number])
       })
 
     state.filteredGroupedCommands[index].commands = (commands as Command[]) ?? []
@@ -175,7 +175,7 @@ const debouncedSearch = useDebounceFn(async (query, groups) => {
     groups.map(async (group: Group) => {
       state.groupLoadingStates[group.key] = true
 
-      const commands = await group.search(query)
+      const commands = await group.search!(query)
       const groupIndex = state.filteredGroupedCommands.findIndex(
         (filteredGroup) => filteredGroup.key === group.key
       )
@@ -200,7 +200,7 @@ function getSelectedIndex(): number {
  * helper to select the first command in the first group
  */
 function selectFirstCommand(): void {
-  state.selectedCommandId = state.filteredGroupedCommands[0]?.commands[0]?.id ?? null
+  state.selectedCommandId = state.filteredGroupedCommands[0]?.commands?.[0]?.id ?? null
 }
 
 /**
@@ -211,7 +211,7 @@ watch(
   () => state.filteredGroupedCommands,
   () => {
     state.filteredCommands = state.filteredGroupedCommands.flatMap((group) =>
-      group.commands.map((command) => ({ ...command, group: group.key }))
+      (group.commands ?? []).map((command) => ({ ...command, group: group.key }))
     )
 
     selectFirstCommand()

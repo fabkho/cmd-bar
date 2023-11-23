@@ -73,7 +73,7 @@ export function useKeymap(fn: ShortcutsSetup) {
 
   const addKeyBindingsFromCommands = (groups: Group[]) => {
     groups.forEach((group) => {
-      group.commands.forEach((command) => {
+      group.commands?.forEach((command) => {
         if (command.shortcut) {
           const action = command.action
           const shortcut: ShortcutOptions = {
