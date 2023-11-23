@@ -10,6 +10,7 @@ const users = ref<Command[]>([])
 const visibility = ref(false)
 const keys = useMagicKeys()
 const cmdK = keys['Meta+k']
+const activeCommand = ref<Command | null>(null)
 
 const listConfig = {
   itemHeightInPixel: {
@@ -146,6 +147,7 @@ const { emitter } = useCmdBarEvent()
 
 emitter.on('selected', (command) => {
   console.log('selected', command)
+  activeCommand.value = command
 })
 
 const fuseOptions = {
@@ -178,7 +180,7 @@ onMounted(() => {
         <CmdBar.Filter :default-filter-option="'all'" :auto-filter="true" />
       </template>
       <template #content>
-        <CmdBar.List :config="listConfig">
+        <CmdBar.List :config="listConfig" v-if="activeCommand">
           <template #default="{ command }">
             <div class="leading">
               <img :src="command.leading" alt="icon" />
