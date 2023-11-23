@@ -1,5 +1,19 @@
 # cmd-bar
 
+## 0.7.0
+
+### Minor Changes
+
+- - 🚀 Features
+
+    - introduced mitt as event bus, to give more control over events
+    - new events:
+      - selected
+      - clicked
+
+  - 🧹 chore
+    - clean up of Input component
+
 ## 0.6.2
 
 ### Patch Changes
