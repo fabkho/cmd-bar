@@ -147,7 +147,7 @@ watch(
         </CmdBarGroup>
       </li>
     </ul>
-    <slot name="list" />
+    <div id="outbreak" />
   </div>
 </template>
 
