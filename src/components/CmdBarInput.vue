@@ -38,9 +38,7 @@ const options: ComputedRef<Partial<UseFuseOptions<Group>>> = computed(() => {
  * emit input event and store value in store
  */
 function handleInput(e: Event): void {
-  const input = e.target as HTMLInputElement
-
-  useCmdBarState?.updateQuery(input?.value, options)
+  useCmdBarState?.updateQuery((e.target as HTMLInputElement)?.value, options)
 }
 
 function clearQuery(): void {
