@@ -1,5 +1,11 @@
 # cmd-bar
 
+## 0.7.1
+
+### Patch Changes
+
+- 🐞 Bug fixes - `defineSlots()` causes an TypeScript error, removed for now
+
 ## 0.7.0
 
 ### Minor Changes
