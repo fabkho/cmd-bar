@@ -9,10 +9,6 @@ const props = defineProps({
     type: String,
     default: 'Search'
   },
-  modelValue: {
-    type: String,
-    default: ''
-  },
   fuse: {
     type: Object as PropType<UseFuseOptions<Group>>,
     default: () => ({})
@@ -21,7 +17,6 @@ const props = defineProps({
 
 const emit = defineEmits<{
   input: [ie: InputEvent]
-  'update:modelValue': [val: string]
 }>()
 
 const query = computed(() => useCmdBarState?.state.query)
@@ -43,14 +38,9 @@ const options: ComputedRef<Partial<UseFuseOptions<Group>>> = computed(() => {
  * emit input event and store value in store
  */
 function handleInput(e: Event): void {
-  const event = e as InputEvent
   const input = e.target as HTMLInputElement
 
   useCmdBarState?.updateQuery(input?.value, options)
-
-  // TODO: not needed?
-  emit('input', event)
-  emit('update:modelValue', input?.value)
 }
 
 function clearQuery(): void {
