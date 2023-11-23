@@ -1,5 +1,18 @@
 # cmd-bar
 
+## 0.6.2
+
+### Patch Changes
+
+- 🚀 Features
+
+  - commands property of groups is now optional to allow for groups that only fetch their commands asynchronously
+
+  🐞 Bug fixes
+
+  - removed logs
+  - leading property of command can now be aan array
+
 ## 0.6.1
 
 ### Patch Changes
