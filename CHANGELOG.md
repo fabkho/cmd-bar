@@ -1,5 +1,12 @@
 # cmd-bar
 
+## 0.7.5
+
+### Patch Changes
+
+- 🚀 Features
+  - moved slot into right context inside group component
+
 ## 0.7.4
 
 ### Patch Changes
