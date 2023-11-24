@@ -147,8 +147,8 @@ watch(
         </CmdBarGroup>
       </li>
     </ul>
-    <div id="outbreak" />
   </div>
+  <div id="outbreak" />
 </template>
 
 <style scoped lang="scss"></style>

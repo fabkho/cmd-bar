@@ -36,7 +36,7 @@ useKeymap((nav) => {
   ]
 })
 
-const formattedShortcuts = (shortcutString: string) => {
+const formatShortcut = (shortcutString: string) => {
   // Split the string into an array based on the '+' character
   const parts = shortcutString.split('+')
   // Check which Os the user is on with useAgent
@@ -183,15 +183,16 @@ onMounted(() => {
         <CmdBar.List :config="listConfig" v-if="activeCommand">
           <template #default="{ command }">
             <div class="leading">
-              <img :src="command.leading" alt="icon" />
+              <fa :icon="['far', command.leading]" />
               {{ command.label }}
             </div>
             <span v-if="command.shortcut" class="actions">
-              <kbd v-for="shortcut of formattedShortcuts(command.shortcut)" :key="shortcut">{{
+              <kbd v-for="shortcut of formatShortcut(command.shortcut)" :key="shortcut">{{
                 shortcut
               }}</kbd>
             </span>
           </template>
+          <template #outbreak="{ command }"> Test </template>
           <template #loading>
             <Skeleton v-for="index in 5" :key="index" />
           </template>
