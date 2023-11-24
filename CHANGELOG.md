@@ -1,5 +1,11 @@
 # cmd-bar
 
+## 0.7.8
+
+### Patch Changes
+
+- command deifned but not used in slot
+
 ## 0.7.7
 
 ### Patch Changes
