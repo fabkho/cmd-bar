@@ -1,5 +1,12 @@
 # cmd-bar
 
+## 0.7.7
+
+### Patch Changes
+
+- - 🐞 Bug fixes
+    - Teleport is not needed for preview slot
+
 ## 0.7.6
 
 ### Patch Changes
