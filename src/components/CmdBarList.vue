@@ -16,11 +16,11 @@ const props = defineProps<{
 }>()
 
 // causes type error!?!?!?
-defineSlots<{
-  // default(props: { command: Command }): any
-  preview(props: { command: Command | null }): any
-  // loading(props: { group: Group }): any
-}>()
+// defineSlots<{
+//   default(props: { command: Command }): any
+//   preview(props: { command: Command | null }): any
+//   loading(props: { group: Group }): any
+// }>()
 
 const labelRef = ref<HTMLElement[] | null>(null) // Create a ref for the label element
 const activeCommand = ref<Command | null>(null)
