@@ -1,5 +1,12 @@
 # cmd-bar
 
+## 0.7.6
+
+### Patch Changes
+
+- 🐞 Bug fixes
+  - outbreak has to be outside of scroll container
+
 ## 0.7.5
 
 ### Patch Changes
