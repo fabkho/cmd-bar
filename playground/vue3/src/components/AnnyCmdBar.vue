@@ -192,7 +192,7 @@ onMounted(() => {
               }}</kbd>
             </span>
           </template>
-          <template #outbreak="{ command }"> Test </template>
+          <template #outbreak> Test </template>
           <template #loading>
             <Skeleton v-for="index in 5" :key="index" />
           </template>
