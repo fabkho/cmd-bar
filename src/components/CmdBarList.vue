@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useCmdBarEvent } from '../useCmdBarEvent'
 import { useVirtualList } from '@vueuse/core'
 import { computed, type ComputedRef, nextTick, ref, watch, watchEffect } from 'vue'
 import { Command } from '../types'
@@ -15,12 +16,14 @@ const props = defineProps<{
 }>()
 
 // causes type error!?!?!?
-// defineSlots<{
-//   default(props: { command: Command }): any
-//   loading(props: { group: Group }): any
-// }>()
+defineSlots<{
+  // default(props: { command: Command }): any
+  preview(props: { command: Command | null }): any
+  // loading(props: { group: Group }): any
+}>()
 
 const labelRef = ref<HTMLElement[] | null>(null) // Create a ref for the label element
+const activeCommand = ref<Command | null>(null)
 
 /**
  * problem: the group header has to be included in the list to calculate the correct height
@@ -119,6 +122,13 @@ const scrollSelectedIntoView = () => {
   item?.scrollIntoView({ block: 'nearest' })
 }
 
+const { emitter } = useCmdBarEvent()
+
+emitter.on('selected', (command: Command) => {
+  console.log('selected', command)
+  activeCommand.value = command
+})
+
 watch(
   () => useCmdBarState?.state.selectedCommandId,
   (newVal) => {
@@ -148,7 +158,7 @@ watch(
       </li>
     </ul>
   </div>
-  <div id="outbreak" />
+  <slot name="preview" :command="activeCommand" />
 </template>
 
 <style scoped lang="scss"></style>

@@ -56,9 +56,6 @@ function handleClick(clickedCommand: Command) {
         @click="handleClick(command)"
       >
         <slot :command="command" />
-        <teleport to="#outbreak">
-          <slot name="outbreak" :command="command" :is-selected="isSelectedItem(command)" />
-        </teleport>
       </li>
     </ul>
     <div v-else class="loading">
