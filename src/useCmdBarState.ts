@@ -186,6 +186,11 @@ const debouncedSearch = useDebounceFn(async (query, groups) => {
         (filteredGroup) => filteredGroup.key === group.key
       )
 
+      //update group parameter of the commands
+      commands.forEach((command) => {
+        command.group = group.key
+      })
+
       state.filteredGroupedCommands[groupIndex].commands = commands
 
       state.groupLoadingStates[group.key] = false
