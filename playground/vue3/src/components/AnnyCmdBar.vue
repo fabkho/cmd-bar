@@ -177,7 +177,14 @@ onMounted(() => {
             <template #clear> x </template>
           </CmdBar.Input>
         </div>
-        <CmdBar.Filter :default-filter-option="'all'" :auto-filter="true" />
+        <CmdBar.Filter
+          :default-filter-option="'all'"
+          :auto-filter="true"
+          v-slot="{ group, groupItemCount }"
+        >
+          <span>{{ group }}</span>
+          <span>{{ groupItemCount }}</span>
+        </CmdBar.Filter>
       </template>
       <template #content>
         <CmdBar.List :config="listConfig" v-if="activeCommand">
@@ -192,7 +199,7 @@ onMounted(() => {
               }}</kbd>
             </span>
           </template>
-          <template #outbreak> Test </template>
+          <!--          <template #outbreak> Test </template>-->
           <template #loading>
             <Skeleton v-for="index in 5" :key="index" />
           </template>

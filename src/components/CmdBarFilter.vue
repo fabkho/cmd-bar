@@ -70,6 +70,32 @@ function toggleGroup(group: string) {
   }
 }
 
+function getNumberOfCommands(group: string, defaultOption: string | null): number {
+  const isActiveGroup = useCmdBarState?.state.selectedGroups.has(group)
+  const defaultGroupIsActive = isSelected(defaultOption ?? '')
+
+  // count all commands from all groups if group is defaultOption
+  if (defaultOption && group === defaultOption) {
+    const filteredCount = useCmdBarState?.state.filteredCommands.length
+    const totalCount = useCmdBarState?.state.commands.length
+
+    return filteredCount > 0 && defaultGroupIsActive ? filteredCount : totalCount
+  }
+
+  const filteredGroupIndex = useCmdBarState?.state.filteredGroupedCommands.findIndex(
+    (filteredGroup) => filteredGroup.key === group
+  )
+  const groupIndex = useCmdBarState?.state.groupedCommands.findIndex(
+    (groupedCommand) => groupedCommand.key === group
+  )
+
+  const filteredCount =
+    useCmdBarState?.state.filteredGroupedCommands[filteredGroupIndex]?.commands?.length ?? 0
+  const totalCount = useCmdBarState?.state.groupedCommands[groupIndex]?.commands?.length ?? 0
+
+  return filteredCount > 0 || isActiveGroup || defaultGroupIsActive ? filteredCount : totalCount
+}
+
 onMounted(() => {
   toggleGroup(props?.defaultFilterOption as string)
 })
@@ -125,7 +151,10 @@ async function setLineStyle() {
         tabindex="0"
         @click="toggleGroup(group)"
       >
-        {{ group }}
+        <slot
+          :group="group"
+          :group-item-count="getNumberOfCommands(group, props.defaultFilterOption)"
+        />
       </button>
     </div>
     <!-- Bottom line -->

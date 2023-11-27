@@ -38,9 +38,19 @@ const useCmdBarState = {
     selectFirstCommand()
   },
 
-  filterGroupedCommands(): void {
+  /**
+   * Filter the grouped commands based on the selected groups.
+   * @param noReset - If true, the filteredGroupedCommands will not be reset to the initial state.
+   */
+  filterGroupedCommands(noReset = false): void {
     if (state.selectedGroups.size === 0) {
       state.filteredGroupedCommands = JSON.parse(JSON.stringify(state.groupedCommands))
+    } else if (noReset) {
+      state.filteredGroupedCommands = JSON.parse(
+        JSON.stringify(
+          state.filteredGroupedCommands.filter((group) => state.selectedGroups.has(group.key))
+        )
+      )
     } else {
       state.filteredGroupedCommands = JSON.parse(
         JSON.stringify(state.groupedCommands.filter((group) => state.selectedGroups.has(group.key)))
@@ -70,7 +80,7 @@ const useCmdBarState = {
       state.selectedGroups.add(groupKeys)
     }
 
-    this.filterGroupedCommands()
+    this.filterGroupedCommands(true)
   },
 
   resetFilter(): void {
