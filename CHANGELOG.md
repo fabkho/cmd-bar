@@ -1,5 +1,13 @@
 # cmd-bar
 
+## 0.7.9
+
+### Patch Changes
+
+- ### Minor Changes
+
+  🐞 Bug fixes - Fuzzy search is now working correctly (searches groups.commands individually) - Only show warning if no command is found, when commands are defined
+
 ## 0.7.8
 
 ### Patch Changes

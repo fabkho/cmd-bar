@@ -1,6 +1,6 @@
 import { useDebounceFn } from '@vueuse/core'
 import { useFuse, UseFuseOptions } from '@vueuse/integrations/useFuse'
-import { ComputedRef, reactive, readonly, ref, watch } from 'vue'
+import { reactive, readonly, ref, watch } from 'vue'
 import type { Command, Group, State } from './types'
 import { useCmdBarEvent } from './useCmdBarEvent'
 import { findNodeById } from './utils'
@@ -208,7 +208,7 @@ function selectFirstCommand(): void {
   if (firstCommand) {
     state.selectedCommandId = firstCommand.id
     emitter.emit('selected', firstCommand as Command)
-  } else {
+  } else if (state.filteredGroupedCommands.length > 0) {
     console.warn('No command found, by trying to select the first command')
   }
 }
