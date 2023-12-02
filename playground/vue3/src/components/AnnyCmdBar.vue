@@ -152,7 +152,7 @@ emitter.on('selected', (command) => {
 
 const fuseOptions = {
   fuseOptions: {
-    keys: ['commands.label']
+    keys: ['label']
   }
 }
 
@@ -183,7 +183,7 @@ onMounted(() => {
         <CmdBar.List :config="listConfig" v-if="activeCommand">
           <template #default="{ command }">
             <div class="leading">
-              <fa :icon="['far', command.leading]" />
+              <!--              <fa :icon="['far', command.leading]" />-->
               {{ command.label }}
             </div>
             <span v-if="command.shortcut" class="actions">
