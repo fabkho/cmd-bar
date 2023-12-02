@@ -26,10 +26,9 @@ const options: ComputedRef<Partial<UseFuseOptions<Group>>> = computed(() => {
     fuseOptions: {
       ...props.fuse?.fuseOptions,
       keys: props.fuse?.fuseOptions?.keys ?? ['commands.label'],
-      includeMatches: true
+      minMatchCharLength: 2
     },
-    resultLimit: 12,
-    matchAllWhenSearchEmpty: true
+    resultLimit: 12
   }
 })
 
