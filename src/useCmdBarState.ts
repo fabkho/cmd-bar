@@ -167,18 +167,12 @@ const searchGroups = async (
 const fuzzySearch = (
   query: string,
   groups: Group[],
-  fuseOptions?: ComputedRef<Partial<UseFuseOptions<Group>>>
+  fuseOptions?: Partial<UseFuseOptions<Command>> // Assuming Command type is used within Group.commands
 ) => {
-  const { results } = useFuse(query, ref(groups), fuseOptions)
-
   groups.forEach((group, index) => {
-    const commands = results.value
-      .filter((result) => result.item.key === group.key)
-      .flatMap((result) => {
-        return result.matches?.map((match) => group.commands?.[match.refIndex as number])
-      })
+    const { results } = useFuse(query, ref(group.commands || []), fuseOptions)
 
-    state.filteredGroupedCommands[index].commands = (commands as Command[]) ?? []
+    state.filteredGroupedCommands[index].commands = results.value.map((result) => result.item)
   })
 }
 
