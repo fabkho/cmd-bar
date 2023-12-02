@@ -221,7 +221,7 @@
     position: relative;
     margin-top: $spacing;
     margin-bottom: calc($footer-height + $spacing);
-    display: flex;
+    //display: flex;
 
     .grouped-list {
       overflow: hidden scroll;

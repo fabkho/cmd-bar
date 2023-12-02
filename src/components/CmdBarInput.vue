@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useCmdBarState } from '../useCmdBarState'
-import type { Group } from '../types'
+import type { Command } from '../types'
 import type { UseFuseOptions } from '@vueuse/integrations/useFuse'
 import { computed, PropType, ComputedRef } from 'vue'
 
@@ -10,7 +10,7 @@ const props = defineProps({
     default: 'Search'
   },
   fuse: {
-    type: Object as PropType<UseFuseOptions<Group>>,
+    type: Object as PropType<UseFuseOptions<Command>>,
     default: () => ({})
   }
 })
@@ -21,11 +21,11 @@ const emit = defineEmits<{
 
 const query = computed(() => useCmdBarState?.state.query)
 
-const options: ComputedRef<Partial<UseFuseOptions<Group>>> = computed(() => {
+const options: ComputedRef<Partial<UseFuseOptions<Command>>> = computed(() => {
   return {
     fuseOptions: {
       ...props.fuse?.fuseOptions,
-      keys: props.fuse?.fuseOptions?.keys ?? ['commands.label'],
+      keys: props.fuse?.fuseOptions?.keys ?? ['label'],
       minMatchCharLength: 2
     },
     resultLimit: 12
@@ -37,7 +37,7 @@ const options: ComputedRef<Partial<UseFuseOptions<Group>>> = computed(() => {
  * emit input event and store value in store
  */
 function handleInput(e: Event): void {
-  useCmdBarState?.updateQuery((e.target as HTMLInputElement)?.value, options)
+  useCmdBarState?.updateQuery((e.target as HTMLInputElement)?.value, options.value)
 }
 
 function clearQuery(): void {

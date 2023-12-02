@@ -102,10 +102,7 @@ const useCmdBarState = {
     }
   },
 
-  async updateQuery(
-    query: string,
-    fuseOptions?: ComputedRef<Partial<UseFuseOptions<Group>>>
-  ): Promise<void> {
+  async updateQuery(query: string, fuseOptions?: Partial<UseFuseOptions<Command>>): Promise<void> {
     state.query = query
 
     if (query === '') {
@@ -140,7 +137,7 @@ const useCmdBarState = {
 const searchGroups = async (
   query: string,
   groups: Group[],
-  fuseOptions?: ComputedRef<Partial<UseFuseOptions<Group>>>
+  fuseOptions?: Partial<UseFuseOptions<Command>>
 ) => {
   const fuzzySearchableGroups = groups.filter((group) => !group.search)
   const asyncSearchableGroups = groups.filter((group) => !!group.search)
