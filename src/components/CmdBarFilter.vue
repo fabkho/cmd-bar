@@ -123,6 +123,7 @@ async function setLineStyle() {
         :aria-selected="isSelected(group)"
         role="tab"
         tabindex="0"
+        @keydown.enter.prevent
         @click="toggleGroup(group)"
       >
         {{ group }}
