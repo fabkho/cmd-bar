@@ -1,0 +1,1 @@
+import{k as o,b as t,c as a,Z as _}from"./entry.e44534fb.js";const r={};function s(e,c){return t(),a("blockquote",null,[_(e.$slots,"default",{},void 0,!0)])}const l=o(r,[["render",s],["__scopeId","data-v-a347a2a2"]]);export{l as default};
