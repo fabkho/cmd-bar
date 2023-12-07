@@ -9,7 +9,8 @@
   "updateInternalDependencies": "patch",
   "ignore": [
     "@cmd-bar/docs",
-    "@cmd-bar/anny",
+    "@cmd-bar/basic",
+    "@cmd-bar/nuxt",
     "vue3",
     "nuxt3"
   ]
