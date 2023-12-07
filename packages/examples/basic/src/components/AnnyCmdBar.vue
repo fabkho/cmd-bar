@@ -1,28 +1,67 @@
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue'
-import { CmdBar, defineCommand, type Commands } from 'cmd-bar'
+import Skeleton from './Skeleton.vue'
+import { type Command, defineCommand, CmdBar, useCmdBarEvent, useKeymap } from 'cmd-bar'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
+import { computed, onMounted, ref } from 'vue'
 
-// const cmdBar = ref<typeof CmdBar | null>(null)
-const users = ref<Commands>([])
-let loading = ref(false)
+const users = ref<Command[]>([])
 const visibility = ref(false)
 const keys = useMagicKeys()
 const cmdK = keys['Meta+k']
-// const searchTerm = ref('')
+const activeCommand = ref<Command | null>(null)
 
 const listConfig = {
-  itemHeightInPixel: 48,
+  itemHeightInPixel: {
+    actions: 48,
+    users: 48
+  },
   containerHeight: '21rem',
   groupLabelHeightInPixel: 20
 }
 
+useKeymap((nav) => {
+  return [
+    {
+      key: 'ArrowRight',
+      action: () => nav.prev(),
+      autoRepeat: false
+    },
+    {
+      key: 'ArrowLeft',
+      action: () => nav.next(),
+      autoRepeat: false
+    }
+  ]
+})
+
+const formatShortcut = (shortcutString: string) => {
+  // Split the string into an array based on the '+' character
+  const parts = shortcutString.split('+')
+  // Check which Os the user is on with useAgent
+  const isMac = navigator.userAgent.includes('Mac OS')
+  // Map over the parts array and replace the keys with the correct representation
+  return parts.map((part) => {
+    let key = part
+    if (isMac) {
+      key = key.replace('Ctrl', '⌃')
+      key = key.replace('Alt', '⌥')
+      key = key.replace('Shift', '⇧')
+      key = key.replace('Meta', '⌘')
+      key = key.replace('Cmd', '⌘')
+    } else {
+      // is Windows or Linux
+      key = key.replace('Meta', 'Win')
+      key = key.replace('Cmd', 'Win')
+    }
+    return key
+  })
+}
+
 async function fetchUsers() {
   const { data } = await useFetch(
-    'https://dummyjson.com/users?limit=10&select=id,firstName,lastName',
+    'https://dummyjson.com/users?limit=50&select=id,firstName,lastName',
     {
       beforeFetch(ctx) {
-        loading.value = true
         return ctx
       }
     }
@@ -30,116 +69,52 @@ async function fetchUsers() {
   users.value = data.value.users.map((user: Record<string, any>) => {
     return defineCommand({
       id: user.id.toString(),
-      leading: './src/assets/icons/user.svg',
+      //
+      leading: './src/assets/icons/user_new.svg',
       label: `${user.firstName} ${user.lastName}`,
       action: () => {
         // Define your action here.
       }
     })
   })
-  loading.value = false
 }
 
 const actions = [
   {
-    id: 'new-file',
-    label: 'Add new file',
+    id: 'new-resource',
+    label: 'Create new Resource',
     leading: './src/assets/icons/create.svg',
-    action: () => alert('New file added'),
-    shortcuts: ['⌘', 'N']
+    action: () => alert('New Resource created'),
+    shortcut: 'Ctrl+R'
   },
   {
-    id: 'new-folder',
-    label: 'Add new folder',
-    leading: './src/assets/icons/create.svg',
-    action: () => alert('New folder added!'),
-    shortcuts: ['⌘', 'F']
+    id: 'new-service',
+    label: 'Add new Service',
+    leading: './src/assets/icons/service_1.svg',
+    action: () => alert('New Service added'),
+    shortcut: 'Ctrl+S'
   },
   {
-    id: 'hashtag',
-    label: 'Add hashtag',
-    leading: './src/assets/icons/create.svg',
-    action: () => alert('Hashtag added!'),
-    shortcuts: ['⌘', 'H']
+    id: 'open-settings',
+    label: 'Open settings',
+    leading: './src/assets/icons/settings.svg',
+    action: () => alert('Settings opened'),
+    shortcut: 'Ctrl+,'
   },
   {
-    id: 'label',
-    label: 'Add label',
-    leading: './src/assets/icons/create.svg',
-    action: () => alert('Label added!'),
-    shortcuts: ['⌘', 'L']
-  }
-]
-
-const actions2 = [
-  {
-    id: 'new-file1',
-    label: 'Add new file',
-    leading: './src/assets/icons/create.svg',
-    action: () => alert('New file added'),
-    shortcuts: ['⌘', 'N']
-  },
-  {
-    id: 'new-folder1',
-    label: 'Add new folder',
-    leading: './src/assets/icons/create.svg',
-    action: () => alert('New folder added!'),
-    shortcuts: ['⌘', 'F']
-  },
-  {
-    id: 'hashtag1',
-    label: 'Add hashtag',
-    leading: './src/assets/icons/create.svg',
-    action: () => alert('Hashtag added!'),
-    shortcuts: ['⌘', 'H']
-  },
-  {
-    id: 'label1',
-    label: 'Add label',
-    leading: './src/assets/icons/create.svg',
-    action: () => alert('Label added!'),
-    shortcuts: ['⌘', 'L']
-  },
-  {
-    id: 'new-file2',
-    label: 'Add new file',
-    leading: './src/assets/icons/create.svg',
-    action: () => alert('New file added'),
-    shortcuts: ['⌘', 'N']
-  },
-  {
-    id: 'new-folder2',
-    label: 'Add new folder',
-    leading: './src/assets/icons/create.svg',
-    action: () => alert('New folder added!'),
-    shortcuts: ['⌘', 'F']
-  },
-  {
-    id: 'hashtag2',
-    label: 'Add hashtag',
-    leading: './src/assets/icons/create.svg',
-    action: () => alert('Hashtag added!'),
-    shortcuts: ['⌘', 'H']
-  },
-  {
-    id: 'label2',
-    label: 'Add label',
-    leading: './src/assets/icons/create.svg',
-    action: () => alert('Label added!'),
-    shortcuts: ['⌘', 'L']
+    id: 'open-calendar',
+    label: 'Open calendar',
+    leading: './src/assets/icons/calendar.svg',
+    action: () => alert('Calendar opened'),
+    shortcut: 'Ctrl+C'
   }
 ]
 
 const groups = computed(() =>
   [
     {
-      key: 'actions2',
-      label: 'Actions',
-      commands: actions2
-    },
-    {
       key: 'actions',
-      label: 'Actions2',
+      label: 'Actions',
       commands: actions
     },
     {
@@ -150,18 +125,12 @@ const groups = computed(() =>
         if (!q) {
           return []
         }
-        const { data } = await useFetch(`https://jsonplaceholder.typicode.com/users?q=${q}`, {
-          beforeFetch(ctx) {
-            loading.value = true
-            return ctx
-          }
-        }).json()
-        loading.value = false
-        return data.value.map((user: Record<string, any>) =>
+        const { data } = await useFetch(`https://dummyjson.com/users/search?q=${q}`, {}).json()
+        return data.value.users.map((user: Record<string, any>) =>
           defineCommand({
             id: user.id.toString(),
-            leading: './src/assets/icons/user.svg',
-            label: user.name,
+            leading: './src/assets/icons/user_new.svg',
+            label: `${user.firstName} ${user.lastName}`,
             action: () => {
               // Define your action here.
             }
@@ -171,6 +140,19 @@ const groups = computed(() =>
     }
   ].filter(Boolean)
 )
+
+const { emitter } = useCmdBarEvent()
+
+emitter.on('selected', (command) => {
+  console.log('selected', command)
+  activeCommand.value = command
+})
+
+const fuseOptions = {
+  fuseOptions: {
+    keys: ['label']
+  }
+}
 
 whenever(cmdK, () => {
   visibility.value = !visibility.value
@@ -186,7 +168,7 @@ onMounted(() => {
     <CmdBar.Dialog :visible="visibility">
       <template #header>
         <div>
-          <CmdBar.Input :placeholder="'search fo anything'" :icon="'../assets/icons/search.svg'">
+          <CmdBar.Input :placeholder="'search fo anything'" :fuse="fuseOptions">
             <template #leading>
               <img src="../assets/icons/search.svg" alt="search" />
             </template>
@@ -196,17 +178,23 @@ onMounted(() => {
         <CmdBar.Filter :default-filter-option="'all'" :auto-filter="true" />
       </template>
       <template #content>
-        <CmdBar.List v-if="!loading" v-slot="{ command }" :config="listConfig">
-          <div class="leading">
-            <img :src="command.leading" alt="icon" />
-            {{ command.label }}
-          </div>
-          <span v-if="command.shortcuts?.length" class="actions">
-            <kbd v-for="shortcut of command.shortcuts" :key="shortcut">{{ shortcut }}</kbd>
-          </span>
+        <CmdBar.List :config="listConfig" v-if="activeCommand">
+          <template #default="{ command }">
+            <div class="leading">
+              <!--              <fa :icon="['far', command.leading]" />-->
+              {{ command.label }}
+            </div>
+            <span v-if="command.shortcut" class="actions">
+              <kbd v-for="shortcut of formatShortcut(command.shortcut)" :key="shortcut">{{
+                shortcut
+              }}</kbd>
+            </span>
+          </template>
+          <template #outbreak> Test </template>
+          <template #loading>
+            <Skeleton v-for="index in 5" :key="index" />
+          </template>
         </CmdBar.List>
-        <CmdBar.Loading :count="6" v-else />
-        <!--        <CmdBar.Empty> No results found </CmdBar.Empty>-->
       </template>
       <template #footer>
         <span class="trigger">
@@ -226,5 +214,5 @@ onMounted(() => {
 </template>
 
 <style lang="scss">
-@import '@/assets/anny-theme';
+@import '../assets/anny-theme';
 </style>
