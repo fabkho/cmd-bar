@@ -104,27 +104,15 @@ const useCmdBarState = {
 
   async updateQuery(query: string, fuseOptions?: Partial<UseFuseOptions<Command>>): Promise<void> {
     state.query = query
-
     if (query === '') {
       this.filterGroupedCommands()
       return
     }
 
-    if (state.selectedGroups.size === 0) {
-      // Search all groups
-      await searchGroups(query, state.groupedCommands, fuseOptions)
-    } else if (state.selectedGroups.size === 1) {
-      // Search a single selected group
-      const group = state.groupedCommands.find((group) => state.selectedGroups.has(group.key))
-      if (group) {
-        await searchGroups(query, [group], fuseOptions)
-      } else {
-        console.warn(`Group ${state.selectedGroups.values().next()} not found`)
-      }
-    } else {
-      // Search multiple selected groups
-      const groups = state.groupedCommands.filter((group) => state.selectedGroups.has(group.key))
-      await searchGroups(query, groups, fuseOptions)
+    let groupsToSearch = getGroupsToSearch()
+
+    if (groupsToSearch) {
+      await searchGroups(query, groupsToSearch, fuseOptions)
     }
   },
 
@@ -139,8 +127,15 @@ const searchGroups = async (
   groups: Group[],
   fuseOptions?: Partial<UseFuseOptions<Command>>
 ) => {
-  const fuzzySearchableGroups = groups.filter((group) => !group.search)
-  const asyncSearchableGroups = groups.filter((group) => !!group.search)
+  const fuzzySearchableGroups: Group[] = []
+  const asyncSearchableGroups: Group[] = []
+  groups.forEach((group) => {
+    if (group.search) {
+      asyncSearchableGroups.push(group)
+    } else {
+      fuzzySearchableGroups.push(group)
+    }
+  })
 
   if (fuzzySearchableGroups.length > 0) {
     fuzzySearch(query, fuzzySearchableGroups, fuseOptions)
@@ -211,6 +206,33 @@ function selectFirstCommand(): void {
   } else if (state.filteredGroupedCommands.length > 0) {
     console.warn('No command found, by trying to select the first command')
   }
+}
+
+function getGroupsToSearch(): Group[] | undefined {
+  let groupsToSearch
+
+  if (state.selectedGroups.size === 0) {
+    groupsToSearch = state.groupedCommands
+  } else if (state.selectedGroups.size === 1) {
+    const group = findSingleSelectedGroup()
+    if (group) {
+      groupsToSearch = [group]
+    } else {
+      console.warn(`Group ${state.selectedGroups.values().next()} not found`)
+    }
+  } else {
+    groupsToSearch = findMultipleSelectedGroups()
+  }
+
+  return groupsToSearch
+}
+
+function findSingleSelectedGroup(): Group | undefined {
+  return state.groupedCommands.find((group) => state.selectedGroups.has(group.key))
+}
+
+function findMultipleSelectedGroups(): Group[] {
+  return state.groupedCommands.filter((group) => state.selectedGroups.has(group.key))
 }
 
 /**
