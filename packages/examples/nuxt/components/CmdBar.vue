@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import CmdBarCustomerPeak from '~/components/peaks/CmdBarUserPeak.vue'
 import Skeleton from './Skeleton.vue'
 import { type Command, defineCommand, CmdBar, useCmdBarEvent, useKeymap } from 'cmd-bar'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
@@ -15,7 +16,7 @@ const listConfig = {
     actions: 48,
     users: 48
   },
-  containerHeight: '21rem',
+  containerHeight: '26rem',
   groupLabelHeightInPixel: 20
 }
 
@@ -79,7 +80,23 @@ async function fetchUsers() {
   })
 }
 
+function toggleColorTheme() {
+  const html = document.querySelector('html')
+  if (html?.classList.contains('dark')) {
+    html.classList.remove('dark')
+  } else {
+    html?.classList.add('dark')
+  }
+}
+
 const actions = [
+  {
+    id: 'toggle-theme',
+    label: 'Toggle color theme',
+    leading: './src/assets/icons/settings.svg',
+    action: () => toggleColorTheme(),
+    shortcut: 'Ctrl+R'
+  },
   {
     id: 'new-resource',
     label: 'Create new Resource',
@@ -169,9 +186,9 @@ onMounted(() => {
       <template #header>
         <div>
           <CmdBar.Input :placeholder="'search fo anything'" :fuse="fuseOptions">
-            <template #leading>
-              <img src="../assets/icons/search.svg" alt="search" />
-            </template>
+            <!--            <template #leading>-->
+            <!--              <img src="../assets/icons/search.svg" alt="search" />-->
+            <!--            </template>-->
             <template #clear> x </template>
           </CmdBar.Input>
         </div>
@@ -190,7 +207,9 @@ onMounted(() => {
               }}</kbd>
             </span>
           </template>
-          <template #outbreak> Test </template>
+          <template #preview="{ command }">
+            <CmdBarCustomerPeak :command="command" />
+          </template>
           <template #loading>
             <Skeleton v-for="index in 5" :key="index" />
           </template>
@@ -214,5 +233,5 @@ onMounted(() => {
 </template>
 
 <style lang="scss">
-@import '../assets/anny-theme';
+@import '../assets/cmd-bar';
 </style>
