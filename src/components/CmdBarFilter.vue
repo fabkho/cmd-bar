@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Group } from '@/Users/fabiankirchhoff/code/cmd-bar'
 import { useKeymap } from '../useKeymap'
 import { type PropType, onMounted, nextTick, ref, watchEffect } from 'vue'
 import { useCmdBarState } from '../useCmdBarState'
@@ -16,6 +17,10 @@ const props = defineProps({
 
 const emit = defineEmits<{
   filterChange: [groups: Array<string>]
+}>()
+
+defineSlots<{
+  default(props: { group: Group; isSelected: boolean }): any
 }>()
 
 const selectedGroups = useCmdBarState?.state.selectedGroups
@@ -46,7 +51,7 @@ useKeymap(() => [
   }
 ])
 
-function isSelected(group: string) {
+function isSelected(group: string): boolean {
   if (group === props.defaultFilterOption && selectedGroups.size === 0) {
     return true
   } else {
@@ -126,7 +131,9 @@ async function setLineStyle() {
         @keydown.enter.prevent
         @click="toggleGroup(group)"
       >
-        {{ group }}
+        <slot :group="group" :is-selected="isSelected(group)">
+          {{ group }}
+        </slot>
       </button>
     </div>
     <!-- Bottom line -->
