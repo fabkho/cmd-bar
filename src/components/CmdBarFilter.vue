@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Group } from '@/Users/fabiankirchhoff/code/cmd-bar'
 import { useKeymap } from '../useKeymap'
 import { type PropType, onMounted, nextTick, ref, watchEffect } from 'vue'
 import { useCmdBarState } from '../useCmdBarState'
@@ -20,7 +19,7 @@ const emit = defineEmits<{
 }>()
 
 defineSlots<{
-  default(props: { group: Group; isSelected: boolean }): any
+  default(props: { group: string; isSelected: boolean }): any
 }>()
 
 const selectedGroups = useCmdBarState?.state.selectedGroups
