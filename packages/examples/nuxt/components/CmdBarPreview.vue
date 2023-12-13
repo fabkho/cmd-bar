@@ -34,7 +34,7 @@ function focusActions() {
 </script>
 
 <template>
-  <div class="w-full eb-border-left ml-1 relative">
+  <div class="w-full border-l-gray-300 dark:border-l-zinc-800 border-l-[1px] ml-1 relative">
     <div class="absolute w-full">
       <div class="h-[6rem] w-full a-hero-gradient"></div>
     </div>

@@ -14,8 +14,8 @@
   width: 50rem;
   min-height: 300px;
   padding: 0;
-  border-radius: var(--border-radius);
-  border: 1px solid var(--border-light);
+  border-radius: var(--border-radius-xl);
+  border: 1px solid var(--border-dark);
   //box-shadow: var(--panel-shadow);
 
   background: var(--panel-bg);
@@ -163,6 +163,7 @@
         }
 
         &__leading {
+          margin-left: .5rem;
           color: var(--text-secondary-color);
         }
 
@@ -314,7 +315,7 @@
           padding: 0 calc($spacing * 2);
           margin-left: calc($scrollbar-width);
           margin-right: calc($scrollbar-width/2);
-          border-radius: calc(var(--detail-border-radius)/2);
+          border-radius: var(--border-radius-md);
           font-size: 15px;
           color: var(--text-secondary-color);
           will-change: background, color;
@@ -338,20 +339,22 @@
           }
 
           /* slotted */
+          .icon-container {
+            border-radius: var(--border-radius-md);
+            background-color: var(--light-color-overlay);
+            //border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 4px;
+
+            > svg {
+              color: var(--icon-color);
+            }
+          }
           .leading {
             display: flex;
             align-items: center;
             gap: 1rem;
-
-            img {
-              width: 24px;
-              height: 24px;
-              aspect-ratio: 16/9;
-
-              /* to grey */
-              filter: brightness(0) invert(0.75);
-            }
-
             font-weight: bold;
           }
           .actions {
@@ -376,10 +379,9 @@
     height: $footer-height;
     width: 100%;
     padding-right: 1rem;
-    //background-color: var(--panel-bg-dark);
     color: var(--text-tertiary-color);
     border-top: 1px solid var(--border-light);
-    border-radius: 0 0 var(--detail-border-radius) var(--detail-border-radius);
+    border-radius: 0 0 var(--border-radius-xl) var(--border-radius-xl);
 
     hr {
       height: 12px;
@@ -439,13 +441,11 @@
 
 kbd {
   font-family: var(--font-sans);
-  color: var(--text-primary-color);
+  color: var(--text-secondary-color);
   height: 20px;
   width: 20px;
   background: var(--light-color-overlay);
-  border-radius: calc(var(--detail-border-radius)/3);
-  //border: 1px solid var(--dark-border-color);
-  //padding-top: 1px;
+  border-radius: var(--border-radius-md);
   display: flex;
   align-items: center;
   justify-content: center;

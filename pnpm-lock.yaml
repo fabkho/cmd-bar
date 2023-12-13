@@ -179,6 +179,9 @@ importers:
       nuxt:
         specifier: ^3.8.2
         version: 3.8.2(@types/node@18.18.4)(eslint@8.51.0)(sass@1.69.2)(typescript@5.1.6)(vite@4.5.0)(vue-tsc@1.8.19)
+      nuxt-icon:
+        specifier: ^0.6.7
+        version: 0.6.7(nuxt@3.8.2)(vite@4.5.0)(vue@3.3.10)
       vue:
         specifier: ^3.3.10
         version: 3.3.10(typescript@5.1.6)
@@ -2161,6 +2164,12 @@ packages:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
     dev: true
 
+  /@iconify/collections@1.0.369:
+    resolution: {integrity: sha512-FbmREMa7Nt0+iD3OKsztCEWdFnUI79Ch6g4dvgdlq8btNkdglNf+i08QXjXX4QFXpMbeRxpxwTtMPYgHXmEHLQ==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
   /@iconify/types@2.0.0:
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
     dev: true
@@ -2171,7 +2180,7 @@ packages:
       vue: '>=3'
     dependencies:
       '@iconify/types': 2.0.0
-      vue: 3.3.10(typescript@5.2.2)
+      vue: 3.3.10(typescript@5.1.6)
     dev: true
 
   /@ioredis/commands@1.2.0:
@@ -11180,6 +11189,21 @@ packages:
     transitivePeerDependencies:
       - rollup
       - supports-color
+      - vue
+    dev: true
+
+  /nuxt-icon@0.6.7(nuxt@3.8.2)(vite@4.5.0)(vue@3.3.10):
+    resolution: {integrity: sha512-0QnQM0yqJCb8PWt+gAn6RiXy1/CHScFuOPbsfIIwHMvyKkea+blj5/unq7F9ZHMkfrHozyCID8ErFPSzwEYLeA==}
+    dependencies:
+      '@iconify/collections': 1.0.369
+      '@iconify/vue': 4.1.1(vue@3.3.10)
+      '@nuxt/devtools-kit': 1.0.4(nuxt@3.8.2)(vite@4.5.0)
+      '@nuxt/kit': 3.8.2(rollup@3.29.4)
+    transitivePeerDependencies:
+      - nuxt
+      - rollup
+      - supports-color
+      - vite
       - vue
     dev: true
 

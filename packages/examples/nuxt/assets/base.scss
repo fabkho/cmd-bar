@@ -1,8 +1,8 @@
 
 :root {
   // light theme
-  --primary-color: theme('colors.blue.600');
-  --secondary-color: theme('colors.orange.600');
+  --primary-color: theme('colors.blue.500');
+  //--secondary-color: theme('colors.orange.600');
 
   --panel-bg: theme('colors.gray.100');
   --panel-bg-dark: theme('colors.gray.300');
@@ -10,13 +10,18 @@
   --border: theme('colors.gray.200');
   --border-dark: theme('colors.gray.400');
   --border-light: theme('colors.gray.300');
-  --border-radius: theme('borderRadius.xl');
+  --border-radius-xl: theme('borderRadius.xl');
+  --border-radius-md: theme('borderRadius.md');
+  --border-radius-sm: theme('borderRadius.sm');
 
-  --text-primary-color: theme('colors.gray.900');
-  --text-secondary-color: theme('colors.gray.700');
-  --text-tertiary-color: theme('colors.gray.500');
+  --text-primary-color: theme('colors.zinc.900');
+  --text-secondary-color: theme('colors.zinc.700');
+  --text-tertiary-color: theme('colors.zinc.500');
+
+  --icon-color: #727272;
 
   --light-color-overlay: rgba(234, 236, 240, 1);
+  --dark-color-overlay: rgba(26, 25, 25, 0.5);
 
   --focus-color: theme('colors.gray.300');
   --focus-ring: 0 0 0 3px var(--focus-color);
@@ -35,20 +40,21 @@
 
 .dark {
     // dark theme
-    --panel-bg: theme('colors.gray.800');
-    --panel-bg-dark: theme('colors.gray.700');
+    --panel-bg: #181818;
+    --panel-bg-dark: theme('colors.zinc.800');
 
-    --border: theme('colors.gray.700');
-    --border-dark: theme('colors.gray.600');
-    --border-light: theme('colors.gray.600');
+    --border-dark: theme('colors.zinc.900');
+    --border-light: theme('colors.zinc.800');
 
-    --text-primary-color: theme('colors.gray.100');
-    --text-secondary-color: theme('colors.gray.300');
-    --text-tertiary-color: theme('colors.gray.500');
+    --text-primary-color: theme('colors.white');
+    --text-secondary-color: theme('colors.zinc.200');
+    --text-tertiary-color: theme('colors.zinc.500');
 
-    --light-color-overlay: rgba(225, 225, 225, 0.5);
+  --icon-color: #9B9B9B;
 
-    --focus-color: theme('colors.gray.500');
+  --light-color-overlay: rgba(55, 55, 55, 1);
+
+    --focus-color: theme('colors.zinc.500');
     --focus-ring: 0 0 0 3px var(--focus-color);
 
     --panel-shadow: 0px 5px 15px 0px rgba(32, 32, 32, 0.4);
