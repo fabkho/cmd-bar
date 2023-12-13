@@ -1,38 +1,43 @@
 <script setup lang="ts">
-import { type Commands, defineCommand, CmdBar, useKeymap } from 'cmd-bar'
+import CmdBarCustomerPeak from '~/components/peaks/CmdBarUserPeak.vue'
+import Skeleton from './Skeleton.vue'
+import { type Command, defineCommand, CmdBar } from '@cmd-bar/src'
+import { useCmdBarEvent } from '@cmd-bar/src/useCmdBarEvent'
+import { useKeymap } from '@cmd-bar/src/useKeymap'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
 import { computed, onMounted, ref } from 'vue'
-import LoadingSpinner from './Spinner.vue'
 
-const users = ref<Commands>([])
+const users = ref<Command[]>([])
 const visibility = ref(false)
 const keys = useMagicKeys()
 const cmdK = keys['Meta+k']
+const activeCommand = ref<Command | null>(null)
 
 const listConfig = {
   itemHeightInPixel: {
     actions: 48,
     users: 48
   },
-  containerHeight: '21rem',
+  containerHeight: '26rem',
   groupLabelHeightInPixel: 20
 }
 
-useKeymap({
-  ArrowUp: {
-    action: () => console.log('ArrowUp'),
-    override: false // Explicitly set override to false
-  },
-  ArrowDown: {
-    action: () => console.log('ArrowDown'),
-    override: false // Explicitly set override to false
-  },
-  Enter: {
-    action: () => console.log('Enter')
-  }
+useKeymap((nav) => {
+  return [
+    {
+      key: 'ArrowRight',
+      action: () => nav.prev(),
+      autoRepeat: false
+    },
+    {
+      key: 'ArrowLeft',
+      action: () => nav.next(),
+      autoRepeat: false
+    }
+  ]
 })
 
-const formattedShortcuts = (shortcutString: string) => {
+const formatShortcut = (shortcutString: string) => {
   // Split the string into an array based on the '+' character
   const parts = shortcutString.split('+')
   // Check which Os the user is on with useAgent
@@ -68,7 +73,7 @@ async function fetchUsers() {
     return defineCommand({
       id: user.id.toString(),
       //
-      leading: './src/assets/icons/user_new.svg',
+      leading: 'ic:baseline-person',
       label: `${user.firstName} ${user.lastName}`,
       action: () => {
         // Define your action here.
@@ -77,32 +82,48 @@ async function fetchUsers() {
   })
 }
 
+function toggleColorTheme() {
+  const html = document.querySelector('html')
+  if (html?.classList.contains('dark')) {
+    html.classList.remove('dark')
+  } else {
+    html?.classList.add('dark')
+  }
+}
+
 const actions = [
+  {
+    id: 'toggle-theme',
+    label: 'Toggle color theme',
+    leading: 'ic:baseline-settings',
+    action: () => toggleColorTheme(),
+    shortcut: 'Ctrl+R'
+  },
   {
     id: 'new-resource',
     label: 'Create new Resource',
-    leading: './src/assets/icons/create.svg',
+    leading: 'ic:baseline-add-box',
     action: () => alert('New Resource created'),
     shortcut: 'Ctrl+R'
   },
   {
     id: 'new-service',
     label: 'Add new Service',
-    leading: './src/assets/icons/service_1.svg',
+    leading: 'ic:baseline-add-box',
     action: () => alert('New Service added'),
     shortcut: 'Ctrl+S'
   },
   {
     id: 'open-settings',
     label: 'Open settings',
-    leading: './src/assets/icons/settings.svg',
+    leading: 'ic:baseline-settings',
     action: () => alert('Settings opened'),
     shortcut: 'Ctrl+,'
   },
   {
     id: 'open-calendar',
     label: 'Open calendar',
-    leading: './src/assets/icons/calendar.svg',
+    leading: 'ic:outline-calendar-month',
     action: () => alert('Calendar opened'),
     shortcut: 'Ctrl+C'
   }
@@ -139,9 +160,16 @@ const groups = computed(() =>
   ].filter(Boolean)
 )
 
+const { emitter } = useCmdBarEvent()
+
+emitter.on('selected', (command) => {
+  console.log('selected', command)
+  activeCommand.value = command
+})
+
 const fuseOptions = {
   fuseOptions: {
-    keys: ['commands.label']
+    keys: ['label']
   }
 }
 
@@ -161,7 +189,7 @@ onMounted(() => {
         <div>
           <CmdBar.Input :placeholder="'search fo anything'" :fuse="fuseOptions">
             <template #leading>
-              <img src="../assets/icons/search.svg" alt="search" />
+              <Icon name="ic:baseline-search" size="26px" />
             </template>
             <template #clear> x </template>
           </CmdBar.Input>
@@ -169,22 +197,27 @@ onMounted(() => {
         <CmdBar.Filter :default-filter-option="'all'" :auto-filter="true" />
       </template>
       <template #content>
-        <CmdBar.List :config="listConfig">
+        <CmdBar.VirtualList :config="listConfig" v-if="activeCommand">
           <template #default="{ command }">
             <div class="leading">
-              <img :src="command.leading" alt="icon" />
+              <div class="icon-container">
+                <Icon :name="command.leading" size="18px" />
+              </div>
               {{ command.label }}
             </div>
             <span v-if="command.shortcut" class="actions">
-              <kbd v-for="shortcut of formattedShortcuts(command.shortcut)" :key="shortcut">{{
+              <kbd v-for="shortcut of formatShortcut(command.shortcut)" :key="shortcut">{{
                 shortcut
               }}</kbd>
             </span>
           </template>
-          <template #loading>
-            <LoadingSpinner :size="30" color="grey" />
+          <template #preview="{ command }">
+            <CmdBarCustomerPeak :command="command" />
           </template>
-        </CmdBar.List>
+          <template #loading>
+            <Skeleton v-for="index in 5" :key="index" />
+          </template>
+        </CmdBar.VirtualList>
       </template>
       <template #footer>
         <span class="trigger">
@@ -204,5 +237,5 @@ onMounted(() => {
 </template>
 
 <style lang="scss">
-@import '../assets/standard-theme.scss';
+@import '../assets/cmd-bar';
 </style>
