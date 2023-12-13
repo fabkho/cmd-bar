@@ -195,7 +195,7 @@ onMounted(() => {
         <CmdBar.Filter :default-filter-option="'all'" :auto-filter="true" />
       </template>
       <template #content>
-        <CmdBar.List :config="listConfig" v-if="activeCommand">
+        <CmdBar.VirtualList :config="listConfig" v-if="activeCommand">
           <template #default="{ command }">
             <div class="leading">
               <div class="icon-container">
@@ -215,7 +215,7 @@ onMounted(() => {
           <template #loading>
             <Skeleton v-for="index in 5" :key="index" />
           </template>
-        </CmdBar.List>
+        </CmdBar.VirtualList>
       </template>
       <template #footer>
         <span class="trigger">

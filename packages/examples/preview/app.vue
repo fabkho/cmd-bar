@@ -2,7 +2,9 @@
   <header></header>
 
   <main>
-    <AnnyCmdBar />
+    <client-only>
+      <AnnyCmdBar />
+    </client-only>
   </main>
 </template>
 
