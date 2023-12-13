@@ -141,9 +141,10 @@
 
   &__header {
     .input-container {
-      padding: $spacing $spacing 0 $spacing;
+      padding: $spacing;
       display: flex;
       align-items: center;
+      border-bottom: 1px solid var(--border-light);
 
       .input {
         border: none;
@@ -193,39 +194,23 @@
     .filter {
       position: relative;
       margin: 0 auto;
-      padding:  0.5rem 0 0.5rem 0;
-      border-bottom: 1px solid var(--border-light);
-      transition: border-color 0.3s ease;
+      padding:  1rem 0 0 0;
 
       &-list {
         display: flex;
+        gap: 1rem;
         align-items: center;
-        margin-left: 0.25em;
-      }
-
-      &-line {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        height: 3px;
-        border-top-right-radius: 2px;
-        border-top-left-radius: 2px;
-        background-color: var(--primary-color);
-        transition:
-                transform 0.25s ease,
-                width 0.25s ease;
-        margin-bottom: -1px; // overlay base-line
+        margin-left: 1em;
       }
 
       &-chip {
-        background: transparent;
-        text-transform: uppercase;
-        border: none;
-        padding: 0.25rem 0.5rem 0.25rem;
+        background: var(--dark-color-overlay);
+        border-radius: var(--border-radius-full);
+        text-transform: capitalize;
+        border: 2px solid var(--border-light);
+        padding: 0.5rem 1rem;
         cursor: pointer;
         position: relative;
-        display: inline-block;
-        margin: 0 0.7rem;
         transition: color 0.15s ease;
         font-weight: bolder;
         font-size: 14px;
@@ -235,16 +220,27 @@
         &-active,
         &[aria-selected='true'] {
           color: var(--primary-color);
+          border: 2px solid var(--border-dark);
+
+
         }
 
         &:focus-visible {
-            outline: none;
-            box-shadow: var(--focus-ring);
-            border-radius: 6px;
+            outline: 2px solid var(--focus-color);
+            //outline-offset: 4px;
+            border-radius: var(--border-radius-full);
         }
 
         &:hover:not(&-active) {
           color: var(--text-primary-color);
+          border: 2px solid var(--border-dark);
+        }
+
+        .dark & {
+          &:hover:not(&-active) {
+              color: var(--text-primary-color);
+              border: 2px solid var(--border-lighter);
+            }
         }
       }
     }

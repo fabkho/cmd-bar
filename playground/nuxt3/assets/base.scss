@@ -10,6 +10,8 @@
   --border: theme('colors.gray.200');
   --border-dark: theme('colors.gray.400');
   --border-light: theme('colors.gray.300');
+
+  --border-radius-full: theme('borderRadius.full');
   --border-radius-xl: theme('borderRadius.xl');
   --border-radius-md: theme('borderRadius.md');
   --border-radius-sm: theme('borderRadius.sm');
@@ -20,8 +22,8 @@
 
   --icon-color: #727272;
 
-  --light-color-overlay: rgba(234, 236, 240, 1);
-  --dark-color-overlay: rgba(26, 25, 25, 0.5);
+  --light-color-overlay: rgba(234, 236, 240, 0.5);
+  --dark-color-overlay: rgba(196, 196, 196, 0.5);
 
   --focus-color: theme('colors.gray.300');
   --focus-ring: 0 0 0 3px var(--focus-color);
@@ -45,14 +47,16 @@
 
     --border-dark: theme('colors.zinc.900');
     --border-light: theme('colors.zinc.800');
+    --border-lighter: theme('colors.zinc.700');
 
     --text-primary-color: theme('colors.white');
     --text-secondary-color: theme('colors.zinc.200');
     --text-tertiary-color: theme('colors.zinc.500');
 
-  --icon-color: #9B9B9B;
+    --icon-color: #9B9B9B;
 
-  --light-color-overlay: rgba(55, 55, 55, 1);
+    --light-color-overlay: rgba(55, 55, 55, 0.5);
+    --dark-color-overlay: rgba(44, 44, 44, 0.5);
 
     --focus-color: theme('colors.zinc.500');
     --focus-ring: 0 0 0 3px var(--focus-color);
