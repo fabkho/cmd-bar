@@ -57,7 +57,7 @@ const vClickOutside = {
 </script>
 
 <template>
-  <dialog ref="dialogRef" data-cmd-bar class="cmd-bar">
+  <dialog ref="dialogRef" data-cmd-bar class="cmd-bar" tabindex="-1">
     <div v-click-outside="handleClickOutside" data-cmd-bar-wrapper class="cmd-bar__wrapper">
       <div data-cmd-bar-header class="cmd-bar__header">
         <slot name="header" />
