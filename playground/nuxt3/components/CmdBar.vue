@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import Skeleton from './Skeleton.vue'
-import { type Command, defineCommand, CmdBar, useCmdBarEvent, useKeymap } from 'cmd-bar'
+import { type Command, defineCommand, CmdBar } from '@cmd-bar/src'
+import { useCmdBarEvent } from '@cmd-bar/src/useCmdBarEvent'
+import { useKeymap } from '@cmd-bar/src/useKeymap'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
 import { computed, onMounted, ref } from 'vue'
 
@@ -170,6 +172,24 @@ const fuseOptions = {
   }
 }
 
+const filterOptions = [
+  {
+    groupKey: 'default',
+    label: 'All',
+    visible: true
+  },
+  {
+    groupKey: 'actions',
+    label: 'Actions',
+    visible: true
+  },
+  {
+    groupKey: 'users',
+    label: 'Users',
+    visible: true
+  }
+]
+
 whenever(cmdK, () => {
   visibility.value = !visibility.value
 })
@@ -191,7 +211,7 @@ onMounted(() => {
             <template #clear> x </template>
           </CmdBar.Input>
         </div>
-        <CmdBar.Filter :default-filter-option="'all'" :auto-filter="true" as-checkbox />
+        <CmdBar.Filter :filter-options="filterOptions" :auto-filter="true" as-checkbox />
       </template>
       <template #content>
         <CmdBar.VirtualList :config="listConfig" v-if="activeCommand">
