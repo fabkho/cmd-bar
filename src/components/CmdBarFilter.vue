@@ -1,12 +1,17 @@
 <script setup lang="ts">
-import { useKeymap } from '../useKeymap'
 import { type PropType, onMounted, nextTick, ref, watchEffect } from 'vue'
 import { useCmdBarState } from '../useCmdBarState'
 
+interface FilterOption {
+  groupKey: string
+  visible: boolean
+  label: string
+}
+
 const props = defineProps({
-  defaultFilterOption: {
-    type: String as PropType<Lowercase<string> | null>,
-    default: null
+  filterOptions: {
+    type: Array as PropType<FilterOption[]>, // Use the created interface here
+    default: () => []
   },
   asCheckbox: {
     type: Boolean as PropType<boolean>,
@@ -19,39 +24,36 @@ const emit = defineEmits<{
 }>()
 
 defineSlots<{
-  default(props: { group: string; isSelected: boolean }): any
+  default(props: { group: FilterOption; isSelected: boolean }): any
+  option(props: {}): any
 }>()
 
 const selectedGroups = useCmdBarState?.state.selectedGroups
-const groups = useCmdBarState?.state.groupedCommands.map((group) => group.key)
-const groupSet = new Set(
-  props.defaultFilterOption ? [props.defaultFilterOption, ...groups] : groups
-)
 
 const lineStyle = ref({
   transform: 'translateX(0)',
   width: '0'
 })
 
-// add space as shortcut to select currently focused group
-useKeymap(() => [
-  {
-    key: 'Space',
-    action: () => {
-      const focusedElement = document.activeElement as HTMLElement
-      if (focusedElement && focusedElement.classList.contains('filter-chip')) {
-        const group = focusedElement.dataset.id
-        if (group !== undefined) {
-          toggleGroup(group)
-        }
-      }
-    },
-    autoRepeat: false
-  }
-])
+const groupSet = ref(new Set<FilterOption>()) // Use Set<FilterOption> here
+const hiddenOptions = ref<FilterOption[]>([])
+const defaultFilterOption = ref()
+
+function initGroups() {
+  props.filterOptions.forEach((option) => {
+    if (option.groupKey === 'default') {
+      defaultFilterOption.value = option.groupKey
+    }
+    if (!option.visible) {
+      hiddenOptions.value.push(option)
+      return
+    }
+    groupSet.value.add(option)
+  })
+}
 
 function isSelected(group: string): boolean {
-  if (group === props.defaultFilterOption && selectedGroups.size === 0) {
+  if (group === defaultFilterOption.value && selectedGroups.size === 0) {
     return true
   } else {
     return selectedGroups.has(group)
@@ -59,7 +61,7 @@ function isSelected(group: string): boolean {
 }
 
 function toggleGroup(group: string) {
-  if (group !== props.defaultFilterOption) {
+  if (group !== defaultFilterOption.value) {
     useCmdBarState?.toggleGroup(group, props.asCheckbox)
     emit('filterChange', Array.from(selectedGroups))
 
@@ -75,7 +77,8 @@ function toggleGroup(group: string) {
 }
 
 onMounted(() => {
-  toggleGroup(props?.defaultFilterOption as string)
+  toggleGroup(defaultFilterOption.value as string)
+  initGroups()
 })
 
 // this is needed to update the line position when the cmd bar is opened
@@ -120,20 +123,22 @@ async function setLineStyle() {
   <div class="filter">
     <div class="filter-list" role="tablist">
       <button
-        v-for="group in groupSet"
-        :key="group"
-        :data-id="group"
+        v-for="group in Array.from(groupSet)"
+        :key="group.groupKey"
+        :data-id="group.groupKey"
         class="filter-chip"
-        :aria-selected="isSelected(group)"
+        :aria-selected="isSelected(group.groupKey)"
         role="tab"
         tabindex="0"
         @keydown.enter.prevent
-        @click="toggleGroup(group)"
+        @click="toggleGroup(group.groupKey)"
       >
-        <slot :group="group" :is-selected="isSelected(group)">
-          {{ group }}
+        <slot :group="group" :is-selected="isSelected(group.groupKey)">
+          {{ group.label }}
+          <!-- Access label property from FilterOption -->
         </slot>
       </button>
+      <slot name="option" />
     </div>
     <!-- Bottom line -->
     <div :style="lineStyle" class="filter-line" />
