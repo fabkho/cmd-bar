@@ -153,6 +153,23 @@ const fuseOptions = {
     keys: ['label']
   }
 }
+const filterOptions = [
+  {
+    groupKey: 'default',
+    label: 'All',
+    visible: true
+  },
+  {
+    groupKey: 'actions',
+    label: 'Actions',
+    visible: true
+  },
+  {
+    groupKey: 'users',
+    label: 'Users',
+    visible: false
+  }
+]
 
 whenever(cmdK, () => {
   visibility.value = !visibility.value
@@ -175,10 +192,10 @@ onMounted(() => {
             <template #clear> x </template>
           </CmdBar.Input>
         </div>
-        <CmdBar.Filter :default-filter-option="'all'" :auto-filter="true" />
+        <CmdBar.Filter :filter-options="filterOptions" />
       </template>
       <template #content>
-        <CmdBar.List :config="listConfig" v-if="activeCommand">
+        <CmdBar.VirtualList :config="listConfig" v-if="activeCommand">
           <template #default="{ command }">
             <div class="leading">
               <!--              <fa :icon="['far', command.leading]" />-->
@@ -193,7 +210,7 @@ onMounted(() => {
           <template #loading>
             <Skeleton v-for="index in 5" :key="index" />
           </template>
-        </CmdBar.List>
+        </CmdBar.VirtualList>
       </template>
       <template #footer>
         <span class="trigger">

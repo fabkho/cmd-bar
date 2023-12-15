@@ -211,7 +211,7 @@ onMounted(() => {
             <template #clear> x </template>
           </CmdBar.Input>
         </div>
-        <CmdBar.Filter :filter-options="filterOptions" :auto-filter="true" as-checkbox />
+        <CmdBar.Filter :filter-options="filterOptions" as-checkbox />
       </template>
       <template #content>
         <CmdBar.VirtualList :config="listConfig" v-if="activeCommand">
