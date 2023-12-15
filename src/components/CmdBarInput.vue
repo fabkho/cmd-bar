@@ -13,6 +13,7 @@ const props = defineProps({
     type: Object as PropType<UseFuseOptions<Command>>,
     default: () => ({})
   },
+  // TODO: multiples of this key should be disallowed
   nonTriggerKeys: {
     type: Array as PropType<string[]>,
     default: () => ['@', '/']
@@ -43,8 +44,11 @@ const options: ComputedRef<Partial<UseFuseOptions<Command>>> = computed(() => {
 function handleInput(e: Event): void {
   const inputValue = (e.target as HTMLInputElement)?.value
 
-  console.log('handleInput', inputValue, props.nonTriggerKeys)
-  if (props.nonTriggerKeys?.includes(inputValue)) return
+  if (props.nonTriggerKeys?.includes(inputValue)) {
+    emit('input', inputValue)
+    console.log('handleInput', inputValue);
+    return
+  }
   if (inputValue !== null && inputValue !== undefined) {
     useCmdBarState?.updateQuery(inputValue, options.value)
   }

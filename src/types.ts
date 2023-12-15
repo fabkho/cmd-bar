@@ -47,3 +47,9 @@ export interface ShortcutOptions {
   autoRepeat?: boolean
   override?: boolean
 }
+
+export interface FilterOption {
+  groupKey: string
+  visible: boolean
+  label: string
+}
