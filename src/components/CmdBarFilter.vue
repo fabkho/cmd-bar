@@ -25,7 +25,7 @@ const emit = defineEmits<{
 
 defineSlots<{
   default(props: { group: FilterOption; isSelected: boolean }): any
-  option(props: {}): any
+  option(props: { hiddenOptions: FilterOption[] }): any
 }>()
 
 const selectedGroups = useCmdBarState?.state.selectedGroups
@@ -138,7 +138,7 @@ async function setLineStyle() {
           <!-- Access label property from FilterOption -->
         </slot>
       </button>
-      <slot name="option" />
+      <slot name="option" :hidden-options="hiddenOptions" />
     </div>
     <!-- Bottom line -->
     <div :style="lineStyle" class="filter-line" />
