@@ -12,6 +12,10 @@ const props = defineProps({
   fuse: {
     type: Object as PropType<UseFuseOptions<Command>>,
     default: () => ({})
+  },
+  nonTriggerKeys: {
+    type: Array as PropType<string[]>,
+    default: () => ['@', '/']
   }
 })
 
@@ -37,7 +41,13 @@ const options: ComputedRef<Partial<UseFuseOptions<Command>>> = computed(() => {
  * emit input event and store value in store
  */
 function handleInput(e: Event): void {
-  useCmdBarState?.updateQuery((e.target as HTMLInputElement)?.value, options.value)
+  const inputValue = (e.target as HTMLInputElement)?.value
+
+  console.log('handleInput', inputValue, props.nonTriggerKeys)
+  if (props.nonTriggerKeys?.includes(inputValue)) return
+  if (inputValue !== null && inputValue !== undefined) {
+    useCmdBarState?.updateQuery(inputValue, options.value)
+  }
 }
 
 function clearQuery(): void {
