@@ -171,6 +171,24 @@ const fuseOptions = {
   }
 }
 
+const filterOptions = [
+  {
+    groupKey: 'default',
+    label: 'All',
+    visible: true
+  },
+  {
+    groupKey: 'actions',
+    label: 'Actions',
+    visible: true
+  },
+  {
+    groupKey: 'users',
+    label: 'Users',
+    visible: false
+  }
+]
+
 whenever(cmdK, () => {
   visibility.value = !visibility.value
 })
@@ -192,7 +210,7 @@ onMounted(() => {
             <template #clear> x </template>
           </CmdBar.Input>
         </div>
-        <CmdBar.Filter :default-filter-option="'all'" :auto-filter="true" />
+        <CmdBar.Filter :filter-options="filterOptions" as-checkbox />
       </template>
       <template #content>
         <CmdBar.VirtualList :config="listConfig" v-if="activeCommand">

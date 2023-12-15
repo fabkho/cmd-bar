@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import CmdBarCustomerPeak from '~/components/peaks/CmdBarUserPeak.vue'
 import Skeleton from './Skeleton.vue'
 import { type Command, defineCommand, CmdBar } from '@cmd-bar/src'
 import { useCmdBarEvent } from '@cmd-bar/src/useCmdBarEvent'
@@ -148,7 +147,7 @@ const groups = computed(() =>
         return data.value.users.map((user: Record<string, any>) =>
           defineCommand({
             id: user.id.toString(),
-            leading: './src/assets/icons/user_new.svg',
+            leading: 'ic:baseline-person',
             label: `${user.firstName} ${user.lastName}`,
             action: () => {
               // Define your action here.
@@ -173,6 +172,24 @@ const fuseOptions = {
   }
 }
 
+const filterOptions = [
+  {
+    groupKey: 'default',
+    label: 'All',
+    visible: true
+  },
+  {
+    groupKey: 'actions',
+    label: 'Actions',
+    visible: true
+  },
+  {
+    groupKey: 'users',
+    label: 'Users',
+    visible: true
+  }
+]
+
 whenever(cmdK, () => {
   visibility.value = !visibility.value
 })
@@ -194,7 +211,7 @@ onMounted(() => {
             <template #clear> x </template>
           </CmdBar.Input>
         </div>
-        <CmdBar.Filter :default-filter-option="'all'" :auto-filter="true" />
+        <CmdBar.Filter :filter-options="filterOptions" as-checkbox />
       </template>
       <template #content>
         <CmdBar.VirtualList :config="listConfig" v-if="activeCommand">
@@ -210,9 +227,6 @@ onMounted(() => {
                 shortcut
               }}</kbd>
             </span>
-          </template>
-          <template #preview="{ command }">
-            <CmdBarCustomerPeak :command="command" />
           </template>
           <template #loading>
             <Skeleton v-for="index in 5" :key="index" />

@@ -15,7 +15,7 @@ const listConfig = {
     actions: 48,
     users: 48
   },
-  containerHeight: '21rem',
+  containerHeight: '26rem',
   groupLabelHeightInPixel: 20
 }
 
@@ -70,7 +70,7 @@ async function fetchUsers() {
     return defineCommand({
       id: user.id.toString(),
       //
-      leading: './src/assets/icons/user_new.svg',
+      leading: 'ic:baseline-person',
       label: `${user.firstName} ${user.lastName}`,
       action: () => {
         // Define your action here.
@@ -79,32 +79,48 @@ async function fetchUsers() {
   })
 }
 
+function toggleColorTheme() {
+  const html = document.querySelector('html')
+  if (html?.classList.contains('dark')) {
+    html.classList.remove('dark')
+  } else {
+    html?.classList.add('dark')
+  }
+}
+
 const actions = [
+  {
+    id: 'toggle-theme',
+    label: 'Toggle color theme',
+    leading: 'ic:baseline-settings',
+    action: () => toggleColorTheme(),
+    shortcut: 'Ctrl+R'
+  },
   {
     id: 'new-resource',
     label: 'Create new Resource',
-    leading: './src/assets/icons/create.svg',
+    leading: 'ic:baseline-add-box',
     action: () => alert('New Resource created'),
     shortcut: 'Ctrl+R'
   },
   {
     id: 'new-service',
     label: 'Add new Service',
-    leading: './src/assets/icons/service_1.svg',
+    leading: 'ic:baseline-add-box',
     action: () => alert('New Service added'),
     shortcut: 'Ctrl+S'
   },
   {
     id: 'open-settings',
     label: 'Open settings',
-    leading: './src/assets/icons/settings.svg',
+    leading: 'ic:baseline-settings',
     action: () => alert('Settings opened'),
     shortcut: 'Ctrl+,'
   },
   {
     id: 'open-calendar',
     label: 'Open calendar',
-    leading: './src/assets/icons/calendar.svg',
+    leading: 'ic:outline-calendar-month',
     action: () => alert('Calendar opened'),
     shortcut: 'Ctrl+C'
   }
@@ -129,7 +145,7 @@ const groups = computed(() =>
         return data.value.users.map((user: Record<string, any>) =>
           defineCommand({
             id: user.id.toString(),
-            leading: './src/assets/icons/user_new.svg',
+            leading: 'ic:baseline-person',
             label: `${user.firstName} ${user.lastName}`,
             action: () => {
               // Define your action here.
@@ -153,6 +169,7 @@ const fuseOptions = {
     keys: ['label']
   }
 }
+
 const filterOptions = [
   {
     groupKey: 'default',
@@ -187,18 +204,20 @@ onMounted(() => {
         <div>
           <CmdBar.Input :placeholder="'search fo anything'" :fuse="fuseOptions">
             <template #leading>
-              <img src="../assets/icons/search.svg" alt="search" />
+              <Icon name="ic:baseline-search" size="26px" />
             </template>
             <template #clear> x </template>
           </CmdBar.Input>
         </div>
-        <CmdBar.Filter :filter-options="filterOptions" />
+        <CmdBar.Filter :filter-options="filterOptions" as-checkbox />
       </template>
       <template #content>
         <CmdBar.VirtualList :config="listConfig" v-if="activeCommand">
           <template #default="{ command }">
             <div class="leading">
-              <!--              <fa :icon="['far', command.leading]" />-->
+              <div class="icon-container">
+                <Icon :name="command.leading" size="18px" />
+              </div>
               {{ command.label }}
             </div>
             <span v-if="command.shortcut" class="actions">
@@ -230,5 +249,5 @@ onMounted(() => {
 </template>
 
 <style lang="scss">
-@import '../assets/anny-theme';
+@import '../assets/cmd-bar';
 </style>
