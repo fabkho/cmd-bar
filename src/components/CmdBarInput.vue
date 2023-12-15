@@ -20,7 +20,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits<{
-  input: [ie: InputEvent]
+  input: [query: string]
 }>()
 
 const query = computed(() => useCmdBarState?.state.query)
@@ -48,6 +48,8 @@ function handleInput(e: Event): void {
   if (inputValue !== null && inputValue !== undefined) {
     useCmdBarState?.updateQuery(inputValue, options.value)
   }
+
+  emit('input', inputValue)
 }
 
 function clearQuery(): void {
