@@ -31,9 +31,9 @@ const options: ComputedRef<Partial<UseFuseOptions<Command>>> = computed(() => {
     fuseOptions: {
       ...props.fuse?.fuseOptions,
       keys: props.fuse?.fuseOptions?.keys ?? ['label'],
-      minMatchCharLength: 2
+      minMatchCharLength: props.fuse?.fuseOptions?.minMatchCharLength ?? 2
     },
-    resultLimit: 12
+    resultLimit: props.fuse?.resultLimit ?? 12
   }
 })
 
@@ -46,7 +46,7 @@ function handleInput(e: Event): void {
 
   if (props.nonTriggerKeys?.includes(inputValue)) {
     emit('input', inputValue)
-    console.log('handleInput', inputValue);
+    console.log('handleInput', inputValue)
     return
   }
   if (inputValue !== null && inputValue !== undefined) {
