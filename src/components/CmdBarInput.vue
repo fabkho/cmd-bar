@@ -12,11 +12,16 @@ const props = defineProps({
   fuse: {
     type: Object as PropType<UseFuseOptions<Command>>,
     default: () => ({})
+  },
+  // TODO: multiples of this key should be disallowed
+  nonTriggerKeys: {
+    type: Array as PropType<string[]>,
+    default: () => ['@', '/']
   }
 })
 
 const emit = defineEmits<{
-  input: [ie: InputEvent]
+  input: [query: string]
 }>()
 
 const query = computed(() => useCmdBarState?.state.query)
@@ -26,9 +31,9 @@ const options: ComputedRef<Partial<UseFuseOptions<Command>>> = computed(() => {
     fuseOptions: {
       ...props.fuse?.fuseOptions,
       keys: props.fuse?.fuseOptions?.keys ?? ['label'],
-      minMatchCharLength: 2
+      minMatchCharLength: props.fuse?.fuseOptions?.minMatchCharLength ?? 2
     },
-    resultLimit: 12
+    resultLimit: props.fuse?.resultLimit ?? 12
   }
 })
 
@@ -37,7 +42,18 @@ const options: ComputedRef<Partial<UseFuseOptions<Command>>> = computed(() => {
  * emit input event and store value in store
  */
 function handleInput(e: Event): void {
-  useCmdBarState?.updateQuery((e.target as HTMLInputElement)?.value, options.value)
+  const inputValue = (e.target as HTMLInputElement)?.value
+
+  if (props.nonTriggerKeys?.includes(inputValue)) {
+    emit('input', inputValue)
+    console.log('handleInput', inputValue)
+    return
+  }
+  if (inputValue !== null && inputValue !== undefined) {
+    useCmdBarState?.updateQuery(inputValue, options.value)
+  }
+
+  emit('input', inputValue)
 }
 
 function clearQuery(): void {

@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import CmdBarHint from '~/components/CmdBarHint.vue'
+import CmdBarCustomerPeak from '~/components/peaks/CmdBarUserPeak.vue'
 import Skeleton from './Skeleton.vue'
-import { type Command, defineCommand, CmdBar } from '@cmd-bar/src'
-import { useCmdBarEvent } from '@cmd-bar/src/useCmdBarEvent'
-import { useKeymap } from '@cmd-bar/src/useKeymap'
+import { type Command, defineCommand, CmdBar, useCmdBarEvent, useKeymap } from 'cmd-bar'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
 import { computed, onMounted, ref } from 'vue'
 
@@ -19,6 +19,7 @@ function updateQuery(q: string) {
 }
 
 const showUserHint = computed(() => {
+  console.log('showUserHint', query.value === '@')
   return query.value === '@'
 })
 
@@ -224,6 +225,7 @@ onMounted(() => {
             </template>
             <template #clear> x </template>
           </CmdBar.Input>
+          <CmdBarHint :visible="showUserHint" />
         </div>
         <CmdBar.Filter :filter-options="filterOptions" as-checkbox />
       </template>
@@ -241,6 +243,9 @@ onMounted(() => {
                 shortcut
               }}</kbd>
             </span>
+          </template>
+          <template #preview="{ command }">
+            <CmdBarCustomerPeak :command="command" />
           </template>
           <template #loading>
             <Skeleton v-for="index in 5" :key="index" />
