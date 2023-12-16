@@ -1,12 +1,7 @@
 <script setup lang="ts">
+import { FilterOption } from '../types'
 import { type PropType, onMounted, nextTick, ref, watchEffect } from 'vue'
 import { useCmdBarState } from '../useCmdBarState'
-
-interface FilterOption {
-  groupKey: string
-  visible: boolean
-  label: string
-}
 
 const props = defineProps({
   filterOptions: {

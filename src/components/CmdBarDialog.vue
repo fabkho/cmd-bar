@@ -26,9 +26,6 @@ function toggleCmdBar(): void {
   }
 }
 
-/**
- * second option: toggle commandbar on prop change
- */
 watch(
   () => props.visible,
   () => toggleCmdBar()
