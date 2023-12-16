@@ -43,6 +43,8 @@
     "play:nuxt": "pnpm --filter=nuxt3 p:dev",
     "example:basic": "pnpm --filter=basic dev",
     "example:preview": "pnpm --filter=preview dev",
+    "example:checkbox": "pnpm --filter=preview dev",
+    "example:hint": "pnpm --filter=hint dev",
     "build": "vue-tsc --noEmit && vite build --mode lib",
     "ci:version": "pnpm changelog && pnpx changeset version && pnpm install --no-frozen-lockfile && git add .",
     "ci:publish": "npm run lint && pnpm run build && git status && changeset publish",
