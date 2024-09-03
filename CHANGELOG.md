@@ -1,5 +1,18 @@
 # cmd-bar
 
+## 0.8.0
+
+### Minor Changes
+
+- Fixes
+
+  - removed logs
+
+  Dependencies
+
+  - updated vue to `3.4.38`
+  - updated dev deps
+
 ## 0.7.9
 
 ### Patch Changes

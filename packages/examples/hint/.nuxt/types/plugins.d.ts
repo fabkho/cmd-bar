@@ -3,18 +3,25 @@ import type { Plugin } from '#app'
 
 type Decorate<T extends Record<string, any>> = { [K in keyof T as K extends string ? `$${K}` : never]: T[K] }
 
-type InjectionType<A extends Plugin> = A extends Plugin<infer T> ? Decorate<T> : unknown
+type IsAny<T> = 0 extends 1 & T ? true : false
+type InjectionType<A extends Plugin> = IsAny<A> extends true ? unknown : A extends Plugin<infer T> ? Decorate<T> : unknown
 
 type NuxtAppInjections = 
-  InjectionType<typeof import("../../../../../node_modules/.pnpm/nuxt@3.8.1_@types+node@20.8.4_eslint@8.51.0_rollup@3.29.4_sass@1.69.2_typescript@5.2.2_vite@4.5.0_vue-tsc@1.8.19/node_modules/nuxt/dist/app/plugins/revive-payload.server").default> &
-  InjectionType<typeof import("../../../../../node_modules/.pnpm/nuxt@3.8.1_@types+node@20.8.4_eslint@8.51.0_rollup@3.29.4_sass@1.69.2_typescript@5.2.2_vite@4.5.0_vue-tsc@1.8.19/node_modules/nuxt/dist/app/plugins/revive-payload.client").default> &
-  InjectionType<typeof import("../../../../../node_modules/.pnpm/nuxt@3.8.1_@types+node@20.8.4_eslint@8.51.0_rollup@3.29.4_sass@1.69.2_typescript@5.2.2_vite@4.5.0_vue-tsc@1.8.19/node_modules/nuxt/dist/head/runtime/plugins/unhead").default> &
-  InjectionType<typeof import("../../../../../node_modules/.pnpm/nuxt@3.8.1_@types+node@20.8.4_eslint@8.51.0_rollup@3.29.4_sass@1.69.2_typescript@5.2.2_vite@4.5.0_vue-tsc@1.8.19/node_modules/nuxt/dist/app/plugins/router").default> &
-  InjectionType<typeof import("../../../../../node_modules/.pnpm/nuxt@3.8.1_@types+node@20.8.4_eslint@8.51.0_rollup@3.29.4_sass@1.69.2_typescript@5.2.2_vite@4.5.0_vue-tsc@1.8.19/node_modules/nuxt/dist/app/plugins/chunk-reload.client").default> &
-  InjectionType<typeof import("../../../../../node_modules/.pnpm/nuxt@3.8.1_@types+node@20.8.4_eslint@8.51.0_rollup@3.29.4_sass@1.69.2_typescript@5.2.2_vite@4.5.0_vue-tsc@1.8.19/node_modules/nuxt/dist/app/plugins/check-outdated-build.client").default>
+  InjectionType<typeof import("../../../../../node_modules/.pnpm/nuxt@3.13.0_@parcel+watcher@2.4.1_@types+node@20.16.3_encoding@0.1.13_eslint@8.57.0_ioredis@5_vowth476ffegb3eetjcbpwoaqu/node_modules/nuxt/dist/app/plugins/revive-payload.client.js").default> &
+  InjectionType<typeof import("../../../../../node_modules/.pnpm/nuxt@3.13.0_@parcel+watcher@2.4.1_@types+node@20.16.3_encoding@0.1.13_eslint@8.57.0_ioredis@5_vowth476ffegb3eetjcbpwoaqu/node_modules/nuxt/dist/head/runtime/plugins/unhead.js").default> &
+  InjectionType<typeof import("../../../../../node_modules/.pnpm/nuxt@3.13.0_@parcel+watcher@2.4.1_@types+node@20.16.3_encoding@0.1.13_eslint@8.57.0_ioredis@5_vowth476ffegb3eetjcbpwoaqu/node_modules/nuxt/dist/app/plugins/router.js").default> &
+  InjectionType<typeof import("../../../../../node_modules/.pnpm/nuxt@3.13.0_@parcel+watcher@2.4.1_@types+node@20.16.3_encoding@0.1.13_eslint@8.57.0_ioredis@5_vowth476ffegb3eetjcbpwoaqu/node_modules/nuxt/dist/app/plugins/payload.client.js").default> &
+  InjectionType<typeof import("../../../../../node_modules/.pnpm/nuxt@3.13.0_@parcel+watcher@2.4.1_@types+node@20.16.3_encoding@0.1.13_eslint@8.57.0_ioredis@5_vowth476ffegb3eetjcbpwoaqu/node_modules/nuxt/dist/app/plugins/navigation-repaint.client.js").default> &
+  InjectionType<typeof import("../../../../../node_modules/.pnpm/nuxt@3.13.0_@parcel+watcher@2.4.1_@types+node@20.16.3_encoding@0.1.13_eslint@8.57.0_ioredis@5_vowth476ffegb3eetjcbpwoaqu/node_modules/nuxt/dist/app/plugins/check-outdated-build.client.js").default> &
+  InjectionType<typeof import("../../../../../node_modules/.pnpm/nuxt@3.13.0_@parcel+watcher@2.4.1_@types+node@20.16.3_encoding@0.1.13_eslint@8.57.0_ioredis@5_vowth476ffegb3eetjcbpwoaqu/node_modules/nuxt/dist/app/plugins/revive-payload.server.js").default> &
+  InjectionType<typeof import("../../../../../node_modules/.pnpm/nuxt@3.13.0_@parcel+watcher@2.4.1_@types+node@20.16.3_encoding@0.1.13_eslint@8.57.0_ioredis@5_vowth476ffegb3eetjcbpwoaqu/node_modules/nuxt/dist/app/plugins/chunk-reload.client.js").default>
 
 declare module '#app' {
   interface NuxtApp extends NuxtAppInjections { }
+
+  interface NuxtAppLiterals {
+    pluginName: 'nuxt:revive-payload:client' | 'nuxt:head' | 'nuxt:router' | 'nuxt:payload' | 'nuxt:revive-payload:server' | 'nuxt:chunk-reload' | 'nuxt:global-components'
+  }
 }
 
 declare module 'vue' {

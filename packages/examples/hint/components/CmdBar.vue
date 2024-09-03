@@ -230,7 +230,7 @@ onMounted(() => {
         <CmdBar.Filter :filter-options="filterOptions" as-checkbox />
       </template>
       <template #content>
-        <CmdBar.VirtualList :config="listConfig" v-if="activeCommand">
+        <CmdBar.VirtualList v-if="activeCommand" :config="listConfig">
           <template #default="{ command }">
             <div class="leading">
               <div class="icon-container">

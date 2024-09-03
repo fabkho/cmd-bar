@@ -57,17 +57,17 @@ function preventTabBreakout(event: KeyboardEvent) {
 <template>
   <dialog
     ref="dialogRef"
-    @keydown="handleDialogKeyDown"
     tabindex="-1"
     class="ml-14 !z-10 w-[12rem] rounded-lg bg-gray-300 dark:bg-zinc-800 dark:text-zinc-200 p-1"
+    @keydown="handleDialogKeyDown"
   >
     <ul class="flex flex-col gap-2">
       <li
         v-for="(suggestion, index) in suggestions"
         :key="index"
         tabindex="0"
-        @click="selectSuggestion(suggestion)"
         class="hover:bg-neutral-400 dark:hover:bg-neutral-200 focus:bg-neutral-700 focus:outline-none dark:focus:bg-neutral-600 rounded-md p-2 cursor-pointer"
+        @click="selectSuggestion(suggestion)"
       >
         <div class="flex items-center gap-3">
           <img

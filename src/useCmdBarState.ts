@@ -109,7 +109,7 @@ const useCmdBarState = {
       return
     }
 
-    let groupsToSearch = getGroupsToSearch()
+    const groupsToSearch = getGroupsToSearch()
 
     if (groupsToSearch) {
       await searchGroups(query, groupsToSearch, fuseOptions)

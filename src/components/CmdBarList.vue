@@ -59,7 +59,7 @@ watch(
 </script>
 
 <template>
-  <div class="grouped-list" ref="listRef">
+  <div ref="listRef" class="grouped-list">
     <ul data-cmd-bar-items class="list-items">
       <li v-for="group in visibleItems" :key="group.key" class="group">
         <h2
