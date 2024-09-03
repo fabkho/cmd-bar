@@ -46,7 +46,6 @@ function handleInput(e: Event): void {
 
   if (props.nonTriggerKeys?.includes(inputValue)) {
     emit('input', inputValue)
-    console.log('handleInput', inputValue)
     return
   }
   if (inputValue !== null && inputValue !== undefined) {
