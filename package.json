@@ -2,7 +2,7 @@
   "name": "cmd-bar",
   "version": "0.7.9",
   "license": "MIT",
-  "packageManager": "pnpm@8.6.12",
+  "packageManager": "pnpm@9.0.6",
   "repository": "fabkho/cmd-bar",
   "description": "Versatile Vue 3 command-bar component",
   "engines": {
@@ -58,7 +58,7 @@
     "fuse.js": "^6.6.2",
     "mitt": "^3.0.1",
     "nanoid": "^4.0.2",
-    "vue": "^3.3.4"
+    "vue": "^3.4.38"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
@@ -77,7 +77,7 @@
     "sass": "^1.64.2",
     "sass-loader": "^13.3.2",
     "typescript": "~5.1.6",
-    "vite": "^4.4.6",
+    "vite": "5.2.6",
     "vite-plugin-dts": "^3.5.4",
     "vue-eslint-parser": "^9.3.1",
     "vue-tsc": "^1.8.6"
