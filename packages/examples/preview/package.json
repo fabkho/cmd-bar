@@ -12,10 +12,9 @@
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "@nuxtjs/tailwindcss": "^6.10.1",
-    "nuxt": "^3.8.2",
+    "nuxt": "^3.13.0",
     "nuxt-icon": "^0.6.7",
-    "vue": "^3.3.10",
-    "vue-router": "^4.2.5"
+    "vue": "^3.4.38"
   },
   "dependencies": {
     "cmd-bar": "workspace:^"

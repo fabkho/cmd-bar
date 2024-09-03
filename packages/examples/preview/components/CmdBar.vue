@@ -167,7 +167,8 @@ emitter.on('selected', (command) => {
 
 const fuseOptions = {
   fuseOptions: {
-    keys: ['label']
+    keys: ['name'],
+    minMatchCharLength: 3
   }
 }
 
