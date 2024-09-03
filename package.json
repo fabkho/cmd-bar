@@ -1,6 +1,6 @@
 {
   "name": "cmd-bar",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "license": "MIT",
   "packageManager": "pnpm@9.0.6",
   "repository": "fabkho/cmd-bar",
@@ -46,7 +46,7 @@
     "example:checkbox": "pnpm --filter=preview dev",
     "example:hint": "pnpm --filter=hint dev",
     "build": "vue-tsc --noEmit && vite build --mode lib",
-    "ci:version": "pnpm changelog && pnpx changeset version && pnpm install --no-frozen-lockfile && git add .",
+    "ci:version": "pnpm changeset && pnpm changeset version && pnpm install --no-frozen-lockfile && git add .",
     "ci:publish": "npm run lint && pnpm run build && git status && changeset publish",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "lintfix": "eslint . --fix --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
