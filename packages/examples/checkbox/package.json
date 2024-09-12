@@ -1,5 +1,5 @@
 {
-  "name": "nuxt-app",
+  "name": "@cmd-bar/checkbox",
   "private": true,
   "type": "module",
   "scripts": {

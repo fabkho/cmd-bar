@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref, PropType } from 'vue'
-
 const props = defineProps({
   visible: {
     type: Boolean as PropType<boolean>,

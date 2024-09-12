@@ -4,7 +4,6 @@ import CmdBarCustomerPeak from '~/components/peaks/CmdBarUserPeak.vue'
 import Skeleton from './Skeleton.vue'
 import { type Command, defineCommand, CmdBar, useCmdBarEvent, useKeymap } from 'cmd-bar'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
-import { computed, onMounted, ref } from 'vue'
 
 const users = ref<Command[]>([])
 const visibility = ref(false)

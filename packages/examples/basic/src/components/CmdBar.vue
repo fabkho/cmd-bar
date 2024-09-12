@@ -5,6 +5,7 @@ import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
 import { computed, onMounted, ref } from 'vue'
 
 const users = ref<Command[]>([])
+const products = ref<Command[]>([])
 const visibility = ref(false)
 const keys = useMagicKeys()
 const cmdK = keys['Meta+k']
@@ -13,7 +14,8 @@ const activeCommand = ref<Command | null>(null)
 const listConfig = {
   itemHeightInPixel: {
     actions: 48,
-    users: 48
+    users: 48,
+    products: 48
   },
   containerHeight: '21rem',
   groupLabelHeightInPixel: 20
@@ -59,7 +61,7 @@ const formatShortcut = (shortcutString: string) => {
 
 async function fetchUsers() {
   const { data } = await useFetch(
-    'https://dummyjson.com/users?limit=50&select=id,firstName,lastName',
+    'https://dummyjson.com/users?limit=10&select=id,firstName,lastName',
     {
       beforeFetch(ctx) {
         return ctx
@@ -72,6 +74,23 @@ async function fetchUsers() {
       //
       leading: './src/assets/icons/user_new.svg',
       label: `${user.firstName} ${user.lastName}`,
+      action: () => {
+        // Define your action here.
+      }
+    })
+  })
+}
+
+async function fetchProducts() {
+  const { data } = await useFetch('https://dummyjson.com/products?limit=10&select=id,title', {
+    beforeFetch(ctx) {
+      return ctx
+    }
+  }).json()
+  products.value = data.value.products.map((product: Record<string, any>) => {
+    return defineCommand({
+      id: product.id.toString(),
+      label: `${product.title}`,
       action: () => {
         // Define your action here.
       }
@@ -129,8 +148,27 @@ const groups = computed(() =>
         return data.value.users.map((user: Record<string, any>) =>
           defineCommand({
             id: user.id.toString(),
-            leading: './src/assets/icons/user_new.svg',
             label: `${user.firstName} ${user.lastName}`,
+            action: () => {
+              // Define your action here.
+            }
+          })
+        )
+      }
+    },
+    {
+      key: 'products',
+      label: 'Products',
+      commands: products.value,
+      search: async (q: string) => {
+        if (!q) {
+          return []
+        }
+        const { data } = await useFetch(`https://dummyjson.com/products/search?q=${q}`, {}).json()
+        return data.value.products.map((product: Record<string, any>) =>
+          defineCommand({
+            id: product.id.toString(),
+            label: `${product.title}`,
             action: () => {
               // Define your action here.
             }
@@ -144,7 +182,7 @@ const groups = computed(() =>
 const { emitter } = useCmdBarEvent()
 
 emitter.on('selected', (command) => {
-  console.log('selected', command)
+  console.log('=>(CmdBar.vue:185) command', command)
   activeCommand.value = command
 })
 
@@ -177,6 +215,7 @@ whenever(cmdK, () => {
 
 onMounted(() => {
   fetchUsers()
+  fetchProducts()
 })
 </script>
 
@@ -195,10 +234,9 @@ onMounted(() => {
         <CmdBar.Filter :filter-options="filterOptions" />
       </template>
       <template #content>
-        <CmdBar.VirtualList :config="listConfig" v-if="activeCommand">
+        <CmdBar.VirtualList :config="listConfig">
           <template #default="{ command }">
             <div class="leading">
-              <!--              <fa :icon="['far', command.leading]" />-->
               {{ command.label }}
             </div>
             <span v-if="command.shortcut" class="actions">
