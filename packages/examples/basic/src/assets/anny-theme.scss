@@ -54,7 +54,7 @@
     .input-container {
       display: flex;
       align-items: center;
-      padding: $spacing $spacing 0.75rem $spacing;
+      padding: $spacing;
 
       .input {
         font-family: var(--font-sans);
@@ -227,6 +227,7 @@
       overflow: hidden scroll;
       overscroll-behavior: contain;
       content-visibility: auto;
+      height: 25rem;
 
       /* Scrollbar */
       &::-webkit-scrollbar {

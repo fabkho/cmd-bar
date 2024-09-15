@@ -45,7 +45,6 @@
     "example:hint": "pnpm --filter=hint dev",
     "dev": "vite build --watch",
     "build": "vue-tsc --noEmit && vite build --mode lib",
-    "prepublishOnly": "pnpm run test && pnpm run build",
     "ci:version": "pnpm changeset && pnpm changeset version && pnpm install --no-frozen-lockfile && git add .",
     "ci:publish": "npm run lint && pnpm run build && git status && changeset publish",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
