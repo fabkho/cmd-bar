@@ -251,10 +251,8 @@
           text-transform: uppercase;
         }
       }
-    }
 
-    .group-container {
-      .items {
+      .items, .results {
         padding: 0 0.25rem;
         .item {
           cursor: pointer;

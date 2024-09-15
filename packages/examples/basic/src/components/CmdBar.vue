@@ -182,7 +182,6 @@ const groups = computed(() =>
 const { emitter } = useCmdBarEvent()
 
 emitter.on('selected', (command) => {
-  console.log('=>(CmdBar.vue:185) command', command)
   activeCommand.value = command
 })
 
@@ -251,6 +250,14 @@ onMounted(() => {
           <!-- TODO: idea results slot -->
           <template #results="{ command }">
             <!-- here you could change the interface of the commands and add a heading -->
+            <div class="leading">
+              {{ command.label }}
+            </div>
+            <span v-if="command.shortcut" class="actions">
+              <kbd v-for="shortcut of formatShortcut(command.shortcut)" :key="shortcut">{{
+                shortcut
+              }}</kbd>
+            </span>
           </template>
         </CmdBar.List>
       </template>

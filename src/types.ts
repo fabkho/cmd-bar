@@ -1,11 +1,16 @@
 export type State = {
+  /* @deprecated */
+  groupedCommands: Group[]
+  /* @deprecated */
+  filteredGroupedCommands: Group[]
+  /* @deprecated */
+  filteredCommands: Command[]
+  /* @deprecated */
+  groupLoadingStates: Record<string, boolean>
+
   selectedCommandId: string | null
   parentCommandId: string | null
   query: string
-  groupedCommands: Group[]
-  filteredGroupedCommands: Group[]
-  filteredCommands: Command[]
-  groupLoadingStates: Record<string, boolean>
 
   groups: Group[]
   commands: Command[]
