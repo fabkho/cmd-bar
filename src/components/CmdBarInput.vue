@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useCmdBarState } from '../useCmdBarState'
+import { useCmdBarState } from '../composables/useCmdBarState'
 import type { Command } from '../types'
 import type { UseFuseOptions } from '@vueuse/integrations/useFuse'
 import { computed, PropType, ComputedRef } from 'vue'

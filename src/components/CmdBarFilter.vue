@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { FilterOption } from '../types'
 import { type PropType, onMounted, nextTick, ref, watchEffect } from 'vue'
-import { useCmdBarState } from '../useCmdBarState'
+import { useCmdBarState } from '../composables/useCmdBarState'
 
 const props = defineProps({
   filterOptions: {

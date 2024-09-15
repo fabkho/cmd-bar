@@ -70,7 +70,7 @@ async function fetchUsers() {
   ).json()
   users.value = data.value.users.map((user: Record<string, any>) => {
     return defineCommand({
-      id: user.id.toString(),
+      id: 'user-' + user.id.toString(),
       //
       leading: './src/assets/icons/user_new.svg',
       label: `${user.firstName} ${user.lastName}`,
@@ -89,7 +89,7 @@ async function fetchProducts() {
   }).json()
   products.value = data.value.products.map((product: Record<string, any>) => {
     return defineCommand({
-      id: product.id.toString(),
+      id: 'product-' + product.id.toString(),
       label: `${product.title}`,
       action: () => {
         // Define your action here.
@@ -147,7 +147,7 @@ const groups = computed(() =>
         const { data } = await useFetch(`https://dummyjson.com/users/search?q=${q}`, {}).json()
         return data.value.users.map((user: Record<string, any>) =>
           defineCommand({
-            id: user.id.toString(),
+            id: 'user-' + user.id.toString(),
             label: `${user.firstName} ${user.lastName}`,
             action: () => {
               // Define your action here.
@@ -167,7 +167,7 @@ const groups = computed(() =>
         const { data } = await useFetch(`https://dummyjson.com/products/search?q=${q}`, {}).json()
         return data.value.products.map((product: Record<string, any>) =>
           defineCommand({
-            id: product.id.toString(),
+            id: 'product-' + product.id.toString(),
             label: `${product.title}`,
             action: () => {
               // Define your action here.
@@ -221,7 +221,7 @@ onMounted(() => {
 
 <template>
   <CmdBar :commands="groups">
-    <CmdBar.Dialog :visible="visibility">
+    <CmdBar.Dialog v-model:visible="visibility">
       <template #header>
         <div>
           <CmdBar.Input :placeholder="'search fo anything'" :fuse="fuseOptions">
@@ -234,7 +234,7 @@ onMounted(() => {
         <CmdBar.Filter :filter-options="filterOptions" />
       </template>
       <template #content>
-        <CmdBar.VirtualList :config="listConfig">
+        <CmdBar.List>
           <template #default="{ command }">
             <div class="leading">
               {{ command.label }}
@@ -248,7 +248,11 @@ onMounted(() => {
           <template #loading>
             <Skeleton v-for="index in 5" :key="index" />
           </template>
-        </CmdBar.VirtualList>
+          <!-- TODO: idea results slot -->
+          <template #results="{ command }">
+            <!-- here you could change the interface of the commands and add a heading -->
+          </template>
+        </CmdBar.List>
       </template>
       <template #footer>
         <span class="trigger">

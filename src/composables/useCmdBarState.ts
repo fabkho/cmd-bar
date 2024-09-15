@@ -1,39 +1,46 @@
 import { useDebounceFn } from '@vueuse/core'
 import { useFuse, UseFuseOptions } from '@vueuse/integrations/useFuse'
 import { reactive, readonly, ref, watch } from 'vue'
-import type { Command, Group, State } from './types'
+import type { Command, Group, State } from '../types'
+import { findNodeById } from '../utils'
 import { useCmdBarEvent } from './useCmdBarEvent'
-import { findNodeById } from './utils'
 
 const state = reactive<State>({
   selectedCommandId: null,
-  selectedGroups: new Set<string>(),
   parentCommandId: null,
   query: '',
-  commands: [] as Command[],
   groupedCommands: [] as Group[],
   filteredGroupedCommands: [] as Group[],
   filteredCommands: [] as Command[],
-  groupLoadingStates: {} as Record<string, boolean>
+  groupLoadingStates: {} as Record<string, boolean>,
+
+  // Idea:
+  // - just store the passed grouped commands in the commands state
+  // - store the filtered commands in the results state as a flat array of commands
+  //   - reset the results state when the query is empty
+  // refactored state
+  groups: [] as Group[], // Store original groups
+  commands: [] as Command[], // Flattened commands from newGroups
+  results: [] as Command[], // Filtered commands based on the search query
+  selectedGroups: new Set<string>() // To track selected groups
+
+  // to remove:
+  // filteredGroupedCommands: [] as Group[],
+  // filteredCommands: [] as Command[],
+  // groupLoadingStates: {} as Record<string, boolean>
 })
 const useCmdBarState = {
   state: readonly(state),
   initState(initialGroups: Group[]): void {
-    const flattenedCommands = []
-    const groupedCommands = []
+    state.groups = initialGroups
 
-    for (const group of initialGroups) {
-      const commandsWithGroup = group.commands?.map((command) => ({ ...command, group: group.key }))
-      flattenedCommands.push(...(commandsWithGroup ?? []))
-      groupedCommands.push({ ...group, commands: commandsWithGroup ?? [] })
-    }
-
-    state.groupedCommands = groupedCommands
-    state.commands = flattenedCommands
-
-    // deep copy of initialGroups, to ensure that the original groups are not modified
-    state.filteredGroupedCommands = JSON.parse(JSON.stringify(groupedCommands))
-    state.filteredCommands = flattenedCommands
+    state.commands = state.groups.flatMap(
+      (group) =>
+        group.commands?.map((command) => ({
+          ...command,
+          group: group.key
+        })) ?? []
+    )
 
     selectFirstCommand()
   },
@@ -53,7 +60,7 @@ const useCmdBarState = {
   resetState(): void {
     state.selectedCommandId = null
     state.query = ''
-    this.filterGroupedCommands()
+    state.results = []
   },
 
   selectCommand(commandId: string): void {
@@ -80,15 +87,18 @@ const useCmdBarState = {
 
   nextCommand(): void {
     const selectedIndex = getSelectedIndex()
+    console.log('nextCommand', selectedIndex, state.commands)
     if (selectedIndex > 0) {
-      state.selectedCommandId = state.filteredCommands[selectedIndex - 1].id
+      state.selectedCommandId = state.commands[selectedIndex - 1].id
+      console.log('=>(useCmdBarState.ts:93) state.selectedCommandId', state.selectedCommandId)
     }
   },
 
   prevCommand(): void {
     const selectedIndex = getSelectedIndex()
-    if (selectedIndex < state.filteredCommands.length - 1) {
-      state.selectedCommandId = state.filteredCommands[selectedIndex + 1].id
+    console.log('prevCommand', selectedIndex)
+    if (selectedIndex < state.commands.length - 1) {
+      state.selectedCommandId = state.commands[selectedIndex + 1].id
     }
   },
 
@@ -96,6 +106,7 @@ const useCmdBarState = {
     const { emitter } = useCmdBarEvent()
 
     const command = findNodeById(state.commands, state.selectedCommandId)
+    console.log('=>(useCmdBarState.ts:109) command', command)
     if (command) {
       emitter.emit('clicked', command)
       command.action?.()
@@ -137,12 +148,14 @@ const searchGroups = async (
     }
   })
 
-  if (fuzzySearchableGroups.length > 0) {
-    fuzzySearch(query, fuzzySearchableGroups, fuseOptions)
+  if (asyncSearchableGroups.length > 0) {
+    // TODO: should return the results of the search as a list of commands, which then can be added to the commands of the fuzzySearchableGroups.
+    // Which then can be fuzzy searched again to get the final results. (This is needed to get the correct order of the commands)
+    await debouncedSearch(query, asyncSearchableGroups)
   }
 
-  if (asyncSearchableGroups.length > 0) {
-    await debouncedSearch(query, asyncSearchableGroups)
+  if (fuzzySearchableGroups.length > 0) {
+    fuzzySearch(query, fuzzySearchableGroups, fuseOptions)
   }
 }
 
@@ -190,7 +203,7 @@ const debouncedSearch = useDebounceFn(async (query, groups) => {
  * helper function to get the index of the selected command
  */
 function getSelectedIndex(): number {
-  return state.filteredCommands.findIndex((command) => command.id === state.selectedCommandId)
+  return state.commands.findIndex((command) => command.id === state.selectedCommandId)
 }
 
 /**
@@ -199,7 +212,7 @@ function getSelectedIndex(): number {
 function selectFirstCommand(): void {
   const { emitter } = useCmdBarEvent()
 
-  const firstCommand: Command | null = state.filteredGroupedCommands[0]?.commands?.[0] ?? null
+  const firstCommand: Command | null = state.groups[0]?.commands?.[0] ?? null
   if (firstCommand) {
     state.selectedCommandId = firstCommand.id
     emitter.emit('selected', firstCommand as Command)
@@ -236,6 +249,7 @@ function findMultipleSelectedGroups(): Group[] {
 }
 
 /**
+ * TODO: not needed anymore
  * watcher to assign new flatMap to filteredCommands when filteredGroupedCommands changes
  * and select the first command
  */

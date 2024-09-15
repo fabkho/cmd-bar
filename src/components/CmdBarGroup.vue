@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useCmdBarEvent } from '../useCmdBarEvent'
+import { useCmdBarEvent } from '../composables/useCmdBarEvent'
 import type { Command, Group } from '../types'
-import { useCmdBarState } from '../useCmdBarState'
+import { useCmdBarState } from '../composables/useCmdBarState'
 import { computed } from 'vue'
 
 const props = defineProps<{
@@ -10,16 +10,10 @@ const props = defineProps<{
 
 const { emitter } = useCmdBarEvent()
 
-const emit = defineEmits<{
+defineEmits<{
   selected: [command: Command]
   clicked: [command: Command]
 }>()
-
-// causes type error!?!?!?
-// defineSlots<{
-//   default(props: { command: Command }): any
-//   loading(props: { group: Group }): any
-// }>()
 
 const isSelectedItem = computed(() => {
   return (command: Command) => {

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useCmdBarEvent } from '../useCmdBarEvent'
+import { useCmdBarEvent } from '../composables/useCmdBarEvent'
 import { useVirtualList } from '@vueuse/core'
 import { computed, type ComputedRef, nextTick, ref, watch, watchEffect } from 'vue'
 import { Command } from '../types'
 import type { Group } from '../types'
-import { useCmdBarState } from '../useCmdBarState'
+import { useCmdBarState } from '../composables/useCmdBarState'
 import CmdBarGroup from './CmdBarGroup.vue'
 
 const props = defineProps<{

@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { useKeymap } from '../composables/useKeymap'
 import { ref, type PropType, watch } from 'vue'
-import { useCmdBarState } from '../useCmdBarState'
+import { useCmdBarState } from '../composables/useCmdBarState'
 
+// Props to control visibility
 const props = defineProps({
   visible: {
     type: Boolean as PropType<boolean>,
@@ -9,35 +11,40 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits<{
+  (e: 'update:visible', value: boolean): void
+}>()
+
+// Reference to the dialog element
 const dialogRef = ref<HTMLDialogElement | null>(null)
 
-/**
- * toggle dialog
- */
-function toggleCmdBar(): void {
-  // if component is mounted, open dialog
-  if (dialogRef.value) {
-    if (dialogRef.value?.open) {
-      dialogRef.value?.close()
-      useCmdBarState?.resetState()
-    } else {
-      dialogRef.value?.showModal()
-    }
+// Use the keymap composable
+const { addEventListener, removeEventListener } = useKeymap((nav) => [
+  {
+    key: 'ArrowUp',
+    action: () => nav.next(),
+    autoRepeat: true
+  },
+  {
+    key: 'ArrowDown',
+    action: () => nav.prev(),
+    autoRepeat: true
+  },
+  {
+    key: 'Enter',
+    action: () => nav.execute(),
+    autoRepeat: true
   }
-}
-
-watch(
-  () => props.visible,
-  () => toggleCmdBar()
-)
+])
 
 /**
- * Close dialog if click is outside of dialog
+ * Event handler to close dialog when clicking outside
  */
 function handleClickOutside(): void {
   dialogRef.value?.close()
 }
 
+// Vue directive to handle outside clicks
 const vClickOutside = {
   mounted(el: any, binding: any) {
     el.__ClickOutsideHandler__ = (event: MouseEvent) => {
@@ -51,6 +58,43 @@ const vClickOutside = {
     document.body.removeEventListener('click', el.__ClickOutsideHandler__)
   }
 }
+
+const { resetState } = useCmdBarState
+
+function onDialogOpen() {
+  emit('update:visible', true)
+  addEventListener()
+}
+
+function onDialogClose() {
+  emit('update:visible', false)
+  removeEventListener()
+  resetState()
+}
+
+/**
+ * Set up event listeners on dialog element
+ */
+watch(dialogRef, (newVal) => {
+  if (newVal) {
+    newVal.addEventListener('close', onDialogClose)
+    newVal.addEventListener('show', onDialogOpen)
+  }
+})
+
+// Watch for changes in visibility prop and toggle the dialog accordingly
+watch(
+  () => props.visible,
+  (visible) => {
+    if (visible) {
+      addEventListener()
+      dialogRef.value?.showModal()
+    } else {
+      dialogRef.value?.close()
+      removeEventListener()
+    }
+  }
+)
 </script>
 
 <template>

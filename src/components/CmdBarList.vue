@@ -1,29 +1,18 @@
 <script setup lang="ts">
-import { useCmdBarEvent } from '../useCmdBarEvent'
-import { computed, type ComputedRef, nextTick, ref, watch } from 'vue'
+import { useKeymap } from '../composables/useKeymap'
+import { useCmdBarEvent } from '../composables/useCmdBarEvent'
+import { computed, type ComputedRef, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { Command } from '../types'
 import type { Group } from '../types'
-import { useCmdBarState } from '../useCmdBarState'
+import { useCmdBarState } from '../composables/useCmdBarState'
 import CmdBarGroup from './CmdBarGroup.vue'
 
-// causes type error!?!?!?
-// defineSlots<{
-//   default(props: { command: Command }): any
-//   preview(props: { command: Command | null }): any
-//   loading(props: { group: Group }): any
-// }>()
-
-const labelRef = ref<HTMLElement[] | null>(null) // Create a ref for the label element
+const labelRef = ref<HTMLElement[] | null>(null)
 const activeCommand = ref<Command | null>(null)
 const listRef = ref<HTMLElement | null>(null)
 
-/**
- * problem: the group header has to be included in the list to calculate the correct height
- * solution: flatten grouped commands, to use with virtual list
- *
- */
 const visibleItems = computed(() => {
-  return useCmdBarState?.state.filteredGroupedCommands
+  return useCmdBarState?.state.groups
 }) as ComputedRef<Group[]>
 
 /* handle scroll to selected item */
