@@ -2,11 +2,7 @@ export type State = {
   /* @deprecated */
   groupedCommands: Group[]
   /* @deprecated */
-  filteredGroupedCommands: Group[]
-  /* @deprecated */
   filteredCommands: Command[]
-  /* @deprecated */
-  groupLoadingStates: Record<string, boolean>
 
   selectedCommandId: string | null
   parentCommandId: string | null
