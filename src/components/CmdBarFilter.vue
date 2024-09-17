@@ -1,21 +1,15 @@
 <script setup lang="ts">
 import { FilterOption } from '../types'
-import { type PropType, onMounted, nextTick, ref, watchEffect } from 'vue'
+import { onMounted, nextTick, ref, watchEffect, computed } from 'vue'
 import { useCmdBarState } from '../composables/useCmdBarState'
 
-const props = defineProps({
-  filterOptions: {
-    type: Array as PropType<FilterOption[]>, // Use the created interface here
-    default: () => []
-  },
-  asCheckbox: {
-    type: Boolean as PropType<boolean>,
-    default: false
-  }
-})
+const { filterOptions, asCheckbox = false } = defineProps<{
+  filterOptions: FilterOption[]
+  asCheckbox?: boolean
+}>()
 
 const emit = defineEmits<{
-  filterChange: [groups: Array<string>]
+  filterChange: [groups: Array<string | null>]
 }>()
 
 defineSlots<{
@@ -23,94 +17,88 @@ defineSlots<{
   option(props: { hiddenOptions: FilterOption[] }): any
 }>()
 
-const selectedGroups = useCmdBarState?.state.selectedGroups
+const { lineStyle, setLineStyle } = useIndicator()
 
-const lineStyle = ref({
-  transform: 'translateX(0)',
-  width: '0'
-})
+const selectedGroups = computed(() => useCmdBarState?.state.selectedGroups)
 
-const groupSet = ref(new Set<FilterOption>()) // Use Set<FilterOption> here
+const groupSet = ref<Set<FilterOption>>(new Set<FilterOption>())
 const hiddenOptions = ref<FilterOption[]>([])
-const defaultFilterOption = ref()
+const defaultFilterOption = ref<FilterOption | null>(null)
 
 function initGroups() {
-  props.filterOptions.forEach((option) => {
-    if (option.groupKey === 'default') {
-      defaultFilterOption.value = option.groupKey
-    }
+  filterOptions.forEach((option, index) => {
     if (!option.visible) {
       hiddenOptions.value.push(option)
       return
     }
     groupSet.value.add(option)
+    // Set the first visible group as the default
+    if (index === 0) {
+      defaultFilterOption.value = option
+    }
   })
 }
 
-function isSelected(group: string): boolean {
-  if (group === defaultFilterOption.value && selectedGroups.size === 0) {
-    return true
-  } else {
-    return selectedGroups.has(group)
-  }
-}
+initGroups()
 
-function toggleGroup(group: string) {
-  if (group !== defaultFilterOption.value) {
-    useCmdBarState?.toggleGroup(group, props.asCheckbox)
-    emit('filterChange', Array.from(selectedGroups))
-
-    if (selectedGroups.size === 0) {
-      useCmdBarState?.resetFilter()
-    }
-    setLineStyle()
-  } else {
-    useCmdBarState?.toggleGroup(group, props.asCheckbox)
-    setLineStyle()
-    useCmdBarState?.resetFilter()
-  }
-}
-
-onMounted(() => {
-  toggleGroup(defaultFilterOption.value as string)
-  initGroups()
-})
-
-// this is needed to update the line position when the cmd bar is opened
+// Select the first group if no group is selected
 watchEffect(() => {
-  // check if we are in browser for SSR
-  const isBrowser = typeof window !== 'undefined'
-  if (!isBrowser) return null
-
-  const resizeObserver = new ResizeObserver(() => {
-    setLineStyle()
-  })
-  nextTick(() => {
-    const filter = document.querySelector('.filter')
-    if (filter) {
-      resizeObserver.observe(filter)
-    }
-  })
+  if (defaultFilterOption.value && selectedGroups.value.size === 0) {
+    toggleGroup(defaultFilterOption.value.groupKey)
+  }
 })
 
-/**
- * Update line position and size
- */
-async function setLineStyle() {
-  /**
-   * Wait until next tick to make sure that refs are set
-   */
-  await nextTick(() => {
-    // get aria-selected element
-    const tabElement = document.querySelector('.filter-chip[aria-selected="true"]') as HTMLElement
-    if (!tabElement) return
-    const width = tabElement.clientWidth
-    const offsetLeft = tabElement.offsetLeft
-    lineStyle.value = {
-      transform: `translateX(${offsetLeft}px)`,
-      width: width + 'px'
-    }
+function isSelected(group: string | null): boolean {
+  // Select the first group if no other group is selected
+  if (!selectedGroups.value.size && defaultFilterOption.value?.groupKey === group) {
+    return true
+  }
+  return selectedGroups.value.has(group)
+}
+
+function toggleGroup(group: string | null) {
+  useCmdBarState?.toggleGroup(group, asCheckbox)
+  emit('filterChange', Array.from(selectedGroups.value))
+
+  setLineStyle()
+}
+
+function useIndicator() {
+  const lineStyle = ref({
+    transform: 'translateX(0)',
+    width: '0'
   })
+
+  async function setLineStyle() {
+    await nextTick(() => {
+      const tabElement = document.querySelector('.filter-chip[aria-selected="true"]') as HTMLElement
+      if (!tabElement) return
+      const width = tabElement.clientWidth
+      const offsetLeft = tabElement.offsetLeft
+      lineStyle.value = {
+        transform: `translateX(${offsetLeft}px)`,
+        width: `${width}px`
+      }
+    })
+  }
+
+  function observeResize() {
+    const resizeObserver = new ResizeObserver(() => {
+      setLineStyle()
+    })
+    nextTick(() => {
+      const filter = document.querySelector('.filter')
+      if (filter) {
+        resizeObserver.observe(filter)
+      }
+    })
+  }
+
+  onMounted(() => {
+    observeResize()
+  })
+
+  return { lineStyle, setLineStyle }
 }
 </script>
 
@@ -119,7 +107,7 @@ async function setLineStyle() {
     <div class="filter-list" role="tablist">
       <button
         v-for="group in Array.from(groupSet)"
-        :key="group.groupKey"
+        :key="group.groupKey ?? 'default'"
         :data-id="group.groupKey"
         class="filter-chip"
         :aria-selected="isSelected(group.groupKey)"
@@ -130,7 +118,6 @@ async function setLineStyle() {
       >
         <slot :group="group" :is-selected="isSelected(group.groupKey)">
           {{ group.label }}
-          <!-- Access label property from FilterOption -->
         </slot>
       </button>
       <slot name="option" :hidden-options="hiddenOptions" />
@@ -139,5 +126,3 @@ async function setLineStyle() {
     <div :style="lineStyle" class="filter-line" />
   </div>
 </template>
-
-<style scoped lang="scss"></style>

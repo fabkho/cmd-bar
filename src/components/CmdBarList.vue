@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import CmdBarItems from '@/Users/fabiankirchhoff/code/cmd-bar/src/components/CmdBarItems.vue'
 import { useCmdBarEvent } from '../composables/useCmdBarEvent'
-import { computed, type ComputedRef, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { Command } from '../types'
 import type { Group } from '../types'
 import { useCmdBarState } from '../composables/useCmdBarState'
@@ -11,12 +11,24 @@ const labelRef = ref<HTMLElement[] | null>(null)
 const activeCommand = ref<Command | null>(null)
 const listRef = ref<HTMLElement | null>(null)
 
-const groups = computed(() => {
-  return useCmdBarState?.state.groups
-}) as ComputedRef<Group[]>
+// Filter groups based on selected groups in the store
+const filteredGroups = computed<Group[]>(() => {
+  const selectedGroups = useCmdBarState?.state.selectedGroups
+  const allGroups = useCmdBarState?.state.groups as Group[]
 
-const results = computed(() => useCmdBarState?.state.results)
-const hasResults = computed(() => results.value.length > 0)
+  // If no group is selected, return all groups
+  if (selectedGroups.has(null)) {
+    return allGroups
+  }
+
+  // Return only groups that are selected
+  return allGroups.filter((group) => selectedGroups.has(group.key))
+})
+
+const results = computed(() => {
+  return useCmdBarState?.state.results
+})
+const hasQuery = computed(() => useCmdBarState?.state.query !== '')
 
 /* handle scroll to selected item */
 const getSelectedItem = () => {
@@ -52,15 +64,16 @@ watch(
 
 <template>
   <div ref="listRef" class="grouped-list">
-    <ul v-if="hasResults" data-cmd-bar-items class="results">
-      <CmdBarItems :commands="results">
+    <ul v-if="results.length || hasQuery" data-cmd-bar-items class="results">
+      <CmdBarItems v-if="results.length" :commands="results">
         <template #default="{ command }">
           <slot name="results" :command="command" />
         </template>
       </CmdBarItems>
+      <slot v-else name="no-results" />
     </ul>
     <ul v-else data-cmd-bar-items class="list-items">
-      <li v-for="group in groups" :key="group.key" class="group">
+      <li v-for="group in filteredGroups" :key="group.key" class="group">
         <h2
           v-if="group.label && group.commands && group.commands?.length > 0"
           ref="labelRef"

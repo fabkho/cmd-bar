@@ -31,10 +31,11 @@ const activeCommand = ref<Command | null>(null)
  *
  */
 const visibleItems = computed(() => {
-  return useCmdBarState?.state.filteredGroupedCommands.flatMap((group) => {
-    const groupWithoutCommands = { key: group.key, label: group.label }
-    return group.commands ? [groupWithoutCommands, ...group.commands] : [groupWithoutCommands]
-  })
+  // return useCmdBarState?.state.filteredGroupedCommands.flatMap((group) => {
+  //   const groupWithoutCommands = { key: group.key, label: group.label }
+  //   return group.commands ? [groupWithoutCommands, ...group.commands] : [groupWithoutCommands]
+  // })
+  return []
 })
 
 const { containerProps, wrapperProps, list } = useVirtualList(visibleItems as ComputedRef, {

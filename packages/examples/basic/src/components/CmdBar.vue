@@ -185,14 +185,14 @@ emitter.on('selected', (command) => {
   activeCommand.value = command
 })
 
-const fuseOptions = {
-  fuseOptions: {
-    keys: ['label']
-  }
-}
+// const fuseOptions = {
+//   fuseOptions: {
+//     keys: ['label']
+//   }
+// }
 const filterOptions = [
   {
-    groupKey: 'default',
+    groupKey: null,
     label: 'All',
     visible: true
   },
@@ -204,7 +204,12 @@ const filterOptions = [
   {
     groupKey: 'users',
     label: 'Users',
-    visible: false
+    visible: true
+  },
+  {
+    groupKey: 'products',
+    label: 'Products',
+    visible: true
   }
 ]
 
@@ -223,7 +228,7 @@ onMounted(() => {
     <CmdBar.Dialog v-model:visible="visibility">
       <template #header>
         <div>
-          <CmdBar.Input :placeholder="'search fo anything'" :fuse="fuseOptions">
+          <CmdBar.Input :placeholder="'search fo anything'">
             <template #leading>
               <img src="../assets/icons/search.svg" alt="search" />
             </template>
@@ -247,7 +252,6 @@ onMounted(() => {
           <template #loading>
             <Skeleton v-for="index in 5" :key="index" />
           </template>
-          <!-- TODO: idea results slot -->
           <template #results="{ command }">
             <!-- here you could change the interface of the commands and add a heading -->
             <div class="leading">
@@ -258,6 +262,9 @@ onMounted(() => {
                 shortcut
               }}</kbd>
             </span>
+          </template>
+          <template #no-results>
+            <div class="no-results">No results found !!!</div>
           </template>
         </CmdBar.List>
       </template>

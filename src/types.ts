@@ -1,17 +1,18 @@
+import { UseFuseOptions } from '@vueuse/integrations/useFuse'
+
 export type State = {
   /* @deprecated */
   groupedCommands: Group[]
-  /* @deprecated */
-  filteredCommands: Command[]
 
   selectedCommandId: string | null
-  parentCommandId: string | null
   query: string
 
   groups: Group[]
   commands: Command[]
   results: Command[]
-  selectedGroups: Set<string>
+  selectedGroups: Set<string | null>
+
+  fuseOptions: Partial<UseFuseOptions<Command>> | null
 }
 
 export interface Command {
@@ -53,7 +54,7 @@ export interface ShortcutOptions {
 }
 
 export interface FilterOption {
-  groupKey: string
+  groupKey: string | null
   visible: boolean
   label: string
 }
