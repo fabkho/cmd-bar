@@ -10,6 +10,10 @@ defineEmits<{
   selected: [command: Command]
   clicked: [command: Command]
 }>()
+
+defineSlots<{
+  default(props: { command: Command }): any
+}>()
 </script>
 
 <template>
@@ -21,9 +25,6 @@ defineEmits<{
         </template>
       </CmdBarItems>
     </ul>
-    <div v-else class="loading">
-      <slot name="loading" :group="group" />
-    </div>
   </div>
 </template>
 

@@ -15,6 +15,12 @@ const emit = defineEmits<{
   (e: 'update:visible', value: boolean): void
 }>()
 
+defineSlots<{
+  header(): any
+  content(): any
+  footer(): any
+}>()
+
 // Reference to the dialog element
 const dialogRef = ref<HTMLDialogElement | null>(null)
 

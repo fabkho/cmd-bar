@@ -24,6 +24,11 @@ const emit = defineEmits<{
   input: [query: string]
 }>()
 
+defineSlots<{
+  leading(): any
+  clear(): any
+}>()
+
 const query = computed(() => useCmdBarState?.state.query)
 
 const options: ComputedRef<Partial<UseFuseOptions<Command>>> = computed(() => {

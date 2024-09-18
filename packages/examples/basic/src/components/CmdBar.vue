@@ -185,11 +185,6 @@ emitter.on('selected', (command) => {
   activeCommand.value = command
 })
 
-// const fuseOptions = {
-//   fuseOptions: {
-//     keys: ['label']
-//   }
-// }
 const filterOptions = [
   {
     groupKey: null,
