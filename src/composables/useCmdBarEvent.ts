@@ -4,6 +4,7 @@ import { Command } from '../types'
 type Events = {
   selected: Command
   clicked: Command
+  input: string
   filterChange: (string | null)[]
 }
 

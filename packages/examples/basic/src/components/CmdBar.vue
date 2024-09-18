@@ -11,16 +11,6 @@ const keys = useMagicKeys()
 const cmdK = keys['Meta+k']
 const activeCommand = ref<Command | null>(null)
 
-const listConfig = {
-  itemHeightInPixel: {
-    actions: 48,
-    users: 48,
-    products: 48
-  },
-  containerHeight: '21rem',
-  groupLabelHeightInPixel: 20
-}
-
 useKeymap((nav) => {
   return [
     {
@@ -61,17 +51,11 @@ const formatShortcut = (shortcutString: string) => {
 
 async function fetchUsers() {
   const { data } = await useFetch(
-    'https://dummyjson.com/users?limit=10&select=id,firstName,lastName',
-    {
-      beforeFetch(ctx) {
-        return ctx
-      }
-    }
+    'https://dummyjson.com/users?limit=10&select=id,firstName,lastName'
   ).json()
   users.value = data.value.users.map((user: Record<string, any>) => {
     return defineCommand({
       id: 'user-' + user.id.toString(),
-      //
       leading: './src/assets/icons/user_new.svg',
       label: `${user.firstName} ${user.lastName}`,
       action: () => {
@@ -82,11 +66,7 @@ async function fetchUsers() {
 }
 
 async function fetchProducts() {
-  const { data } = await useFetch('https://dummyjson.com/products?limit=10&select=id,title', {
-    beforeFetch(ctx) {
-      return ctx
-    }
-  }).json()
+  const { data } = await useFetch('https://dummyjson.com/products?limit=10&select=id,title').json()
   products.value = data.value.products.map((product: Record<string, any>) => {
     return defineCommand({
       id: 'product-' + product.id.toString(),
@@ -141,9 +121,6 @@ const groups = computed(() =>
       label: 'Users',
       commands: users.value,
       search: async (q: string) => {
-        if (!q) {
-          return []
-        }
         const { data } = await useFetch(`https://dummyjson.com/users/search?q=${q}`, {}).json()
         return data.value.users.map((user: Record<string, any>) =>
           defineCommand({
@@ -161,9 +138,6 @@ const groups = computed(() =>
       label: 'Products',
       commands: products.value,
       search: async (q: string) => {
-        if (!q) {
-          return []
-        }
         const { data } = await useFetch(`https://dummyjson.com/products/search?q=${q}`, {}).json()
         return data.value.products.map((product: Record<string, any>) =>
           defineCommand({
@@ -223,7 +197,7 @@ onMounted(() => {
     <CmdBar.Dialog v-model:visible="visibility">
       <template #header>
         <div>
-          <CmdBar.Input :placeholder="'search fo anything'">
+          <CmdBar.Input placeholder="search fo anything">
             <template #leading>
               <img src="../assets/icons/search.svg" alt="search" />
             </template>

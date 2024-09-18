@@ -1,21 +1,18 @@
 <script setup lang="ts">
+import { useCmdBarEvent } from '../composables/useCmdBarEvent'
 import { useCmdBarState } from '../composables/useCmdBarState'
 import type { Command } from '../types'
 import type { UseFuseOptions } from '@vueuse/integrations/useFuse'
 import { computed, PropType, ComputedRef } from 'vue'
 
 const {
-  placeholder = 'Search',
+  placeholder = 'Search for anything',
   fuse = {},
   nonTriggerKeys = ['@', '/']
 } = defineProps<{
-  placeholder: string
-  fuse: UseFuseOptions<Command>
-  nonTriggerKeys: string[]
-}>()
-
-const emit = defineEmits<{
-  input: [query: string]
+  placeholder?: string
+  fuse?: UseFuseOptions<Command>
+  nonTriggerKeys?: string[]
 }>()
 
 defineSlots<{
@@ -36,6 +33,8 @@ const options: ComputedRef<Partial<UseFuseOptions<Command>>> = computed(() => {
   }
 })
 
+const { emitter } = useCmdBarEvent()
+
 /**
  * handle input event
  * emit input event and store value in store
@@ -44,14 +43,14 @@ function handleInput(e: Event): void {
   const inputValue = (e.target as HTMLInputElement)?.value
 
   if (nonTriggerKeys?.includes(inputValue)) {
-    emit('input', inputValue)
+    emitter.emit('input', inputValue)
     return
   }
   if (inputValue !== null && inputValue !== undefined) {
     useCmdBarState?.updateQuery(inputValue, options.value)
   }
 
-  emit('input', inputValue)
+  emitter.emit('input', inputValue)
 }
 
 function clearQuery(): void {
