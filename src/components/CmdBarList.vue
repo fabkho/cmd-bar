@@ -15,7 +15,6 @@ defineSlots<{
   preview(props: { activeCommand: Command | null }): any
 }>()
 
-const labelRef = ref<HTMLElement[] | null>(null)
 const activeCommand = ref<Command | null>(null)
 const listRef = ref<HTMLElement | null>(null)
 
