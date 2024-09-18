@@ -1,15 +1,11 @@
 <script setup lang="ts">
 import { useKeymap } from '../composables/useKeymap'
-import { ref, type PropType, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useCmdBarState } from '../composables/useCmdBarState'
 
-// Props to control visibility
-const props = defineProps({
-  visible: {
-    type: Boolean as PropType<boolean>,
-    default: false
-  }
-})
+const { visible = false } = defineProps<{
+  visible: boolean
+}>()
 
 const emit = defineEmits<{
   (e: 'update:visible', value: boolean): void
@@ -90,7 +86,7 @@ watch(dialogRef, (newVal) => {
 
 // Watch for changes in visibility prop and toggle the dialog accordingly
 watch(
-  () => props.visible,
+  () => visible,
   (visible) => {
     if (visible) {
       addEventListener()

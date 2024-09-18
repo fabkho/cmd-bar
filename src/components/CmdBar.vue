@@ -3,14 +3,14 @@ import type { Group } from '../types'
 import { useCmdBarState } from '../composables/useCmdBarState'
 import { watch } from 'vue'
 
-const props = defineProps<{
+const { commands } = defineProps<{
   commands: Group[]
 }>()
 
 watch(
-  () => props.commands,
+  () => commands,
   () => {
-    useCmdBarState?.initState(props.commands)
+    useCmdBarState?.initState(commands)
   },
   { deep: true, immediate: true }
 )
