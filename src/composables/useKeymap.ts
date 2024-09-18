@@ -1,7 +1,7 @@
 import { useCmdBarState } from './useCmdBarState'
-import { ref, onBeforeUnmount, onMounted, Ref } from 'vue'
+import { ref } from 'vue'
 import { useMagicKeys, whenever } from '@vueuse/core'
-import { Command, Group, NavOperations, ShortcutOptions } from '../types'
+import { NavOperations, ShortcutOptions } from '../types'
 
 type ShortcutsSetup = (nav: NavOperations) => Array<ShortcutOptions>
 
