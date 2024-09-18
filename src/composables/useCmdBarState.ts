@@ -8,7 +8,7 @@ import { useCmdBarEvent } from './useCmdBarEvent'
 const state = reactive<State>({
   selectedCommandId: null,
   query: '',
-
+  isLoading: false,
   groups: [] as Group[],
   commands: [] as Command[],
   results: [] as Command[],
@@ -100,7 +100,9 @@ const useCmdBarState = {
    * @
    */
   async updateQuery(query: string, fuseOptions?: Partial<UseFuseOptions<Command>>): Promise<void> {
+    state.isLoading = true
     await debouncedUpdateQuery(query, fuseOptions)
+    state.isLoading = false
   },
 
   clearQuery(): void {

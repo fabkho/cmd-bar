@@ -6,12 +6,11 @@ export type State = {
 
   selectedCommandId: string | null
   query: string
-
+  isLoading: boolean
   groups: Group[]
   commands: Command[]
   results: Command[]
   selectedGroups: Set<string | null>
-
   fuseOptions: Partial<UseFuseOptions<Command>> | null
 }
 

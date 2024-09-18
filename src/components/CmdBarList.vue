@@ -7,6 +7,14 @@ import type { Group } from '../types'
 import { useCmdBarState } from '../composables/useCmdBarState'
 import CmdBarGroup from './CmdBarGroup.vue'
 
+defineSlots<{
+  default(props: { command: Command }): any
+  loading(): any
+  results(props: { command: Command }): any
+  'no-results'(): any
+  preview(props: { activeCommand: Command | null }): any
+}>()
+
 const labelRef = ref<HTMLElement[] | null>(null)
 const activeCommand = ref<Command | null>(null)
 const listRef = ref<HTMLElement | null>(null)
@@ -29,6 +37,11 @@ const results = computed(() => {
   return useCmdBarState?.state.results
 })
 const hasQuery = computed(() => useCmdBarState?.state.query !== '')
+
+const isLoading = computed(() => useCmdBarState.state.isLoading)
+const showNoResults = computed(
+  () => !isLoading.value && results.value.length === 0 && hasQuery.value
+)
 
 /* handle scroll to selected item */
 const getSelectedItem = () => {
@@ -64,13 +77,22 @@ watch(
 
 <template>
   <div ref="listRef" class="grouped-list">
-    <ul v-if="results.length || hasQuery" data-cmd-bar-items class="results">
-      <CmdBarItems v-if="results.length" :commands="results">
+    <ul v-if="hasQuery" data-cmd-bar-items class="results">
+      <li v-if="isLoading">
+        <slot name="loading">
+          <div class="loading-animation">Loading...</div>
+        </slot>
+      </li>
+      <CmdBarItems v-else-if="results.length" :commands="results">
         <template #default="{ command }">
           <slot name="results" :command="command" />
         </template>
       </CmdBarItems>
-      <slot v-else name="no-results" />
+      <li v-else-if="showNoResults">
+        <slot name="no-results">
+          <div class="no-results">Nothing found</div>
+        </slot>
+      </li>
     </ul>
     <ul v-else data-cmd-bar-items class="list-items">
       <li v-for="group in filteredGroups" :key="group.key" class="group">
@@ -82,14 +104,14 @@ watch(
           {{ group.label }}
         </h2>
         <CmdBarGroup :group="group">
-          <template v-for="(_, name) in $slots" :key="name" #[name]="slotData">
-            <slot :name="name" v-bind="slotData" />
+          <template #default="{ command }">
+            <slot :command="command" />
           </template>
         </CmdBarGroup>
       </li>
     </ul>
   </div>
-  <slot name="preview" :command="activeCommand" />
+  <slot name="preview" :active-command="activeCommand" />
 </template>
 
 <style scoped lang="scss"></style>
