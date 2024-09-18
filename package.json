@@ -37,7 +37,7 @@
     "./"
   ],
   "scripts": {
-    "docs": "pnpm run -r --filter=docs dev",
+    "docs": "pnpm run -r --filter=doc dev",
     "play:vue": "pnpm --filter=vue3 p:dev",
     "play:nuxt": "pnpm --filter=nuxt3 p:dev",
     "example:basic": "pnpm --filter=basic dev",

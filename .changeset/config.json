@@ -9,6 +9,7 @@
   "updateInternalDependencies": "patch",
   "ignore": [
     "@cmd-bar/docs",
+    "@cmd-bar/doc",
     "@cmd-bar/basic",
     "@cmd-bar/preview",
     "vue3",
