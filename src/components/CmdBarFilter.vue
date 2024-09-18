@@ -8,10 +8,6 @@ const { filterOptions, asCheckbox = false } = defineProps<{
   asCheckbox?: boolean
 }>()
 
-const emit = defineEmits<{
-  filterChange: [groups: Array<string | null>]
-}>()
-
 defineSlots<{
   default(props: { group: FilterOption; isSelected: boolean }): any
   option(props: { hiddenOptions: FilterOption[] }): any
@@ -58,7 +54,6 @@ function isSelected(group: string | null): boolean {
 
 function toggleGroup(group: string | null) {
   useCmdBarState?.toggleGroup(group, asCheckbox)
-  emit('filterChange', Array.from(selectedGroups.value))
 
   setLineStyle()
 }

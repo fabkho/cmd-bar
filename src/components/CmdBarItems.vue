@@ -8,11 +8,6 @@ defineProps<{
   commands: Command[]
 }>()
 
-defineEmits<{
-  selected: [command: Command]
-  clicked: [command: Command]
-}>()
-
 const { emitter } = useCmdBarEvent()
 
 const isSelectedItem = computed(() => {

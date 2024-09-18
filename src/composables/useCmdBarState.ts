@@ -46,6 +46,11 @@ const useCmdBarState = {
     state.selectedCommandId = commandId
   },
 
+  /**
+   * Toggles the selected state of a group.
+   *
+   * @event filterChange
+   */
   async toggleGroup(groupKey: string | null, multiSelect: boolean): Promise<void> {
     if (state.selectedGroups.has(groupKey)) {
       state.selectedGroups.delete(groupKey)
@@ -55,6 +60,9 @@ const useCmdBarState = {
       }
       state.selectedGroups.add(groupKey)
     }
+
+    const { emitter } = useCmdBarEvent()
+    emitter.emit('filterChange', Array.from(state.selectedGroups))
 
     // If there is an active query, rerun the search after group is toggled
     if (state.query !== '') {
