@@ -1,6 +1,16 @@
 <script setup lang="ts">
 import Skeleton from './Skeleton.vue'
-import { type Command, defineCommand, CmdBar, useCmdBarEvent, useKeymap } from 'cmd-bar'
+import {
+  type Command,
+  defineCommand,
+  CmdBar,
+  useCmdBarEvent,
+  useKeymap,
+  CmdBarDialog,
+  CmdBarInput,
+  CmdBarFilter,
+  CmdBarList
+} from 'cmd-bar'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
 import { computed, onMounted, ref } from 'vue'
 
@@ -194,20 +204,20 @@ onMounted(() => {
 
 <template>
   <CmdBar :commands="groups">
-    <CmdBar.Dialog v-model:visible="visibility">
+    <CmdBarDialog v-model:visible="visibility">
       <template #header>
         <div>
-          <CmdBar.Input placeholder="search fo anything">
+          <CmdBarInput :placeholder="'search fo anything'">
             <template #leading>
               <img src="../assets/icons/search.svg" alt="search" />
             </template>
             <template #clear> x </template>
-          </CmdBar.Input>
+          </CmdBarInput>
         </div>
-        <CmdBar.Filter :filter-options="filterOptions" />
+        <CmdBarFilter :filter-options="filterOptions" />
       </template>
       <template #content>
-        <CmdBar.List>
+        <CmdBarList :loop="false">
           <template #default="{ command }">
             <div class="leading">
               {{ command.label }}
@@ -235,7 +245,7 @@ onMounted(() => {
           <template #no-results>
             <div class="no-results">No results found !!!</div>
           </template>
-        </CmdBar.List>
+        </CmdBarList>
       </template>
       <template #footer>
         <span class="trigger">
@@ -250,7 +260,7 @@ onMounted(() => {
           <kbd>↓</kbd>
         </span>
       </template>
-    </CmdBar.Dialog>
+    </CmdBarDialog>
   </CmdBar>
 </template>
 
