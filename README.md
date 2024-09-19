@@ -36,12 +36,12 @@ npm install --save-dev cmd-bar
 import { CmdBar } from 'cmd-bar'
 
 <CmdBar :groups="groupedCommands" />
-  <CmdBar.Dialog>
+  <CmdBarDialog>
     <template #header>
-      <CmdBar.Input placeholder="search fo anything />
+      <CmdBarInput placeholder="search fo anything />
     </template>
     <template #content>
-      <CmdBar.List :config="listConfig">
+      <CmdBarList :config="listConfig">
           <template #default="{ command }">
             <div class="leading">
               <img :src="command.leading" alt="icon" />
@@ -53,9 +53,9 @@ import { CmdBar } from 'cmd-bar'
               </kbd>
             </span>
           </template>
-      </CmdBar.List>
+      </CmdBarList>
     </template>
-  </CmdBar.Dialog>
+  </CmdBarDialog>
 </CmdBar>
 ```
 
