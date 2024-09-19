@@ -11,8 +11,7 @@
     "@cmd-bar/docs",
     "@cmd-bar/doc",
     "@cmd-bar/basic",
-    "@cmd-bar/preview",
-    "vue3",
-    "nuxt3"
+    "@cmd-bar/checkbox",
+    "@cmd-bar/hint"
   ]
 }
