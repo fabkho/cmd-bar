@@ -1,6 +1,16 @@
 <script setup lang="ts">
 import Skeleton from './Skeleton.vue'
-import { type Command, defineCommand, CmdBar, useCmdBarEvent, useKeymap } from 'cmd-bar'
+import {
+  type Command,
+  defineCommand,
+  CmdBar,
+  useCmdBarEvent,
+  useKeymap,
+  CmdBarDialog,
+  CmdBarInput,
+  CmdBarFilter,
+  CmdBarList
+} from 'cmd-bar'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
 import { computed, onMounted, ref } from 'vue'
 
@@ -10,16 +20,6 @@ const visibility = ref(false)
 const keys = useMagicKeys()
 const cmdK = keys['Meta+k']
 const activeCommand = ref<Command | null>(null)
-
-const listConfig = {
-  itemHeightInPixel: {
-    actions: 48,
-    users: 48,
-    products: 48
-  },
-  containerHeight: '21rem',
-  groupLabelHeightInPixel: 20
-}
 
 useKeymap((nav) => {
   return [
@@ -61,17 +61,11 @@ const formatShortcut = (shortcutString: string) => {
 
 async function fetchUsers() {
   const { data } = await useFetch(
-    'https://dummyjson.com/users?limit=10&select=id,firstName,lastName',
-    {
-      beforeFetch(ctx) {
-        return ctx
-      }
-    }
+    'https://dummyjson.com/users?limit=10&select=id,firstName,lastName'
   ).json()
   users.value = data.value.users.map((user: Record<string, any>) => {
     return defineCommand({
-      id: user.id.toString(),
-      //
+      id: 'user-' + user.id.toString(),
       leading: './src/assets/icons/user_new.svg',
       label: `${user.firstName} ${user.lastName}`,
       action: () => {
@@ -82,14 +76,10 @@ async function fetchUsers() {
 }
 
 async function fetchProducts() {
-  const { data } = await useFetch('https://dummyjson.com/products?limit=10&select=id,title', {
-    beforeFetch(ctx) {
-      return ctx
-    }
-  }).json()
+  const { data } = await useFetch('https://dummyjson.com/products?limit=10&select=id,title').json()
   products.value = data.value.products.map((product: Record<string, any>) => {
     return defineCommand({
-      id: product.id.toString(),
+      id: 'product-' + product.id.toString(),
       label: `${product.title}`,
       action: () => {
         // Define your action here.
@@ -141,13 +131,10 @@ const groups = computed(() =>
       label: 'Users',
       commands: users.value,
       search: async (q: string) => {
-        if (!q) {
-          return []
-        }
         const { data } = await useFetch(`https://dummyjson.com/users/search?q=${q}`, {}).json()
         return data.value.users.map((user: Record<string, any>) =>
           defineCommand({
-            id: user.id.toString(),
+            id: 'user-' + user.id.toString(),
             label: `${user.firstName} ${user.lastName}`,
             action: () => {
               // Define your action here.
@@ -161,13 +148,10 @@ const groups = computed(() =>
       label: 'Products',
       commands: products.value,
       search: async (q: string) => {
-        if (!q) {
-          return []
-        }
         const { data } = await useFetch(`https://dummyjson.com/products/search?q=${q}`, {}).json()
         return data.value.products.map((product: Record<string, any>) =>
           defineCommand({
-            id: product.id.toString(),
+            id: 'product-' + product.id.toString(),
             label: `${product.title}`,
             action: () => {
               // Define your action here.
@@ -182,18 +166,12 @@ const groups = computed(() =>
 const { emitter } = useCmdBarEvent()
 
 emitter.on('selected', (command) => {
-  console.log('=>(CmdBar.vue:185) command', command)
   activeCommand.value = command
 })
 
-const fuseOptions = {
-  fuseOptions: {
-    keys: ['label']
-  }
-}
 const filterOptions = [
   {
-    groupKey: 'default',
+    groupKey: null,
     label: 'All',
     visible: true
   },
@@ -205,7 +183,12 @@ const filterOptions = [
   {
     groupKey: 'users',
     label: 'Users',
-    visible: false
+    visible: true
+  },
+  {
+    groupKey: 'products',
+    label: 'Products',
+    visible: true
   }
 ]
 
@@ -221,20 +204,20 @@ onMounted(() => {
 
 <template>
   <CmdBar :commands="groups">
-    <CmdBar.Dialog :visible="visibility">
+    <CmdBarDialog v-model:visible="visibility">
       <template #header>
         <div>
-          <CmdBar.Input :placeholder="'search fo anything'" :fuse="fuseOptions">
+          <CmdBarInput :placeholder="'search fo anything'">
             <template #leading>
               <img src="../assets/icons/search.svg" alt="search" />
             </template>
             <template #clear> x </template>
-          </CmdBar.Input>
+          </CmdBarInput>
         </div>
-        <CmdBar.Filter :filter-options="filterOptions" />
+        <CmdBarFilter :filter-options="filterOptions" />
       </template>
       <template #content>
-        <CmdBar.VirtualList :config="listConfig">
+        <CmdBarList :loop="false">
           <template #default="{ command }">
             <div class="leading">
               {{ command.label }}
@@ -248,7 +231,21 @@ onMounted(() => {
           <template #loading>
             <Skeleton v-for="index in 5" :key="index" />
           </template>
-        </CmdBar.VirtualList>
+          <template #results="{ command }">
+            <!-- here you could change the interface of the commands and add a heading -->
+            <div class="leading">
+              {{ command.label }}
+            </div>
+            <span v-if="command.shortcut" class="actions">
+              <kbd v-for="shortcut of formatShortcut(command.shortcut)" :key="shortcut">{{
+                shortcut
+              }}</kbd>
+            </span>
+          </template>
+          <template #no-results>
+            <div class="no-results">No results found !!!</div>
+          </template>
+        </CmdBarList>
       </template>
       <template #footer>
         <span class="trigger">
@@ -263,7 +260,7 @@ onMounted(() => {
           <kbd>↓</kbd>
         </span>
       </template>
-    </CmdBar.Dialog>
+    </CmdBarDialog>
   </CmdBar>
 </template>
 

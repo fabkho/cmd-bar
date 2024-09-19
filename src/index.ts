@@ -1,22 +1,25 @@
 import CmdBar from './components/CmdBar.vue'
 import CmdBarInput from './components/CmdBarInput.vue'
-import CmdBarVirtualList from './components/CmdBarVirtualList.vue'
 import CmdBarList from './components/CmdBarList.vue'
 import CmdBarFilter from './components/CmdBarFilter.vue'
 import CmdBarDialog from './components/CmdBarDialog.vue'
-import { defineCommand } from './useDefineCommand'
-import { useCmdBarEvent } from './useCmdBarEvent'
-import { useKeymap } from './useKeymap'
+import { defineCommand } from './composables/useDefineCommand'
+import { useCmdBarEvent } from './composables/useCmdBarEvent'
+import { useKeymap } from './composables/useKeymap'
 
-const components = Object.assign(CmdBar, {
-  Input: CmdBarInput,
-  VirtualList: CmdBarVirtualList,
-  List: CmdBarList,
-  Filter: CmdBarFilter,
-  Dialog: CmdBarDialog,
-  Root: CmdBar
-})
+export {
+  CmdBar,
+  CmdBarDialog,
+  CmdBarInput,
+  CmdBarList,
+  CmdBarFilter,
 
-export { defineCommand, useKeymap, useCmdBarEvent }
+  // helper
+  defineCommand,
+
+  // composable
+  useKeymap,
+  useCmdBarEvent
+}
+
 export * from './types'
-export { components as CmdBar }

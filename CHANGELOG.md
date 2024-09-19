@@ -1,5 +1,36 @@
 # cmd-bar
 
+## 0.9.0
+
+### Minor Changes
+
+- Features
+- List: added `loop` prop to loop back to the first command when reaching the end of the list
+- improved typing
+- emit events consistently via `useCmdBarEvent` composable
+
+Refactoring
+  Store
+  - streamlined state management
+  - improved search strategy and performance
+  
+  useKeymap
+  - does not provide add/remove event listeners helper instead of using hooks
+  
+  List
+  - does now render results seperately
+  - slot for loading state and no results
+
+Deprecated
+- removed `CmdBarVirtualList.vue` component
+- compound component (all components are exported individually)
+
+Chore
+- updated major dependecies
+
+Docs
+- added docs 2.0 to drastically simplify the documentation
+
 ## 0.8.1
 
 ### Patch Changes

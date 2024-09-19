@@ -1,13 +1,18 @@
+import { UseFuseOptions } from '@vueuse/integrations/useFuse'
+
 export type State = {
   selectedCommandId: string | null
-  selectedGroups: Set<string>
-  parentCommandId: string | null
   query: string
+  isLoading: boolean
+  groups: Group[]
   commands: Command[]
-  groupedCommands: Group[]
-  filteredGroupedCommands: Group[]
-  filteredCommands: Command[]
-  groupLoadingStates: Record<string, boolean>
+  results: Command[]
+  selectedGroups: Set<string | null>
+  fuseOptions: Partial<UseFuseOptions<Command>> | null
+  /**
+   * Whether to loop back to the first command when reaching the end of the list.
+   */
+  loop: boolean
 }
 
 export interface Command {
@@ -31,6 +36,7 @@ export interface Command {
 export interface Group {
   key: string
   commands?: Command[]
+  visible?: boolean
   search?: (query: string) => Promise<Command[]>
   [key: string]: any
 }
@@ -45,11 +51,10 @@ export interface ShortcutOptions {
   key: string
   action: () => void
   autoRepeat?: boolean
-  override?: boolean
 }
 
 export interface FilterOption {
-  groupKey: string
+  groupKey: string | null
   visible: boolean
   label: string
 }

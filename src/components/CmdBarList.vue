@@ -1,30 +1,52 @@
 <script setup lang="ts">
-import { useCmdBarEvent } from '../useCmdBarEvent'
-import { computed, type ComputedRef, nextTick, ref, watch } from 'vue'
+import CmdBarItems from '@/Users/fabiankirchhoff/code/cmd-bar/src/components/CmdBarItems.vue'
+import { useCmdBarEvent } from '../composables/useCmdBarEvent'
+import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { Command } from '../types'
 import type { Group } from '../types'
-import { useCmdBarState } from '../useCmdBarState'
+import { useCmdBarState } from '../composables/useCmdBarState'
 import CmdBarGroup from './CmdBarGroup.vue'
 
-// causes type error!?!?!?
-// defineSlots<{
-//   default(props: { command: Command }): any
-//   preview(props: { command: Command | null }): any
-//   loading(props: { group: Group }): any
-// }>()
+const { loop = false } = defineProps<{
+  loop?: boolean
+}>()
 
-const labelRef = ref<HTMLElement[] | null>(null) // Create a ref for the label element
+defineSlots<{
+  default(props: { command: Command }): any
+  loading(): any
+  results(props: { command: Command }): any
+  'no-results'(): any
+  preview(props: { activeCommand: Command | null }): any
+}>()
+
+useCmdBarState.setLoop(loop)
+
 const activeCommand = ref<Command | null>(null)
 const listRef = ref<HTMLElement | null>(null)
 
-/**
- * problem: the group header has to be included in the list to calculate the correct height
- * solution: flatten grouped commands, to use with virtual list
- *
- */
-const visibleItems = computed(() => {
-  return useCmdBarState?.state.filteredGroupedCommands
-}) as ComputedRef<Group[]>
+// Filter groups based on selected groups in the store
+const filteredGroups = computed<Group[]>(() => {
+  const selectedGroups = useCmdBarState?.state.selectedGroups
+  const allGroups = useCmdBarState?.state.groups as Group[]
+
+  // If no group is selected, return all groups
+  if (selectedGroups.has(null)) {
+    return allGroups
+  }
+
+  // Return only groups that are selected
+  return allGroups.filter((group) => selectedGroups.has(group.key))
+})
+
+const results = computed(() => {
+  return useCmdBarState?.state.results
+})
+const hasQuery = computed(() => useCmdBarState?.state.query !== '')
+
+const isLoading = computed(() => useCmdBarState.state.isLoading)
+const showNoResults = computed(
+  () => !isLoading.value && results.value.length === 0 && hasQuery.value
+)
 
 /* handle scroll to selected item */
 const getSelectedItem = () => {
@@ -60,8 +82,25 @@ watch(
 
 <template>
   <div ref="listRef" class="grouped-list">
-    <ul data-cmd-bar-items class="list-items">
-      <li v-for="group in visibleItems" :key="group.key" class="group">
+    <ul v-if="hasQuery" data-cmd-bar-items class="results">
+      <li v-if="isLoading">
+        <slot name="loading">
+          <div class="loading-animation">Loading...</div>
+        </slot>
+      </li>
+      <CmdBarItems v-else-if="results.length" :commands="results">
+        <template #default="{ command }">
+          <slot name="results" :command="command" />
+        </template>
+      </CmdBarItems>
+      <li v-else-if="showNoResults">
+        <slot name="no-results">
+          <div class="no-results">Nothing found</div>
+        </slot>
+      </li>
+    </ul>
+    <ul v-else data-cmd-bar-items class="list-items">
+      <li v-for="group in filteredGroups" :key="group.key" class="group">
         <h2
           v-if="group.label && group.commands && group.commands?.length > 0"
           ref="labelRef"
@@ -70,14 +109,14 @@ watch(
           {{ group.label }}
         </h2>
         <CmdBarGroup :group="group">
-          <template v-for="(_, name) in $slots" :key="name" #[name]="slotData">
-            <slot :name="name" v-bind="slotData" />
+          <template #default="{ command }">
+            <slot :command="command" />
           </template>
         </CmdBarGroup>
       </li>
     </ul>
   </div>
-  <slot name="preview" :command="activeCommand" />
+  <slot name="preview" :active-command="activeCommand" />
 </template>
 
 <style scoped lang="scss"></style>

@@ -1,27 +1,23 @@
 <script setup lang="ts">
-import { useCmdBarState } from '../useCmdBarState'
+import { useCmdBarEvent } from '../composables/useCmdBarEvent'
+import { useCmdBarState } from '../composables/useCmdBarState'
 import type { Command } from '../types'
 import type { UseFuseOptions } from '@vueuse/integrations/useFuse'
 import { computed, PropType, ComputedRef } from 'vue'
 
-const props = defineProps({
-  placeholder: {
-    type: String,
-    default: 'Search'
-  },
-  fuse: {
-    type: Object as PropType<UseFuseOptions<Command>>,
-    default: () => ({})
-  },
-  // TODO: multiples of this key should be disallowed
-  nonTriggerKeys: {
-    type: Array as PropType<string[]>,
-    default: () => ['@', '/']
-  }
-})
+const {
+  placeholder = 'Search for anything',
+  fuse = {},
+  nonTriggerKeys = ['@', '/']
+} = defineProps<{
+  placeholder?: string
+  fuse?: UseFuseOptions<Command>
+  nonTriggerKeys?: string[]
+}>()
 
-const emit = defineEmits<{
-  input: [query: string]
+defineSlots<{
+  leading(): any
+  clear(): any
 }>()
 
 const query = computed(() => useCmdBarState?.state.query)
@@ -29,13 +25,15 @@ const query = computed(() => useCmdBarState?.state.query)
 const options: ComputedRef<Partial<UseFuseOptions<Command>>> = computed(() => {
   return {
     fuseOptions: {
-      ...props.fuse?.fuseOptions,
-      keys: props.fuse?.fuseOptions?.keys ?? ['label'],
-      minMatchCharLength: props.fuse?.fuseOptions?.minMatchCharLength ?? 2
+      ...fuse?.fuseOptions,
+      keys: fuse?.fuseOptions?.keys ?? ['label'],
+      minMatchCharLength: fuse?.fuseOptions?.minMatchCharLength ?? 2
     },
-    resultLimit: props.fuse?.resultLimit ?? 12
+    resultLimit: fuse?.resultLimit ?? 12
   }
 })
+
+const { emitter } = useCmdBarEvent()
 
 /**
  * handle input event
@@ -44,15 +42,15 @@ const options: ComputedRef<Partial<UseFuseOptions<Command>>> = computed(() => {
 function handleInput(e: Event): void {
   const inputValue = (e.target as HTMLInputElement)?.value
 
-  if (props.nonTriggerKeys?.includes(inputValue)) {
-    emit('input', inputValue)
+  if (nonTriggerKeys?.includes(inputValue)) {
+    emitter.emit('input', inputValue)
     return
   }
   if (inputValue !== null && inputValue !== undefined) {
     useCmdBarState?.updateQuery(inputValue, options.value)
   }
 
-  emit('input', inputValue)
+  emitter.emit('input', inputValue)
 }
 
 function clearQuery(): void {

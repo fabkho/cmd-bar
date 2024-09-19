@@ -1,39 +1,16 @@
 <script setup lang="ts">
-import { useKeymap } from '../useKeymap'
 import type { Group } from '../types'
-import type { PropType } from 'vue'
-import { useCmdBarState } from '../useCmdBarState'
+import { useCmdBarState } from '../composables/useCmdBarState'
 import { watch } from 'vue'
 
-const props = defineProps({
-  commands: {
-    type: Array as PropType<Group[]>,
-    required: true
-  }
-})
-
-useKeymap((nav) => [
-  {
-    key: 'ArrowUp',
-    action: () => nav.next(),
-    autoRepeat: true
-  },
-  {
-    key: 'ArrowDown',
-    action: () => nav.prev(),
-    autoRepeat: true
-  },
-  {
-    key: 'Enter',
-    action: () => nav.execute(),
-    autoRepeat: true
-  }
-]).addKeyBindingsFromCommands(props.commands)
+const { commands } = defineProps<{
+  commands: Group[]
+}>()
 
 watch(
-  () => props.commands,
+  () => commands,
   () => {
-    useCmdBarState?.initState(props.commands)
+    useCmdBarState?.initState(commands)
   },
   { deep: true, immediate: true }
 )

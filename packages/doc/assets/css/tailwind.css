@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .prose-edit {
+    @apply prose
+  !text-white/90
+  [&_*]:text-white/90
+    prose-headings:font-bold
+    prose-a:prose-headings:font-bold
+    prose-a:no-underline
+    prose-img:rounded
+    !max-w-none
+  }
+}
+
+@layer base {
+  html {
+    @apply bg-[#0e0e0e] !text-white
+  }
+
+  p {
+    @apply m-0 p-0
+  }
+
+  body {
+    @apply pb-12
+  }
+  h3 {
+    @apply font-semibold
+  }
+}

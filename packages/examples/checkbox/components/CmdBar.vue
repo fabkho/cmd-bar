@@ -199,17 +199,17 @@ onMounted(() => {
 
 <template>
   <CmdBar :commands="groups">
-    <CmdBar.Dialog :visible="visibility">
+    <CmdBarDialog :visible="visibility">
       <template #header>
         <div>
-          <CmdBar.Input :placeholder="'search fo anything'" :fuse="fuseOptions">
+          <CmdBarInput :placeholder="'search fo anything'" :fuse="fuseOptions">
             <template #leading>
               <Icon name="ic:baseline-search" size="26px" />
             </template>
             <template #clear> x </template>
-          </CmdBar.Input>
+          </CmdBarInput>
         </div>
-        <CmdBar.Filter :filter-options="filterOptions" as-checkbox />
+        <CmdBarFilter :filter-options="filterOptions" as-checkbox />
       </template>
       <template #content>
         <CmdBar.VirtualList v-if="activeCommand" :config="listConfig">
@@ -244,7 +244,7 @@ onMounted(() => {
           <kbd>↓</kbd>
         </span>
       </template>
-    </CmdBar.Dialog>
+    </CmdBarDialog>
   </CmdBar>
 </template>
 
