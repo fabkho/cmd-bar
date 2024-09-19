@@ -6,17 +6,15 @@ import { findNodeById } from '../utils'
 import { useCmdBarEvent } from './useCmdBarEvent'
 
 const state = reactive<State>({
-  selectedCommandId: null,
+  commands: [] as Command[],
+  groups: [] as Group[],
   query: '',
   isLoading: false,
-  groups: [] as Group[],
-  commands: [] as Command[],
   results: [] as Command[],
-  selectedGroups: new Set<string | null>(),
   fuseOptions: null,
-
-  // TODO: remove after virtual list is refactored
-  groupedCommands: [] as Group[]
+  selectedCommandId: null,
+  selectedGroups: new Set<string | null>(),
+  loop: false
 })
 
 const useCmdBarState = {
@@ -40,6 +38,10 @@ const useCmdBarState = {
     state.selectedCommandId = null
     state.query = ''
     state.results = []
+  },
+
+  setLoop(loop: boolean): void {
+    state.loop = loop
   },
 
   selectCommand(commandId: string): void {
@@ -74,16 +76,27 @@ const useCmdBarState = {
   },
 
   nextCommand(): void {
-    const selectedIndex = getSelectedIndex()
-    if (selectedIndex > 0) {
-      state.selectedCommandId = state.commands[selectedIndex - 1].id
+    const commands = getDisplayedCommands()
+    const selectedIndex = getSelectedIndex(commands)
+
+    if (selectedIndex < commands.length - 1) {
+      state.selectedCommandId = commands[selectedIndex + 1].id
+    } else if (state.loop) {
+      console.log('=>(useCmdBarState.ts:85) state.loop', state.loop)
+      // Optionally loop back to the first command
+      state.selectedCommandId = commands[0].id
     }
   },
 
   prevCommand(): void {
-    const selectedIndex = getSelectedIndex()
-    if (selectedIndex < state.commands.length - 1) {
-      state.selectedCommandId = state.commands[selectedIndex + 1].id
+    const commands = getDisplayedCommands()
+    const selectedIndex = getSelectedIndex(commands)
+
+    if (selectedIndex > 0) {
+      state.selectedCommandId = commands[selectedIndex - 1].id
+    } else if (state.loop) {
+      // Optionally loop back to the last command
+      state.selectedCommandId = commands[commands.length - 1].id
     }
   },
 
@@ -135,13 +148,10 @@ const debouncedUpdateQuery = useDebounceFn(
     if (query === '') {
       state.results = []
       selectFirstCommand()
-      console.log('=>(useCmdBarState.ts:108) query', query)
       return
     }
-    console.log('=>(useCmdBarState.ts:111) query', query)
 
     state.results = await search(query)
-    console.log('=>(useCmdBarState.ts:112) state.results', state.results)
 
     selectFirstCommand()
   },
@@ -214,8 +224,32 @@ const asyncSearch = async (query: string, groups: Group[]) => {
 /**
  * *Helper* function to get the index of the selected command
  */
-function getSelectedIndex(): number {
-  return state.commands.findIndex((command) => command.id === state.selectedCommandId)
+function getSelectedIndex(commands: Command[]): number {
+  return commands.findIndex((command) => command.id === state.selectedCommandId)
+}
+
+/**
+ * Returns the commands to display based on the selected groups and the active query.
+ */
+function getDisplayedCommands(): Command[] {
+  // If there's an active query, use the search results
+  if (state.query !== '' && state.results.length > 0) {
+    return state.results.filter(
+      (command) =>
+        state.selectedGroups.size === 0 ||
+        state.selectedGroups.has(null) ||
+        state.selectedGroups.has(command.group ?? null)
+    )
+  }
+
+  // No active query; filter commands based on selected groups
+  if (state.selectedGroups.size === 0 || state.selectedGroups.has(null)) {
+    // No group filtering; return all commands
+    return state.commands
+  } else {
+    // Return commands from selected groups
+    return state.commands.filter((command) => state.selectedGroups.has(command.group ?? null))
+  }
 }
 
 /**
@@ -225,19 +259,14 @@ function getSelectedIndex(): number {
  */
 function selectFirstCommand(): void {
   const { emitter } = useCmdBarEvent()
+  const commands = getDisplayedCommands()
 
-  let firstCommand: Command | null
-  if (state.results.length > 0) {
-    firstCommand = state.results[0]
+  if (commands.length > 0) {
+    state.selectedCommandId = commands[0].id
+    emitter.emit('selected', commands[0])
   } else {
-    firstCommand = state.groups[0]?.commands?.[0] ?? null
-  }
-
-  if (firstCommand) {
-    state.selectedCommandId = firstCommand.id
-    emitter.emit('selected', firstCommand as Command)
-  } else {
-    console.warn('No command found, by trying to select the first command in the first group')
+    state.selectedCommandId = null
+    console.warn('No commands available to select')
   }
 }
 

@@ -7,6 +7,10 @@ import type { Group } from '../types'
 import { useCmdBarState } from '../composables/useCmdBarState'
 import CmdBarGroup from './CmdBarGroup.vue'
 
+const { loop = false } = defineProps<{
+  loop?: boolean
+}>()
+
 defineSlots<{
   default(props: { command: Command }): any
   loading(): any
@@ -14,6 +18,8 @@ defineSlots<{
   'no-results'(): any
   preview(props: { activeCommand: Command | null }): any
 }>()
+
+useCmdBarState.setLoop(loop)
 
 const activeCommand = ref<Command | null>(null)
 const listRef = ref<HTMLElement | null>(null)

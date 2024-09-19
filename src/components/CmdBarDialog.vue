@@ -24,12 +24,12 @@ const dialogRef = ref<HTMLDialogElement | null>(null)
 const { addEventListener, removeEventListener } = useKeymap((nav) => [
   {
     key: 'ArrowUp',
-    action: () => nav.next(),
+    action: () => nav.prev(),
     autoRepeat: true
   },
   {
     key: 'ArrowDown',
-    action: () => nav.prev(),
+    action: () => nav.next(),
     autoRepeat: true
   },
   {

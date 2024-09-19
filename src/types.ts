@@ -1,9 +1,6 @@
 import { UseFuseOptions } from '@vueuse/integrations/useFuse'
 
 export type State = {
-  /* @deprecated */
-  groupedCommands: Group[]
-
   selectedCommandId: string | null
   query: string
   isLoading: boolean
@@ -12,6 +9,10 @@ export type State = {
   results: Command[]
   selectedGroups: Set<string | null>
   fuseOptions: Partial<UseFuseOptions<Command>> | null
+  /**
+   * Whether to loop back to the first command when reaching the end of the list.
+   */
+  loop: boolean
 }
 
 export interface Command {
