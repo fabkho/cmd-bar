@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CmdBarItems from '@/Users/fabiankirchhoff/code/cmd-bar/src/components/CmdBarItems.vue'
+import CmdBarItems from '../components/CmdBarItems.vue'
 import type { Command, Group } from '../types'
 
 defineProps<{
