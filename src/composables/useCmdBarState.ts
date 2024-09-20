@@ -17,6 +17,8 @@ const state = reactive<State>({
   loop: false
 })
 
+const { emitter } = useCmdBarEvent()
+
 const useCmdBarState = {
   state: readonly(state),
 
@@ -44,10 +46,6 @@ const useCmdBarState = {
     state.loop = loop
   },
 
-  selectCommand(commandId: string): void {
-    state.selectedCommandId = commandId
-  },
-
   /**
    * Toggles the selected state of a group.
    *
@@ -63,7 +61,6 @@ const useCmdBarState = {
       state.selectedGroups.add(groupKey)
     }
 
-    const { emitter } = useCmdBarEvent()
     emitter.emit('filterChange', Array.from(state.selectedGroups))
 
     // If there is an active query, rerun the search after group is toggled
@@ -73,6 +70,12 @@ const useCmdBarState = {
       // No query, so reset results when groups are changed
       state.results = []
     }
+
+    selectFirstCommand()
+  },
+
+  selectCommand(commandId: string): void {
+    selectCommand(commandId)
   },
 
   nextCommand(): void {
@@ -80,11 +83,9 @@ const useCmdBarState = {
     const selectedIndex = getSelectedIndex(commands)
 
     if (selectedIndex < commands.length - 1) {
-      state.selectedCommandId = commands[selectedIndex + 1].id
+      selectCommand(commands[selectedIndex + 1].id)
     } else if (state.loop) {
-      console.log('=>(useCmdBarState.ts:85) state.loop', state.loop)
-      // Optionally loop back to the first command
-      state.selectedCommandId = commands[0].id
+      selectCommand(commands[0].id)
     }
   },
 
@@ -93,10 +94,9 @@ const useCmdBarState = {
     const selectedIndex = getSelectedIndex(commands)
 
     if (selectedIndex > 0) {
-      state.selectedCommandId = commands[selectedIndex - 1].id
+      selectCommand(commands[selectedIndex - 1].id)
     } else if (state.loop) {
-      // Optionally loop back to the last command
-      state.selectedCommandId = commands[commands.length - 1].id
+      selectCommand(commands[commands.length - 1].id)
     }
   },
 
@@ -106,8 +106,6 @@ const useCmdBarState = {
    * @event clicked
    */
   executeCommand(): void {
-    const { emitter } = useCmdBarEvent()
-
     const command = findNodeById(state.commands, state.selectedCommandId)
     if (command) {
       emitter.emit('clicked', command)
@@ -253,17 +251,29 @@ function getDisplayedCommands(): Command[] {
 }
 
 /**
- * *Helper* to select the first command in the first group
+ * *Helper* to select a command and emit the selected event
  *
+ * @param commandId
  * @event selected
  */
+function selectCommand(commandId: string): void {
+  if (state.selectedCommandId === commandId) return // Command is already selected
+
+  state.selectedCommandId = commandId
+  const selectedCommand = findNodeById(state.commands, commandId)
+  if (selectedCommand) {
+    emitter.emit('selected', selectedCommand)
+  }
+}
+
+/**
+ * *Helper* to select the first command in the first group
+ */
 function selectFirstCommand(): void {
-  const { emitter } = useCmdBarEvent()
   const commands = getDisplayedCommands()
 
   if (commands.length > 0) {
-    state.selectedCommandId = commands[0].id
-    emitter.emit('selected', commands[0])
+    selectCommand(commands[0].id)
   } else {
     state.selectedCommandId = null
     console.warn('No commands available to select')
