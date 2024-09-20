@@ -1,5 +1,17 @@
 # cmd-bar
 
+## 0.9.2
+
+### Patch Changes
+
+- Bugs
+
+  - auto selection of commnds (group change)
+
+  Featues
+
+  - bundle default css
+
 ## 0.9.1
 
 ### Patch Changes
