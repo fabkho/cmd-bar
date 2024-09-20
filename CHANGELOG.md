@@ -1,5 +1,13 @@
 # cmd-bar
 
+## 0.9.1
+
+### Patch Changes
+
+- Bugs
+
+  - cannot import anything
+
 ## 0.9.0
 
 ### Minor Changes
@@ -10,25 +18,31 @@
 - emit events consistently via `useCmdBarEvent` composable
 
 Refactoring
-  Store
-  - streamlined state management
-  - improved search strategy and performance
-  
-  useKeymap
-  - does not provide add/remove event listeners helper instead of using hooks
-  
-  List
-  - does now render results seperately
-  - slot for loading state and no results
+Store
+
+- streamlined state management
+- improved search strategy and performance
+
+useKeymap
+
+- does not provide add/remove event listeners helper instead of using hooks
+
+List
+
+- does now render results seperately
+- slot for loading state and no results
 
 Deprecated
+
 - removed `CmdBarVirtualList.vue` component
 - compound component (all components are exported individually)
 
 Chore
+
 - updated major dependecies
 
 Docs
+
 - added docs 2.0 to drastically simplify the documentation
 
 ## 0.8.1
