@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CmdBarItems from '../components/CmdBarItems.vue'
+import CmdBarItems from './CmdBarItems.vue'
 import { useCmdBarEvent } from '../composables/useCmdBarEvent'
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { Command } from '../types'
@@ -39,7 +39,7 @@ const filteredGroups = computed<Group[]>(() => {
 })
 
 const results = computed(() => {
-  return useCmdBarState?.state.results
+  return useCmdBarState?.state.results as Readonly<Command[]>
 })
 const hasQuery = computed(() => useCmdBarState?.state.query !== '')
 

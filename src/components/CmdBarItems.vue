@@ -5,7 +5,7 @@ import { useCmdBarState } from '../composables/useCmdBarState'
 import { computed } from 'vue'
 
 defineProps<{
-  commands: Command[]
+  commands: Readonly<Command[]>
 }>()
 
 const { emitter } = useCmdBarEvent()
