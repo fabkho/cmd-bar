@@ -21,6 +21,7 @@
   "files": [
     "lib"
   ],
+  "style": "./lib/cmd-bar.css",
   "main": "./lib/cmd-bar.umd.cjs",
   "module": "./lib/cmd-bar.js",
   "exports": {
@@ -28,7 +29,8 @@
       "import": "./lib/cmd-bar.js",
       "require": "./lib/cmd-bar.umd.cjs",
       "types": "./lib/index.d.ts"
-    }
+    },
+    "./style.css": "./lib/cmd-bar.css"
   },
   "types": "./lib/index.d.ts",
   "workspaces": [

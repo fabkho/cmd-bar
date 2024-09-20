@@ -3,7 +3,6 @@ import vue from '@vitejs/plugin-vue'
 import dts from 'vite-plugin-dts'
 import { resolve } from 'path'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue(), dts({ rollupTypes: true })],
   resolve: {
@@ -25,8 +24,13 @@ export default defineConfig({
       output: {
         globals: {
           vue: 'Vue'
+        },
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name === 'style.css') return 'cmd-bar.css'
+          return assetInfo.name
         }
       }
-    }
+    },
+    cssCodeSplit: false
   }
 })
