@@ -10,17 +10,9 @@ defineProps<{
 
 const { emitter } = useCmdBarEvent()
 
-const isSelectedItem = computed(() => {
-  return (command: Command) => {
-    const isSelected = useCmdBarState?.state.selectedCommandId === command.id
-    if (isSelected) {
-      emitter.emit('selected', command as Command)
-      return true
-    }
-    return false
-  }
-})
-
+const isSelectedItem = (command: Command): boolean => {
+  return useCmdBarState.state.selectedCommandId === command.id
+}
 function handleClick(clickedCommand: Command) {
   emitter.emit('clicked', clickedCommand as Command)
   useCmdBarState?.executeCommand()

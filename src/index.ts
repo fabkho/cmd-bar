@@ -7,6 +7,8 @@ import { defineCommand } from './composables/useDefineCommand'
 import { useCmdBarEvent } from './composables/useCmdBarEvent'
 import { useKeymap } from './composables/useKeymap'
 
+import './style.css'
+
 export {
   CmdBar,
   CmdBarDialog,

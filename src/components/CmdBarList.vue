@@ -90,7 +90,10 @@ watch(
       </li>
       <CmdBarItems v-else-if="results.length" :commands="results">
         <template #default="{ command }">
-          <slot name="results" :command="command" />
+          <slot name="results" :command="command">
+            <!-- render default slot if no results slot is provided -->
+            <slot name="default" :command="command" />
+          </slot>
         </template>
       </CmdBarItems>
       <li v-else-if="showNoResults">
