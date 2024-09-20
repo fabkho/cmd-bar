@@ -11,6 +11,7 @@ import {
   CmdBarFilter,
   CmdBarList
 } from 'cmd-bar'
+import 'cmd-bar/style.css'
 import { useFetch, useMagicKeys, whenever } from '@vueuse/core'
 import { computed, onMounted, ref } from 'vue'
 
@@ -231,17 +232,6 @@ onMounted(() => {
           <template #loading>
             <Skeleton v-for="index in 5" :key="index" />
           </template>
-          <template #results="{ command }">
-            <!-- here you could change the interface of the commands and add a heading -->
-            <div class="leading">
-              {{ command.label }}
-            </div>
-            <span v-if="command.shortcut" class="actions">
-              <kbd v-for="shortcut of formatShortcut(command.shortcut)" :key="shortcut">{{
-                shortcut
-              }}</kbd>
-            </span>
-          </template>
           <template #no-results>
             <div class="no-results">No results found !!!</div>
           </template>
@@ -265,5 +255,5 @@ onMounted(() => {
 </template>
 
 <style lang="scss">
-@import '../assets/anny-theme';
+@import '../assets/global';
 </style>
