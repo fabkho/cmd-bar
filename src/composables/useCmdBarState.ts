@@ -37,7 +37,6 @@ const useCmdBarState = {
   },
 
   resetState(): void {
-    state.selectedCommandId = null
     state.query = ''
     state.results = []
   },
