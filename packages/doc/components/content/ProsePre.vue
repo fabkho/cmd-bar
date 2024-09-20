@@ -4,12 +4,12 @@ import { useClipboard } from '@vueuse/core'
 defineProps({
   code: {
     type: String,
-    default: '',
+    default: ''
   },
   class: {
     type: String,
-    default: null,
-  },
+    default: null
+  }
 })
 
 const { copy, copied } = useClipboard()
@@ -21,11 +21,12 @@ const { copy, copied } = useClipboard()
       <div v-if="!copied" class="cursor-pointer opacity-50" :size="16" @click="copy(code)">
         Copy
       </div>
-      <div v-else class="opacity-50">
-        Copied!
-      </div>
+      <div v-else class="opacity-50">Copied!</div>
     </div>
-    <pre class="border border-neutral-800 bg-neutral-900 font-[500] leading-normal font-mono" :class="$props.class"><slot /></pre>
+    <pre
+      class="border border-neutral-800 bg-neutral-900 font-[500] leading-normal font-mono"
+      :class="$props.class"
+    ><slot /></pre>
   </div>
 </template>
 

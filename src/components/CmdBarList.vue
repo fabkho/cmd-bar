@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CmdBarItems from '@/Users/fabiankirchhoff/code/cmd-bar/src/components/CmdBarItems.vue'
+import CmdBarItems from '../components/CmdBarItems.vue'
 import { useCmdBarEvent } from '../composables/useCmdBarEvent'
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { Command } from '../types'
