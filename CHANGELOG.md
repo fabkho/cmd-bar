@@ -1,5 +1,13 @@
 # cmd-bar
 
+## 0.9.3
+
+### Patch Changes
+
+- Bugs
+
+  - absolute path was used for CmdBarList.vue
+
 ## 0.9.2
 
 ### Patch Changes
