@@ -218,7 +218,7 @@ onMounted(() => {
         <CmdBarFilter :filter-options="filterOptions" />
       </template>
       <template #content>
-        <CmdBarList :loop="false">
+        <CmdBarList :loop="false" :results-header="null">
           <template #default="{ command }">
             <div class="leading">
               {{ command.label }}
