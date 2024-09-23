@@ -185,7 +185,6 @@
 
 .cmd-bar__body {
     position: relative;
-    margin-top: var(--cmd-spacing);
     margin-bottom: calc(var(--cmd-footer-height) + var(--cmd-spacing));
 }
 

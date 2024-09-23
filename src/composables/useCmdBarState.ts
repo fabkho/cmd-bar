@@ -173,8 +173,10 @@ const search = async (query: string) => {
 
   // Retrieve all commands from sync groups
   const syncGroups = relevantGroups.filter((group) => !group.search) as Group[]
-  let commandsToSearch: Command[] = syncGroups.flatMap((group) => group.commands ?? [])
-
+  let commandsToSearch = syncGroups.flatMap(
+    (group) =>
+      (group.commands ?? []).map((command) => ({ ...command, group: group.key })) as Command[]
+  )
   // Merge async results (if any) with the sync group commands
   if (Array.isArray(asyncResults) && asyncResults.length > 0) {
     commandsToSearch = commandsToSearch.concat(asyncResults)
