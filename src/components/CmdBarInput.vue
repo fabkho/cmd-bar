@@ -8,7 +8,7 @@ import { computed, PropType, ComputedRef } from 'vue'
 const {
   placeholder = 'Search for anything',
   fuse = {},
-  nonTriggerKeys = ['@', '/']
+  nonTriggerKeys = () => ['@', '/']
 } = defineProps<{
   placeholder?: string
   fuse?: UseFuseOptions<Command>
