@@ -11,7 +11,7 @@ defineProps<{
 const { emitter } = useCmdBarEvent()
 
 const isSelectedItem = (command: Command): boolean => {
-  return useCmdBarState.state.selectedCommandId === command.id
+  return useCmdBarState.state.selectedCommandKey === command.key
 }
 function handleClick(clickedCommand: Command) {
   emitter.emit('clicked', clickedCommand as Command)
@@ -22,12 +22,12 @@ function handleClick(clickedCommand: Command) {
 <template>
   <li
     v-for="(command, index) of commands"
-    :key="`${command.id}-${index}`"
-    :data-id="command.id"
+    :key="`${command.key}-${index}`"
+    :data-id="command.key"
     role="option"
     class="item"
     :aria-selected="isSelectedItem(command)"
-    @mousemove="useCmdBarState?.selectCommand(command.id)"
+    @mousemove="useCmdBarState?.selectCommand(command.key)"
     @click="handleClick(command)"
   >
     <slot :command="command" />

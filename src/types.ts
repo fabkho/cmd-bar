@@ -1,7 +1,7 @@
 import { UseFuseOptions } from '@vueuse/integrations/useFuse'
 
 export type State = {
-  selectedCommandId: string | null
+  selectedCommandKey: string | null
   query: string
   isLoading: boolean
   groups: Group[]
@@ -16,7 +16,7 @@ export type State = {
 }
 
 export interface Command {
-  id: string
+  key: string
   leading?: string | []
   label: string
   action: () => void

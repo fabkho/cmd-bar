@@ -51,7 +51,7 @@ const showNoResults = computed(
 
 /* handle scroll to selected item */
 const getSelectedItem = () => {
-  const selectedId = useCmdBarState?.state.selectedCommandId
+  const selectedId = useCmdBarState?.state.selectedCommandKey
   return listRef.value?.querySelector(`[data-id="${selectedId}"]`) as HTMLElement
 }
 
@@ -72,7 +72,7 @@ emitter.on('selected', (command: Command) => {
 })
 
 watch(
-  () => useCmdBarState?.state.selectedCommandId,
+  () => useCmdBarState?.state.selectedCommandKey,
   (newVal) => {
     if (newVal) {
       nextTick(scrollSelectedIntoView)

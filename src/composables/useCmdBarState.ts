@@ -2,7 +2,7 @@ import { useDebounceFn } from '@vueuse/core'
 import { useFuse, UseFuseOptions } from '@vueuse/integrations/useFuse'
 import { reactive, readonly, ref } from 'vue'
 import type { Command, Group, State } from '../types'
-import { findNodeById } from '../utils'
+import { findNodeByKey } from '../utils'
 import { useCmdBarEvent } from './useCmdBarEvent'
 
 const state = reactive<State>({
@@ -12,7 +12,7 @@ const state = reactive<State>({
   isLoading: false,
   results: [] as Command[],
   fuseOptions: null,
-  selectedCommandId: null,
+  selectedCommandKey: null,
   selectedGroups: new Set<string | null>(),
   loop: false
 })
@@ -73,8 +73,8 @@ const useCmdBarState = {
     selectFirstCommand()
   },
 
-  selectCommand(commandId: string): void {
-    selectCommand(commandId)
+  selectCommand(commandKey: string): void {
+    selectCommand(commandKey)
   },
 
   nextCommand(): void {
@@ -82,9 +82,9 @@ const useCmdBarState = {
     const selectedIndex = getSelectedIndex(commands)
 
     if (selectedIndex < commands.length - 1) {
-      selectCommand(commands[selectedIndex + 1].id)
+      selectCommand(commands[selectedIndex + 1].key)
     } else if (state.loop) {
-      selectCommand(commands[0].id)
+      selectCommand(commands[0].key)
     }
   },
 
@@ -93,9 +93,9 @@ const useCmdBarState = {
     const selectedIndex = getSelectedIndex(commands)
 
     if (selectedIndex > 0) {
-      selectCommand(commands[selectedIndex - 1].id)
+      selectCommand(commands[selectedIndex - 1].key)
     } else if (state.loop) {
-      selectCommand(commands[commands.length - 1].id)
+      selectCommand(commands[commands.length - 1].key)
     }
   },
 
@@ -105,7 +105,7 @@ const useCmdBarState = {
    * @event clicked
    */
   executeCommand(): void {
-    const command = findNodeById(state.commands, state.selectedCommandId)
+    const command = findNodeByKey(state.commands, state.selectedCommandKey)
     if (command) {
       emitter.emit('clicked', command)
       command.action?.()
@@ -224,7 +224,7 @@ const asyncSearch = async (query: string, groups: Group[]) => {
  * *Helper* function to get the index of the selected command
  */
 function getSelectedIndex(commands: Command[]): number {
-  return commands.findIndex((command) => command.id === state.selectedCommandId)
+  return commands.findIndex((command) => command.key === state.selectedCommandKey)
 }
 
 /**
@@ -254,14 +254,14 @@ function getDisplayedCommands(): Command[] {
 /**
  * *Helper* to select a command and emit the selected event
  *
- * @param commandId
+ * @param commandKey
  * @event selected
  */
-function selectCommand(commandId: string): void {
-  if (state.selectedCommandId === commandId) return // Command is already selected
+function selectCommand(commandKey: string): void {
+  if (state.selectedCommandKey === commandKey) return // Command is already selected
 
-  state.selectedCommandId = commandId
-  const selectedCommand = findNodeById(state.commands, commandId)
+  state.selectedCommandKey = commandKey
+  const selectedCommand = findNodeByKey(state.commands, commandKey)
   if (selectedCommand) {
     emitter.emit('selected', selectedCommand)
   }
@@ -274,9 +274,9 @@ function selectFirstCommand(): void {
   const commands = getDisplayedCommands()
 
   if (commands.length > 0) {
-    selectCommand(commands[0].id)
+    selectCommand(commands[0].key)
   } else {
-    state.selectedCommandId = null
+    state.selectedCommandKey = null
     console.warn('No commands available to select')
   }
 }
