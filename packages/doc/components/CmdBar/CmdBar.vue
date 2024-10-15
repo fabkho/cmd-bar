@@ -22,21 +22,6 @@ const keys = useMagicKeys()
 const cmdK = keys['Meta+k']
 const activeCommand = ref<Command | null>(null)
 
-useKeymap((nav) => {
-  return [
-    {
-      key: 'ArrowRight',
-      action: () => nav.prev(),
-      autoRepeat: false
-    },
-    {
-      key: 'ArrowLeft',
-      action: () => nav.next(),
-      autoRepeat: false
-    }
-  ]
-})
-
 const formatShortcut = (shortcutString: string) => {
   // Split the string into an array based on the '+' character
   const parts = shortcutString.split('+')
@@ -66,7 +51,7 @@ async function fetchUsers() {
   ).json()
   users.value = data.value.users.map((user: Record<string, any>) => {
     return defineCommand({
-      key: 'user-' + user.id.toString(),
+      id: 'user-' + user.id.toString(),
       leading: './src/assets/icons/user_new.svg',
       label: `${user.firstName} ${user.lastName}`,
       action: () => {
@@ -80,7 +65,7 @@ async function fetchProducts() {
   const { data } = await useFetch('https://dummyjson.com/products?limit=10&select=id,title').json()
   products.value = data.value.products.map((product: Record<string, any>) => {
     return defineCommand({
-      key: 'product-' + product.id.toString(),
+      id: 'product-' + product.id.toString(),
       label: `${product.title}`,
       action: () => {
         // Define your action here.
@@ -135,7 +120,7 @@ const groups = computed(() =>
         const { data } = await useFetch(`https://dummyjson.com/users/search?q=${q}`, {}).json()
         return data.value.users.map((user: Record<string, any>) =>
           defineCommand({
-            key: 'user-' + user.id.toString(),
+            id: 'user-' + user.id.toString(),
             label: `${user.firstName} ${user.lastName}`,
             action: () => {
               // Define your action here.
@@ -152,7 +137,7 @@ const groups = computed(() =>
         const { data } = await useFetch(`https://dummyjson.com/products/search?q=${q}`, {}).json()
         return data.value.products.map((product: Record<string, any>) =>
           defineCommand({
-            key: 'product-' + product.id.toString(),
+            id: 'product-' + product.id.toString(),
             label: `${product.title}`,
             action: () => {
               // Define your action here.
@@ -218,7 +203,7 @@ onMounted(() => {
         <CmdBarFilter :filter-options="filterOptions" />
       </template>
       <template #content>
-        <CmdBarList :loop="false" :results-header="'Results'">
+        <CmdBarList :loop="false">
           <template #default="{ command }">
             <div class="leading">
               {{ command.label }}
@@ -255,5 +240,8 @@ onMounted(() => {
 </template>
 
 <style lang="scss">
-@import '../assets/global';
+// TODO: overwrite styles
+:root {
+  --cmd-bg-color: rgba(22, 22, 22, 1);
+}
 </style>

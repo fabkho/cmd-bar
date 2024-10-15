@@ -1,5 +1,17 @@
 # cmd-bar
 
+## 0.9.5
+
+### Patch Changes
+
+- Refactor
+
+  - rename `id` attribute of command to `key`
+
+  Bugs
+
+  - apply group identifier to search results
+
 ## 0.9.4
 
 ### Patch Changes

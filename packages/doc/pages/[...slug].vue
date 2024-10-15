@@ -23,6 +23,9 @@ onMounted(async () => {
     />
 
     <!-- TODO: integrate cmd-bar    -->
+    <ClientOnly>
+      <CmdBar />
+    </ClientOnly>
 
     <HeadlessTransitionRoot as="template" :show="sidebarOpen">
       <HeadlessDialog class="relative z-50 lg:hidden" @close="sidebarOpen = false">
