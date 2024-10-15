@@ -5,15 +5,17 @@ import type { Command } from '../types'
 import type { UseFuseOptions } from '@vueuse/integrations/useFuse'
 import { computed, PropType, ComputedRef } from 'vue'
 
-const {
-  placeholder = 'Search for anything',
-  fuse = {},
-  nonTriggerKeys = () => ['@', '/']
-} = defineProps<{
+interface Props {
   placeholder?: string
   fuse?: UseFuseOptions<Command>
   nonTriggerKeys?: string[]
-}>()
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  placeholder: 'Search for anything',
+  fuse: () => ({}),
+  nonTriggerKeys: () => ['@', '/']
+})
 
 defineSlots<{
   leading(): any
@@ -25,11 +27,11 @@ const query = computed(() => useCmdBarState?.state.query)
 const options: ComputedRef<Partial<UseFuseOptions<Command>>> = computed(() => {
   return {
     fuseOptions: {
-      ...fuse?.fuseOptions,
-      keys: fuse?.fuseOptions?.keys ?? ['label'],
-      minMatchCharLength: fuse?.fuseOptions?.minMatchCharLength ?? 2
+      ...props.fuse?.fuseOptions,
+      keys: props.fuse?.fuseOptions?.keys ?? ['label'],
+      minMatchCharLength: props.fuse?.fuseOptions?.minMatchCharLength ?? 2
     },
-    resultLimit: fuse?.resultLimit ?? 12
+    resultLimit: props.fuse?.resultLimit ?? 12
   }
 })
 
@@ -42,7 +44,7 @@ const { emitter } = useCmdBarEvent()
 function handleInput(e: Event): void {
   const inputValue = (e.target as HTMLInputElement)?.value
 
-  if (nonTriggerKeys?.includes(inputValue)) {
+  if (props.nonTriggerKeys?.includes(inputValue)) {
     emitter.emit('input', inputValue)
     return
   }
