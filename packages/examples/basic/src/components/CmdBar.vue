@@ -91,28 +91,28 @@ async function fetchProducts() {
 
 const actions = [
   {
-    id: 'new-resource',
+    key: 'new-resource',
     label: 'Create new Resource',
     leading: './src/assets/icons/create.svg',
     action: () => alert('New Resource created'),
     shortcut: 'Ctrl+R'
   },
   {
-    id: 'new-service',
+    key: 'new-service',
     label: 'Add new Service',
     leading: './src/assets/icons/service_1.svg',
     action: () => alert('New Service added'),
     shortcut: 'Ctrl+S'
   },
   {
-    id: 'open-settings',
+    key: 'open-settings',
     label: 'Open settings',
     leading: './src/assets/icons/settings.svg',
     action: () => alert('Settings opened'),
     shortcut: 'Ctrl+,'
   },
   {
-    id: 'open-calendar',
+    key: 'open-calendar',
     label: 'Open calendar',
     leading: './src/assets/icons/calendar.svg',
     action: () => alert('Calendar opened'),
@@ -167,6 +167,7 @@ const groups = computed(() =>
 const { emitter } = useCmdBarEvent()
 
 emitter.on('selected', (command) => {
+  console.log("🚀 ~ emitter.on ~ command:", command)
   activeCommand.value = command
 })
 
@@ -201,6 +202,7 @@ onMounted(() => {
   fetchUsers()
   fetchProducts()
 })
+
 </script>
 
 <template>
@@ -234,6 +236,9 @@ onMounted(() => {
           </template>
           <template #no-results>
             <div class="no-results">No results found !!!</div>
+          </template>
+          <template #preview="{activeCommand}">
+            <span>{{ activeCommand?.label }}</span>
           </template>
         </CmdBarList>
       </template>
