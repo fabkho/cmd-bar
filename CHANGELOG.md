@@ -1,5 +1,17 @@
 # cmd-bar
 
+## 0.9.6
+
+### Patch Changes
+
+- Bugs
+
+  - with search results the selcetion of commands was not working
+
+  Refactor
+
+  - improved performance by using computed properties inside the store
+
 ## 0.9.5
 
 ### Patch Changes
