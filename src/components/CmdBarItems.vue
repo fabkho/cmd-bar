@@ -28,7 +28,7 @@ function handleClick(clickedCommand: Command) {
     role="option"
     class="item"
     :aria-selected="isSelectedItem(command)"
-    @mousemove="selectCommand(command.key)"
+    @mouseenter="selectCommand(command.key)"
     @click="handleClick(command)"
   >
     <slot :command="command" />
