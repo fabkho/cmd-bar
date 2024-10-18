@@ -9,13 +9,14 @@ defineProps<{
 }>()
 
 const { emitter } = useCmdBarEvent()
+const { state, selectCommand, executeCommand } = useCmdBarState()
 
 const isSelectedItem = (command: Command): boolean => {
-  return useCmdBarState.state.selectedCommandKey === command.key
+  return state.selectedCommandKey === command.key
 }
 function handleClick(clickedCommand: Command) {
   emitter.emit('clicked', clickedCommand as Command)
-  useCmdBarState?.executeCommand()
+  executeCommand()
 }
 </script>
 
@@ -27,7 +28,7 @@ function handleClick(clickedCommand: Command) {
     role="option"
     class="item"
     :aria-selected="isSelectedItem(command)"
-    @mousemove="useCmdBarState?.selectCommand(command.key)"
+    @mousemove="selectCommand(command.key)"
     @click="handleClick(command)"
   >
     <slot :command="command" />

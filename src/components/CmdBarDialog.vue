@@ -61,7 +61,7 @@ const vClickOutside = {
   }
 }
 
-const { resetState } = useCmdBarState
+const { resetState } = useCmdBarState()
 
 function onDialogOpen() {
   emit('update:visible', true)

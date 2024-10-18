@@ -54,10 +54,11 @@ function createKeymap() {
 }
 
 export function useKeymap(fn: ShortcutsSetup) {
+  const { nextCommand, prevCommand, executeCommand } = useCmdBarState()
   const nav = {
-    next: () => useCmdBarState.nextCommand(),
-    prev: () => useCmdBarState.prevCommand(),
-    execute: () => useCmdBarState.executeCommand()
+    next: () => nextCommand(),
+    prev: () => prevCommand(),
+    execute: () => executeCommand()
   }
 
   const { registerKeyBinding, handleKeydown } = createKeymap()
@@ -69,7 +70,7 @@ export function useKeymap(fn: ShortcutsSetup) {
     }
   })
 
-  const { state } = useCmdBarState
+  const { state } = useCmdBarState()
   const addKeyBindingsFromCommands = () => {
     state.commands.forEach((command) => {
       if (command.shortcut) {

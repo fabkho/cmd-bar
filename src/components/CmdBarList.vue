@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import CmdBarItems from './CmdBarItems.vue'
 import { useCmdBarEvent } from '../composables/useCmdBarEvent'
-import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, ref, watch, watchEffect } from 'vue'
 import { Command } from '../types'
 import type { Group } from '../types'
 import { useCmdBarState } from '../composables/useCmdBarState'
@@ -20,15 +20,17 @@ defineSlots<{
   preview(props: { activeCommand: Command | null }): any
 }>()
 
-useCmdBarState.setLoop(loop)
+const { state, setLoop } = useCmdBarState()
+
+setLoop(loop)
 
 const activeCommand = ref<Command | null>(null)
 const listRef = ref<HTMLElement | null>(null)
 
 // Filter groups based on selected groups in the store
 const filteredGroups = computed<Group[]>(() => {
-  const selectedGroups = useCmdBarState?.state.selectedGroups
-  const allGroups = useCmdBarState?.state.groups as Group[]
+  const selectedGroups = state.selectedGroups
+  const allGroups = state.groups as Group[]
 
   // If no group is selected, return all groups
   if (selectedGroups.has(null)) {
@@ -40,18 +42,18 @@ const filteredGroups = computed<Group[]>(() => {
 })
 
 const results = computed(() => {
-  return useCmdBarState?.state.results as Readonly<Command[]>
+  return state.results as Readonly<Command[]>
 })
-const hasQuery = computed(() => useCmdBarState?.state.query !== '')
+const hasQuery = computed(() => state.query !== '')
 
-const isLoading = computed(() => useCmdBarState.state.isLoading)
+const isLoading = computed(() => state.isLoading)
 const showNoResults = computed(
   () => !isLoading.value && results.value.length === 0 && hasQuery.value
 )
 
 /* handle scroll to selected item */
 const getSelectedItem = () => {
-  const selectedId = useCmdBarState?.state.selectedCommandKey
+  const selectedId = state.selectedCommandKey
   return listRef.value?.querySelector(`[data-id="${selectedId}"]`) as HTMLElement
 }
 
@@ -72,7 +74,7 @@ emitter.on('selected', (command: Command) => {
 })
 
 watch(
-  () => useCmdBarState?.state.selectedCommandKey,
+  () => state.selectedCommandKey,
   (newVal) => {
     if (newVal) {
       nextTick(scrollSelectedIntoView)

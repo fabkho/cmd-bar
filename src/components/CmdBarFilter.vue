@@ -15,7 +15,8 @@ defineSlots<{
 
 const { lineStyle, setLineStyle } = useIndicator()
 
-const selectedGroups = computed(() => useCmdBarState?.state.selectedGroups)
+const { state, toggleGroup: toggleCmdBarGroup } = useCmdBarState()
+const selectedGroups = computed(() => state.selectedGroups)
 
 const groupSet = ref<Set<FilterOption>>(new Set<FilterOption>())
 const hiddenOptions = ref<FilterOption[]>([])
@@ -53,7 +54,7 @@ function isSelected(group: string | null): boolean {
 }
 
 function toggleGroup(group: string | null) {
-  useCmdBarState?.toggleGroup(group, asCheckbox)
+  toggleCmdBarGroup(group, asCheckbox)
 
   setLineStyle()
 }

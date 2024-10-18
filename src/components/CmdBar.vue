@@ -7,10 +7,12 @@ const { commands } = defineProps<{
   commands: Group[]
 }>()
 
+const { initState } = useCmdBarState()
+
 watch(
   () => commands,
   () => {
-    useCmdBarState?.initState(commands)
+    initState(commands)
   },
   { deep: true, immediate: true }
 )

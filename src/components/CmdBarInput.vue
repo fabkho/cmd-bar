@@ -22,7 +22,9 @@ defineSlots<{
   clear(): any
 }>()
 
-const query = computed(() => useCmdBarState?.state.query)
+const { state, updateQuery, clearQuery } = useCmdBarState()
+
+const query = computed(() => state.query)
 
 const options: ComputedRef<Partial<UseFuseOptions<Command>>> = computed(() => {
   return {
@@ -49,14 +51,10 @@ function handleInput(e: Event): void {
     return
   }
   if (inputValue !== null && inputValue !== undefined) {
-    useCmdBarState?.updateQuery(inputValue, options.value)
+    updateQuery(inputValue, options.value)
   }
 
   emitter.emit('input', inputValue)
-}
-
-function clearQuery(): void {
-  useCmdBarState?.clearQuery()
 }
 </script>
 
