@@ -1,5 +1,13 @@
 # cmd-bar
 
+## 0.9.7
+
+### Patch Changes
+
+- Bugs
+
+  - use mouse enter event instead of move to prevent unnecessary updates (CmdBarList.vue)
+
 ## 0.9.6
 
 ### Patch Changes
