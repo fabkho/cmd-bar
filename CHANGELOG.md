@@ -1,5 +1,12 @@
 # cmd-bar
 
+## 0.9.9
+
+### Patch Changes
+
+- Feature
+  -support v-model on input component to give user more control
+
 ## 0.9.8
 
 ### Patch Changes
