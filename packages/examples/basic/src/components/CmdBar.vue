@@ -202,7 +202,7 @@ onMounted(() => {
   fetchUsers()
   fetchProducts()
 })
-
+const query = ref('')
 </script>
 
 <template>
@@ -210,7 +210,7 @@ onMounted(() => {
     <CmdBarDialog v-model:visible="visibility">
       <template #header>
         <div>
-          <CmdBarInput :placeholder="'search fo anything'">
+          <CmdBarInput v-model="query" :placeholder="'search fo anything'">
             <template #leading>
               <img src="../assets/icons/search.svg" alt="search" />
             </template>
@@ -236,9 +236,6 @@ onMounted(() => {
           </template>
           <template #no-results>
             <div class="no-results">No results found !!!</div>
-          </template>
-          <template #preview="{activeCommand}">
-            <span>{{ activeCommand?.label }}</span>
           </template>
         </CmdBarList>
       </template>

@@ -3,19 +3,25 @@ import { useCmdBarEvent } from '../composables/useCmdBarEvent'
 import { useCmdBarState } from '../composables/useCmdBarState'
 import type { Command } from '../types'
 import type { UseFuseOptions } from '@vueuse/integrations/useFuse'
-import { computed, PropType, ComputedRef } from 'vue'
+import { computed, PropType, ComputedRef, watch, ref } from 'vue'
 
 interface Props {
+  modelValue?: string
   placeholder?: string
   fuse?: UseFuseOptions<Command>
   nonTriggerKeys?: string[]
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  modelValue: undefined,
   placeholder: 'Search for anything',
   fuse: () => ({}),
   nonTriggerKeys: () => ['@', '/']
 })
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string): void
+}>()
 
 defineSlots<{
   leading(): any
@@ -24,7 +30,27 @@ defineSlots<{
 
 const { state, updateQuery, clearQuery } = useCmdBarState()
 
-const query = computed(() => state.query)
+const internalQuery = ref(props.modelValue ?? state.query)
+
+const query = computed({
+  get: () => props.modelValue ?? internalQuery.value,
+  set: (value: string) => {
+    internalQuery.value = value
+    if (props.modelValue !== undefined) {
+      emit('update:modelValue', value)
+    }
+  }
+})
+
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    if (newValue !== undefined && newValue !== internalQuery.value) {
+      internalQuery.value = newValue
+      updateQuery(newValue, options.value)
+    }
+  }
+)
 
 const options: ComputedRef<Partial<UseFuseOptions<Command>>> = computed(() => {
   return {
@@ -51,10 +77,17 @@ function handleInput(e: Event): void {
     return
   }
   if (inputValue !== null && inputValue !== undefined) {
+    query.value = inputValue
     updateQuery(inputValue, options.value)
   }
 
   emitter.emit('input', inputValue)
+}
+
+function handleClearQuery(): void {
+  clearQuery()
+  query.value = ''
+  emit('update:modelValue', '')
 }
 </script>
 
@@ -76,7 +109,7 @@ function handleInput(e: Event): void {
       @input="handleInput"
     />
     <div class="input__clear">
-      <button aria-label="Close" tabindex="-1" @click="clearQuery">
+      <button aria-label="Close" tabindex="-1" @click="handleClearQuery">
         <slot name="clear" />
       </button>
     </div>
