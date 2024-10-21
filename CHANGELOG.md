@@ -1,5 +1,17 @@
 # cmd-bar
 
+## 0.9.8
+
+### Patch Changes
+
+- Bugs
+
+  - if no results available the activeCommand was not set to null
+
+  Refactor
+
+  - render no-results container outside of results ul
+
 ## 0.9.7
 
 ### Patch Changes
