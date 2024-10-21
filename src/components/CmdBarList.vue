@@ -85,31 +85,33 @@ watch(
 
 <template>
   <div ref="listRef" class="grouped-list">
-    <ul v-if="hasQuery" data-cmd-bar-items class="results">
-      <li v-if="isLoading">
-        <slot name="loading">
-          <div class="loading-animation">Loading...</div>
-        </slot>
-      </li>
-      <li v-else-if="results.length" class="group">
-        <h2 v-if="resultsHeader" class="group__label">{{ resultsHeader }}</h2>
-        <ul data-cmd-bar-items class="items">
-          <CmdBarItems :commands="results">
-            <template #default="{ command }">
-              <slot name="results" :command="command">
-                <!-- render default slot if no results slot is provided -->
-                <slot name="default" :command="command" />
-              </slot>
-            </template>
-          </CmdBarItems>
-        </ul>
-      </li>
-      <li v-else-if="showNoResults">
+    <template v-if="hasQuery">
+      <ul v-if="!showNoResults" data-cmd-bar-items class="results">
+        <li v-if="isLoading">
+          <slot name="loading">
+            <div class="loading-animation">Loading...</div>
+          </slot>
+        </li>
+        <li v-else-if="results.length" class="group">
+          <h2 v-if="resultsHeader" class="group__label">{{ resultsHeader }}</h2>
+          <ul data-cmd-bar-items class="items">
+            <CmdBarItems :commands="results">
+              <template #default="{ command }">
+                <slot name="results" :command="command">
+                  <!-- render default slot if no results slot is provided -->
+                  <slot name="default" :command="command" />
+                </slot>
+              </template>
+            </CmdBarItems>
+          </ul>
+        </li>
+      </ul>
+      <div v-else class="no-results">
         <slot name="no-results">
-          <div class="no-results">Nothing found</div>
+          <div>Nothing found</div>
         </slot>
-      </li>
-    </ul>
+      </div>
+    </template>
     <ul v-else data-cmd-bar-items class="list-items">
       <li v-for="group in filteredGroups" :key="group.key" class="group">
         <h2 v-if="group.label && group.commands && group.commands?.length > 0" class="group__label">
