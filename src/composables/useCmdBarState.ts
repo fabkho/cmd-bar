@@ -62,14 +62,19 @@ export function useCmdBarState() {
     selectFirstCommand()
   }
 
+  const resultsEmpty = computed(() => state.query !== '' && state.results.length === 0)
+  const resultsNotEmpty = computed(() => state.query !== '' && state.results.length > 0)
+
   const displayedCommands = computed(() => {
-    if (state.query !== '' && state.results.length > 0) {
+    if (resultsNotEmpty.value) {
       return state.results.filter(
         (command) =>
           state.selectedGroups.size === 0 ||
           state.selectedGroups.has(null) ||
           state.selectedGroups.has(command.group ?? null)
       )
+    } else if (resultsEmpty.value) {
+      return []
     }
 
     if (state.selectedGroups.size === 0 || state.selectedGroups.has(null)) {
@@ -120,11 +125,12 @@ export function useCmdBarState() {
 
   function selectFirstCommand(): void {
     const commands = displayedCommands.value
+
     if (commands.length > 0) {
       selectCommand(commands[0].key)
     } else {
       state.selectedCommandKey = null
-      console.warn('No commands available to select')
+      emitter.emit('selected', null)
     }
   }
 

@@ -69,7 +69,7 @@ const scrollSelectedIntoView = () => {
 
 const { emitter } = useCmdBarEvent()
 
-emitter.on('selected', (command: Command) => {
+emitter.on('selected', (command: Command | null) => {
   activeCommand.value = command
 })
 
