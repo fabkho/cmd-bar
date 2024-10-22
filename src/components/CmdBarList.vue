@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import CmdBarItems from './CmdBarItems.vue'
+import CmdBarGroup from './CmdBarGroup.vue'
+import CmdBarResults from './CmdBarResults.vue'
 import { useCmdBarEvent } from '../composables/useCmdBarEvent'
-import { computed, nextTick, onBeforeUnmount, ref, watch, watchEffect } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { Command } from '../types'
 import type { Group } from '../types'
 import { useCmdBarState } from '../composables/useCmdBarState'
-import CmdBarGroup from './CmdBarGroup.vue'
 
 const { loop = false, resultsHeader = 'Results' } = defineProps<{
   loop?: boolean
@@ -20,9 +21,8 @@ defineSlots<{
   preview(props: { activeCommand: Command | null }): any
 }>()
 
-const { state, setLoop } = useCmdBarState()
-
-setLoop(loop)
+const { state, setLoop, resultsEmpty } = useCmdBarState()
+setLoop(loop ?? false)
 
 const activeCommand = ref<Command | null>(null)
 const listRef = ref<HTMLElement | null>(null)
@@ -31,35 +31,18 @@ const listRef = ref<HTMLElement | null>(null)
 const filteredGroups = computed<Group[]>(() => {
   const selectedGroups = state.selectedGroups
   const allGroups = state.groups as Group[]
-
-  // If no group is selected, return all groups
-  if (selectedGroups.has(null)) {
-    return allGroups
-  }
-
-  // Return only groups that are selected
-  return allGroups.filter((group) => selectedGroups.has(group.key))
+  return selectedGroups.has(null)
+    ? allGroups
+    : allGroups.filter((group) => selectedGroups.has(group.key))
 })
 
-const results = computed(() => {
-  return state.results as Readonly<Command[]>
-})
-const hasQuery = computed(() => state.query !== '')
+const isSearching = computed(() => state.query.length > 0)
 
-const isLoading = computed(() => state.isLoading)
-const showNoResults = computed(
-  () => !isLoading.value && results.value.length === 0 && hasQuery.value
-)
-
-/* handle scroll to selected item */
-const getSelectedItem = () => {
-  const selectedId = state.selectedCommandKey
-  return listRef.value?.querySelector(`[data-id="${selectedId}"]`) as HTMLElement
-}
-
+// Scroll handling
 const scrollSelectedIntoView = () => {
-  const item = getSelectedItem()
-  // if item is first element of group, make sure header/label is in view
+  const selectedId = state.selectedCommandKey
+  const item = listRef.value?.querySelector(`[data-id="${selectedId}"]`) as HTMLElement
+
   if (item?.parentElement?.firstElementChild === item) {
     item?.closest('.group')?.querySelector('.group__label')?.scrollIntoView({ block: 'nearest' })
     return
@@ -67,8 +50,8 @@ const scrollSelectedIntoView = () => {
   item?.scrollIntoView({ block: 'nearest' })
 }
 
+// Event handling
 const { emitter } = useCmdBarEvent()
-
 emitter.on('selected', (command: Command | null) => {
   activeCommand.value = command
 })
@@ -85,36 +68,31 @@ watch(
 
 <template>
   <div ref="listRef" class="grouped-list">
-    <template v-if="hasQuery">
-      <ul v-if="!showNoResults" data-cmd-bar-items class="results">
-        <li v-if="isLoading">
-          <slot name="loading">
-            <div class="loading-animation">Loading...</div>
-          </slot>
-        </li>
-        <li v-else-if="results.length" class="group">
-          <h2 v-if="resultsHeader" class="group__label">{{ resultsHeader }}</h2>
-          <ul data-cmd-bar-items class="items">
-            <CmdBarItems :commands="results">
-              <template #default="{ command }">
-                <slot name="results" :command="command">
-                  <!-- render default slot if no results slot is provided -->
-                  <slot name="default" :command="command" />
-                </slot>
-              </template>
-            </CmdBarItems>
-          </ul>
-        </li>
-      </ul>
-      <div v-else class="no-results">
+    <!-- Search Results View -->
+    <CmdBarResults v-if="isSearching" :results-header="resultsHeader">
+      <template #loading>
+        <slot name="loading">
+          <div class="loading-animation">Loading...</div>
+        </slot>
+      </template>
+
+      <template #no-results>
         <slot name="no-results">
           <div>Nothing found</div>
         </slot>
-      </div>
-    </template>
+      </template>
+
+      <template #default="{ command }">
+        <slot name="results" :command="command">
+          <slot name="default" :command="command" />
+        </slot>
+      </template>
+    </CmdBarResults>
+
+    <!-- Default Group View -->
     <ul v-else data-cmd-bar-items class="list-items">
       <li v-for="group in filteredGroups" :key="group.key" class="group">
-        <h2 v-if="group.label && group.commands && group.commands?.length > 0" class="group__label">
+        <h2 v-if="group.label && group.commands?.length" class="group__label">
           {{ group.label }}
         </h2>
         <CmdBarGroup :group="group">
@@ -125,7 +103,6 @@ watch(
       </li>
     </ul>
   </div>
+
   <slot name="preview" :active-command="activeCommand" />
 </template>
-
-<style scoped lang="scss"></style>

@@ -146,9 +146,7 @@ export function useCmdBarState() {
     query: string,
     fuseOptions?: Partial<UseFuseOptions<Command>>
   ): Promise<void> {
-    state.isLoading = true
     await debouncedUpdateQuery(query, fuseOptions)
-    state.isLoading = false
   }
 
   function clearQuery(): void {
@@ -159,6 +157,7 @@ export function useCmdBarState() {
 
   const debouncedUpdateQuery = useDebounceFn(
     async (query: string, fuseOptions?: Partial<UseFuseOptions<Command>>) => {
+      state.isLoading = true
       if (fuseOptions) state.fuseOptions = fuseOptions
       state.query = query
       if (query === '') {
@@ -168,6 +167,7 @@ export function useCmdBarState() {
       }
       state.results = await search(query)
       selectFirstCommand()
+      state.isLoading = false
     },
     200
   )
@@ -223,6 +223,7 @@ export function useCmdBarState() {
     executeCommand,
     updateQuery,
     clearQuery,
-    displayedCommands
+    displayedCommands,
+    resultsEmpty
   }
 }
