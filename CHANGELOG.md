@@ -1,5 +1,17 @@
 # cmd-bar
 
+## 0.9.10
+
+### Patch Changes
+
+- Bugs
+
+  - loading state has to be set inside debounced update query method
+
+  Refactor
+
+  - moved logic for rendering results to its own component
+
 ## 0.9.9
 
 ### Patch Changes
