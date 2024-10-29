@@ -10,13 +10,15 @@ interface Props {
   placeholder?: string
   fuse?: UseFuseOptions<Command>
   nonTriggerKeys?: string[]
+  threshold?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
   modelValue: undefined,
   placeholder: 'Search for anything',
   fuse: () => ({}),
-  nonTriggerKeys: () => ['@', '/']
+  nonTriggerKeys: () => ['@', '/'],
+  threshold: 0
 })
 
 const emit = defineEmits<{
@@ -47,7 +49,11 @@ watch(
   (newValue) => {
     if (newValue !== undefined && newValue !== internalQuery.value) {
       internalQuery.value = newValue
-      updateQuery(newValue, options.value)
+      if (newValue.length >= props.threshold) {
+        updateQuery(newValue, options.value)
+      } else {
+        clearQuery()
+      }
     }
   }
 )
@@ -57,7 +63,7 @@ const options: ComputedRef<Partial<UseFuseOptions<Command>>> = computed(() => {
     fuseOptions: {
       ...props.fuse?.fuseOptions,
       keys: props.fuse?.fuseOptions?.keys ?? ['label'],
-      minMatchCharLength: props.fuse?.fuseOptions?.minMatchCharLength ?? 2
+      minMatchCharLength: props.fuse?.fuseOptions?.minMatchCharLength ?? 0
     },
     resultLimit: props.fuse?.resultLimit ?? 12
   }
@@ -76,9 +82,15 @@ function handleInput(e: Event): void {
     emitter.emit('input', inputValue)
     return
   }
+
   if (inputValue !== null && inputValue !== undefined) {
     query.value = inputValue
-    updateQuery(inputValue, options.value)
+    // Only trigger search if input length meets threshold
+    if (inputValue.length >= props.threshold) {
+      updateQuery(inputValue, options.value)
+    } else {
+      clearQuery() // Clear results if below threshold
+    }
   }
 
   emitter.emit('input', inputValue)
