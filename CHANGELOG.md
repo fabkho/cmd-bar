@@ -1,5 +1,16 @@
 # cmd-bar
 
+## 0.9.11
+
+### Patch Changes
+
+- Feautures
+
+  - added possibility to set input threshold
+
+  Refactor
+  -set default of fuse minMatchCharLength to zero
+
 ## 0.9.10
 
 ### Patch Changes
