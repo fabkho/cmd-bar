@@ -1,5 +1,13 @@
 # cmd-bar
 
+## 0.9.18
+
+### Patch Changes
+
+- Bugs
+
+  - remove not visible groups from store instead of just not rendering them
+
 ## 0.9.17
 
 ### Patch Changes
