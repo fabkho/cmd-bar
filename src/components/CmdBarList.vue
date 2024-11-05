@@ -67,7 +67,7 @@ watch(
 </script>
 
 <template>
-  <div ref="listRef" class="grouped-list">
+  <div ref="listRef" class="grouped-list" tabindex="-1">
     <!-- Search Results View -->
     <CmdBarResults v-if="isSearching" :results-header="resultsHeader">
       <template #loading>
