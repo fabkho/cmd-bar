@@ -1,5 +1,13 @@
 # cmd-bar
 
+## 0.9.17
+
+### Patch Changes
+
+- Bugs
+
+  - loop property of List was not taken into account
+
 ## 0.9.16
 
 ### Patch Changes
