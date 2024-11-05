@@ -33,7 +33,7 @@ const filteredGroups = computed<Group[]>(() => {
   const allGroups = state.groups as Group[]
   return selectedGroups.has(null)
     ? allGroups
-    : allGroups.filter((group) => selectedGroups.has(group.key))
+    : allGroups.filter((group) => selectedGroups.has(group.key) && group.visible)
 })
 
 const isSearching = computed(() => state.query.length > 0)
