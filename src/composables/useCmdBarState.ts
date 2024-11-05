@@ -137,7 +137,7 @@ export function useCmdBarState() {
   function executeCommand(): void {
     const command = findNodeByKey(state.commands, state.selectedCommandKey)
     if (command) {
-      emitter.emit('clicked', command)
+      emitter.emit('executed', command)
       command.action?.()
     }
   }
