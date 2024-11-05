@@ -32,7 +32,7 @@ const filteredGroups = computed<Group[]>(() => {
   const selectedGroups = state.selectedGroups
   const allGroups = state.groups as Group[]
   return selectedGroups.has(null)
-    ? allGroups
+    ? allGroups.filter((group) => group.visible)
     : allGroups.filter((group) => selectedGroups.has(group.key) && group.visible)
 })
 
