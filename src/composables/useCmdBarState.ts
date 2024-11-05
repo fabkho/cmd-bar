@@ -108,8 +108,12 @@ export function useCmdBarState() {
       return
     }
 
-    const nextIndex = (currentCommandIndex.value + 1) % commands.length
-    selectCommand(commands[nextIndex].key)
+    const nextIndex = currentCommandIndex.value + 1
+    if (nextIndex < commands.length) {
+      selectCommand(commands[nextIndex].key)
+    } else if (state.loop) {
+      selectCommand(commands[0].key)
+    }
   }
 
   function prevCommand(): void {
@@ -119,8 +123,12 @@ export function useCmdBarState() {
       return
     }
 
-    const prevIndex = (currentCommandIndex.value - 1 + commands.length) % commands.length
-    selectCommand(commands[prevIndex].key)
+    const prevIndex = currentCommandIndex.value - 1
+    if (prevIndex >= 0) {
+      selectCommand(commands[prevIndex].key)
+    } else if (state.loop) {
+      selectCommand(commands[commands.length - 1].key)
+    }
   }
 
   function selectFirstCommand(): void {
