@@ -1,5 +1,13 @@
 # cmd-bar
 
+## 0.9.12
+
+### Patch Changes
+
+- Bugs
+
+  - take into account the visible attribute of a group
+
 ## 0.9.11
 
 ### Patch Changes
