@@ -1,5 +1,13 @@
 # cmd-bar
 
+## 0.9.15
+
+### Patch Changes
+
+- Bugs
+
+  - clicked event was emitted multiple times
+
 ## 0.9.14
 
 ### Patch Changes
