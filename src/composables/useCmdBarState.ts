@@ -21,7 +21,7 @@ export function useCmdBarState() {
   const { emitter } = useCmdBarEvent()
 
   function initState(initialGroups: Group[]): void {
-    state.groups = initialGroups
+    state.groups = initialGroups.filter((group) => group.visible !== false)
     state.commands = state.groups.flatMap(
       (group) =>
         group.commands?.map((command) => ({
