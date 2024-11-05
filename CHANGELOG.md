@@ -1,5 +1,11 @@
 # cmd-bar
 
+## 0.9.14
+
+### Patch Changes
+
+- fix related to 0.19.12
+
 ## 0.9.13
 
 ### Patch Changes
