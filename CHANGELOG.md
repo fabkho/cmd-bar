@@ -1,5 +1,13 @@
 # cmd-bar
 
+## 0.9.16
+
+### Patch Changes
+
+- Bugs
+
+  - list was focused in rare cases
+
 ## 0.9.15
 
 ### Patch Changes
