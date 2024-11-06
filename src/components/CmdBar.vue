@@ -7,7 +7,7 @@ const { commands } = defineProps<{
   commands: Group[]
 }>()
 
-const { initState } = useCmdBarState()
+const { initState, resetState } = useCmdBarState()
 
 watch(
   () => commands,
@@ -16,6 +16,10 @@ watch(
   },
   { deep: true, immediate: true }
 )
+
+defineExpose({
+  resetState
+})
 </script>
 
 <template>
