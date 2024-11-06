@@ -1,5 +1,13 @@
 # cmd-bar
 
+## 0.9.19
+
+### Patch Changes
+
+- Features
+
+  - expose resetState method to better support third party modal (only relevant if dialog is not used)
+
 ## 0.9.18
 
 ### Patch Changes
