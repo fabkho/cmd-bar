@@ -1,4 +1,4 @@
-import { reactive, readonly, ref, computed, watchEffect } from 'vue'
+import { reactive, readonly, ref, computed } from 'vue'
 import { useDebounceFn } from '@vueuse/core'
 import { useFuse, UseFuseOptions } from '@vueuse/integrations/useFuse'
 import type { Command, Group, State } from '../types'
@@ -34,7 +34,12 @@ export function useCmdBarState() {
 
   function resetState(): void {
     state.query = ''
+    state.isLoading = false
     state.results = []
+    state.selectedCommandKey = null
+    state.selectedGroups.clear()
+
+    selectFirstCommand()
   }
 
   function setLoop(loop: boolean): void {
