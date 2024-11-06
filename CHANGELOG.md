@@ -1,5 +1,11 @@
 # cmd-bar
 
+## 0.9.20
+
+### Patch Changes
+
+- related to last release 0.9.19
+
 ## 0.9.19
 
 ### Patch Changes
