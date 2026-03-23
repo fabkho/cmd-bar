@@ -1,5 +1,14 @@
 # cmd-bar
 
+## [0.9.21](https://github.com/fabkho/cmd-bar/compare/cmd-bar@0.9.20...cmd-bar-v0.9.21) (2026-03-23)
+
+
+### Bug Fixes
+
+* remove interactive changeset step from ci:version script ([8f94212](https://github.com/fabkho/cmd-bar/commit/8f94212a0aa4b1996f2d3753aac7afd00350545f))
+* skip client-side fuse re-filtering for async search results ([6680819](https://github.com/fabkho/cmd-bar/commit/6680819d41446d078fd042281d3b463a0a376ac8))
+* skip client-side fuse re-filtering for async search results ([84a4fb2](https://github.com/fabkho/cmd-bar/commit/84a4fb2588d82904365c9f48cc2c8fb1c492b0c5))
+
 ## 0.9.20
 
 ### Patch Changes
