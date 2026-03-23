@@ -1,5 +1,11 @@
 # cmd-bar
 
+## 0.9.21
+
+### Patch Changes
+
+- 25037b8: Skip client-side Fuse.js re-filtering for async search results. Groups with a server-side `search()` function already return filtered results — re-running them through Fuse.js (which defaults to `keys: ['label']`) incorrectly dropped valid matches when the query matched non-label fields like email or booking number.
+
 ## 0.9.20
 
 ### Patch Changes
@@ -11,7 +17,6 @@
 ### Patch Changes
 
 - Features
-
   - expose resetState method to better support third party modal (only relevant if dialog is not used)
 
 ## 0.9.18
@@ -19,7 +24,6 @@
 ### Patch Changes
 
 - Bugs
-
   - remove not visible groups from store instead of just not rendering them
 
 ## 0.9.17
@@ -27,7 +31,6 @@
 ### Patch Changes
 
 - Bugs
-
   - loop property of List was not taken into account
 
 ## 0.9.16
@@ -35,7 +38,6 @@
 ### Patch Changes
 
 - Bugs
-
   - list was focused in rare cases
 
 ## 0.9.15
@@ -43,7 +45,6 @@
 ### Patch Changes
 
 - Bugs
-
   - clicked event was emitted multiple times
 
 ## 0.9.14
@@ -63,7 +64,6 @@
 ### Patch Changes
 
 - Bugs
-
   - take into account the visible attribute of a group
 
 ## 0.9.11
@@ -71,7 +71,6 @@
 ### Patch Changes
 
 - Feautures
-
   - added possibility to set input threshold
 
   Refactor
@@ -82,11 +81,9 @@
 ### Patch Changes
 
 - Bugs
-
   - loading state has to be set inside debounced update query method
 
   Refactor
-
   - moved logic for rendering results to its own component
 
 ## 0.9.9
@@ -101,11 +98,9 @@
 ### Patch Changes
 
 - Bugs
-
   - if no results available the activeCommand was not set to null
 
   Refactor
-
   - render no-results container outside of results ul
 
 ## 0.9.7
@@ -113,7 +108,6 @@
 ### Patch Changes
 
 - Bugs
-
   - use mouse enter event instead of move to prevent unnecessary updates (CmdBarList.vue)
 
 ## 0.9.6
@@ -121,11 +115,9 @@
 ### Patch Changes
 
 - Bugs
-
   - with search results the selcetion of commands was not working
 
   Refactor
-
   - improved performance by using computed properties inside the store
 
 ## 0.9.5
@@ -133,11 +125,9 @@
 ### Patch Changes
 
 - Refactor
-
   - rename `id` attribute of command to `key`
 
   Bugs
-
   - apply group identifier to search results
 
 ## 0.9.4
@@ -145,7 +135,6 @@
 ### Patch Changes
 
 - Features
-
   - render an optional heading for the results slot
 
 ## 0.9.3
@@ -153,7 +142,6 @@
 ### Patch Changes
 
 - Bugs
-
   - absolute path was used for CmdBarList.vue
 
 ## 0.9.2
@@ -161,11 +149,9 @@
 ### Patch Changes
 
 - Bugs
-
   - auto selection of commnds (group change)
 
   Featues
-
   - bundle default css
 
 ## 0.9.1
@@ -173,7 +159,6 @@
 ### Patch Changes
 
 - Bugs
-
   - cannot import anything
 
 ## 0.9.0
@@ -226,11 +211,9 @@ Docs
 ### Minor Changes
 
 - Fixes
-
   - removed logs
 
   Dependencies
-
   - updated vue to `3.4.38`
   - updated dev deps
 
@@ -300,7 +283,6 @@ Docs
 ### Minor Changes
 
 - - 🚀 Features
-
     - introduced mitt as event bus, to give more control over events
     - new events:
       - selected
@@ -314,11 +296,9 @@ Docs
 ### Patch Changes
 
 - 🚀 Features
-
   - commands property of groups is now optional to allow for groups that only fetch their commands asynchronously
 
   🐞 Bug fixes
-
   - removed logs
   - leading property of command can now be aan array
 
@@ -334,11 +314,9 @@ Docs
 ### Minor Changes
 
 - ✨ feature:
-
   - updated filter component with the possibility to use an indicator
 
   🧹 bugs:
-
   - useKeymap now uses the correct types
 
 ## 0.5.0
@@ -346,16 +324,13 @@ Docs
 ### Minor Changes
 
 - ### CmdBarList
-
   - emit selected event up to parent
   - allow different item heights per group
 
   ## nuxt module
-
   - cleanup
 
   ## misc
-
   - renamed useDefineCommand to defineCommand
   - cleanup
   - style improvements
