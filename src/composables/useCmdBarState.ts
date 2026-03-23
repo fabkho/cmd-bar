@@ -190,14 +190,16 @@ export function useCmdBarState() {
     const asyncGroups = relevantGroups.filter((group) => !!group.search)
     const asyncResults = await asyncSearch(query, asyncGroups)
     const syncGroups = relevantGroups.filter((group) => !group.search) as Group[]
-    let commandsToSearch = syncGroups.flatMap(
+    const syncCommands = syncGroups.flatMap(
       (group) =>
         (group.commands ?? []).map((command) => ({ ...command, group: group.key })) as Command[]
     )
+    // Only fuzzy-search sync commands — async groups already performed server-side search
+    const fusedResults = fuzzySearch(query, syncCommands)
     if (Array.isArray(asyncResults) && asyncResults.length > 0) {
-      commandsToSearch = commandsToSearch.concat(asyncResults)
+      return fusedResults.concat(asyncResults)
     }
-    return fuzzySearch(query, commandsToSearch)
+    return fusedResults
   }
 
   function fuzzySearch(query: string, commands: Command[]) {
