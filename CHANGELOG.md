@@ -1,5 +1,13 @@
 # cmd-bar
 
+## [0.9.22](https://github.com/fabkho/cmd-bar/compare/cmd-bar-v0.9.21...cmd-bar-v0.9.22) (2026-07-15)
+
+
+### Bug Fixes
+
+* execute async search results not present in initial commands ([3c93e3b](https://github.com/fabkho/cmd-bar/commit/3c93e3bffbf4648a58a2d857f8e9134ca159ce49))
+* execute async search results not present in initial commands ([d50d3d5](https://github.com/fabkho/cmd-bar/commit/d50d3d507895f488d261481d58242f1568a305f5))
+
 ## [0.9.21](https://github.com/fabkho/cmd-bar/compare/cmd-bar@0.9.20...cmd-bar-v0.9.21) (2026-03-23)
 
 
