@@ -148,7 +148,11 @@ export function useCmdBarState() {
   }
 
   function executeCommand(): void {
-    const command = findNodeByKey(state.commands, state.selectedCommandKey)
+    // Look up in displayedCommands (results while searching, commands otherwise)
+    // so async search results that are not part of the initial groups are executable too.
+    const command =
+      findNodeByKey(displayedCommands.value, state.selectedCommandKey) ??
+      findNodeByKey(state.commands, state.selectedCommandKey)
     if (command) {
       emitter.emit('executed', command)
       command.action?.()

@@ -4,6 +4,14 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      force_publish:
+        description: 'Force publish when package.json version is ahead of npm'
+        required: false
+        default: 'true'
+        type: choice
+        options: ['true', 'false']
 
 permissions:
   contents: write
@@ -16,6 +24,7 @@ concurrency:
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' }}
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
       tag_name: ${{ steps.release.outputs.tag_name }}
@@ -29,7 +38,9 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     needs: release-please
-    if: ${{ needs.release-please.outputs.release_created }}
+    # Always run on workflow_dispatch; on push only when release-please created a release.
+    # `always()` is needed because `needs.release-please` is skipped on dispatch.
+    if: ${{ always() && (github.event_name == 'workflow_dispatch' || needs.release-please.outputs.release_created == 'true') }}
     steps:
       - uses: actions/checkout@v4
 
@@ -44,6 +55,27 @@ jobs:
 
       - run: pnpm run build
 
-      - run: pnpm publish --no-git-checks --access public
+      # Idempotent version diff: publish only when package.json version
+      # is ahead of what's on the npm registry. Lets the same job recover
+      # from a failed publish (e.g. expired token) without needing a fresh
+      # release-please cycle — just re-run via workflow_dispatch.
+      - name: Check publish target
+        id: target
+        run: |
+          set -euo pipefail
+          name=$(jq -r .name package.json)
+          local_ver=$(jq -r .version package.json)
+          remote_ver=$(npm view "$name" version 2>/dev/null || echo "0.0.0")
+          if [ "$local_ver" != "$remote_ver" ]; then
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::Will publish $name@$local_ver (registry: $remote_ver)"
+          else
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Skipping $name@$local_ver (already on registry)"
+          fi
+
+      - name: Publish cmd-bar
+        if: ${{ steps.target.outputs.publish == 'true' }}
+        run: pnpm publish --no-git-checks --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
