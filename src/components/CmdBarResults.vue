@@ -12,7 +12,6 @@ const { state, resultsEmpty } = useCmdBarState()
 const results = computed(() => state.results as Readonly<Command[]>)
 const isLoading = computed(() => state.isLoading)
 const hasNoResults = computed(() => resultsEmpty.value && !isLoading.value)
-
 </script>
 
 <template>
